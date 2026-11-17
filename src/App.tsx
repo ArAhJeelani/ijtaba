@@ -1,21 +1,711 @@
-import {useEffect,useState} from 'react';
-import {Link,NavLink,Route,Routes,useLocation} from 'react-router-dom';
-import {ArrowUpRight,ArrowUp,ArrowDown,BookOpen,Check,Menu,X,Moon,Search,Plus} from 'lucide-react';
-import {motion,useReducedMotion} from 'motion/react';
-import {duas} from './data/duas';
-import {useCollection} from './state/Collection';
-import {DuaCard} from './components/DuaCard';
-import {TahajjudCalculator} from './components/TahajjudCalculator';
-import {ReadingDialog} from './components/ReadingDialog';
-import {Arrival} from './components/Arrival';
-import {TahajjudEntrance} from './components/TahajjudEntrance';
+import { useEffect, useState } from "react";
+import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
+import {
+  ArrowUpRight,
+  ArrowUp,
+  ArrowDown,
+  BookOpen,
+  Check,
+  Menu,
+  X,
+  Moon,
+  Search,
+  Plus,
+} from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { duas } from "./data/duas";
+import { useCollection } from "./state/Collection";
+import { DuaCard } from "./components/DuaCard";
+import { TahajjudCalculator } from "./components/TahajjudCalculator";
+import { ReadingDialog } from "./components/ReadingDialog";
+import { Arrival } from "./components/Arrival";
+import { TahajjudEntrance } from "./components/TahajjudEntrance";
 
-function Navbar(){const [open,setOpen]=useState(false),c=useCollection(),location=useLocation();useEffect(()=>{setOpen(false)},[location.pathname]);return <header className="navbar"><Link to="/" className="brand" aria-label="Ijabah home"><img src="/assets/ijabah-logo.webp" alt="إجابة"/><span>IJABAH<small>ONE DUA AWAY</small></span></Link><button className="menu-toggle" aria-label={open?'Close menu':'Open menu'} aria-expanded={open} aria-controls="main-nav" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav id="main-nav" className={open?'open':''} aria-label="Main navigation"><NavLink to="/discover">Discover</NavLink><NavLink to="/my-duas">My Du’as <span className="count">{c.items.length}</span></NavLink><NavLink to="/tahajjud">Tahajjud</NavLink><NavLink to="/about">About</NavLink></nav><Link className="nav-quiet" to="/my-duas"><BookOpen size={16}/> A moment for you</Link></header>}
-function Footer(){return <footer><Link className="footer-brand" to="/">Ijabah <span lang="ar">إجابة</span></Link><span>A little closer, one du’a at a time.</span><span>Made for moments that matter.</span></footer>}
-function Heading({eyebrow,title,text}:{eyebrow:string;title:string;text?:string}){return <div className="section-heading"><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{text&&<p>{text}</p>}</div>}
-function Home(){const c=useCollection();const [arrival,setArrival]=useState(()=>{try{if(new URLSearchParams(window.location.search).get("intro")==="1")return true;return localStorage.getItem("ijabah.arrival.v4")!=="seen"}catch{return true}});if(arrival)return <Arrival onEnter={()=>{try{localStorage.setItem("ijabah.arrival.v4","seen")}catch{}setArrival(false);window.scrollTo(0,0)}}/>;return <><section className="hero"><div className="hero-copy"><span className="eyebrow">A SPACE FOR YOUR HEART TO RETURN</span><h1>One <i>Du’a</i><br/> Away.</h1><p>A space to discover, collect, and return to<br className="desktop-break"/> the du’as that matter most.</p><div className="hero-actions"><Link className="button light" to="/discover">Explore Du’as <ArrowUpRight size={18}/></Link><Link className="text-link" to="/my-duas">My Du’a List <span>↗</span></Link></div><div className="hero-note"><span className="tiny-star">✧</span> For every hope. Every hardship. Every quiet moment.</div></div><button className="replay-arrival" onClick={()=>setArrival(true)}>Replay the three ways ↗</button><a href="#featured" className="scroll-note">SCROLL TO DISCOVER ↓</a></section><section className="intro-strip"><span lang="ar" dir="rtl">وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ</span><p>“Call upon Me; I will respond to you.” <a href="https://quran.com/40/60" target="_blank" rel="noreferrer">Qur’an 40:60 ↗</a></p></section><section id="featured" className="section"><div className="section-top"><Heading eyebrow="WORDS TO CARRY WITH YOU" title="A du’a for where you are."/><Link className="underlined" to="/discover">Explore the library <ArrowUpRight size={16}/></Link></div><div className="dua-grid">{duas.slice(0,2).map(d=><DuaCard key={d.id} dua={d}/>)}</div></section><section className="section categories-section"><Heading eyebrow="COME AS YOU ARE" title="What’s on your heart?" text="Begin with a feeling. Find words to meet it."/><div className="category-grid">{[['Everyday blessings','01','For the ordinary & extraordinary'],['Guidance','02','When you need a little direction'],['Knowledge','03','For a mind that keeps growing']].map(([name,no,desc])=><Link key={name} to={'/discover?category='+encodeURIComponent(name)}><span className="eyebrow">{no} /</span><h3>{name}</h3><p>{desc}</p><ArrowUpRight size={22}/></Link>)}</div></section><section className="night-feature"><div className="night-feature-image"/><div><span className="eyebrow">TAHAJJUD TONIGHT</span><h2>When the world rests,<br/><i>let your heart speak.</i></h2><p>Find the last third of your night. Make room for a moment of prayer, reflection, and hope.</p><Link className="button light" to="/tahajjud">In the quiet of the night <Moon size={17}/></Link><small>YOUR QUIET MOMENT AWAITS</small></div></section><section className="collection-invite section"><span className="eyebrow">YOUR PERSONAL PRAYER JOURNAL</span><h2>Keep what speaks<br/>to your <i>heart.</i></h2><p>Gather your du’as in one place. Return to them in your own time,<br/> at your own pace. {c.items.length>0&&`${c.items.length} already waiting for you.`}</p><Link className="button" to="/my-duas">Your Du’a Collection <ArrowUpRight size={18}/></Link></section><section className="purpose"><span className="eyebrow">THE HEART OF IJABAH</span><p>Making du’a should feel accessible,<br/>intentional, and deeply personal.</p><Link to="/about" className="underlined">Our story <ArrowUpRight size={16}/></Link></section></>}
-function Discover(){const location=useLocation(),[query,setQuery]=useState(''),[category,setCategory]=useState(new URLSearchParams(location.search).get('category')||'All'),[trans,setTrans]=useState(false);const categories=['All',...new Set(duas.map(d=>d.category))];const found=duas.filter(d=>(category==='All'||d.category===category)&&[d.title,d.translation,d.context,d.category,d.reference,d.transliteration].join(' ').toLowerCase().includes(query.toLowerCase()));return <main className="section page"><Heading eyebrow="THE DU’A LIBRARY" title="Words for every season." text="A small, carefully sourced beginning. Find a prayer to carry with you."/><div className="library-controls"><label className="search"><Search size={19}/><input aria-label="Search duas" placeholder="Search a feeling, a word, a hope…" value={query} onChange={e=>setQuery(e.target.value)}/></label><label className="checkbox"><input type="checkbox" checked={trans} onChange={e=>setTrans(e.target.checked)}/> Show transliteration</label></div><div className="filters" aria-label="Filter by category">{categories.map(x=><button key={x} aria-pressed={category===x} className={category===x?'selected':''} onClick={()=>setCategory(x)}>{x}</button>)}</div><p className="small" aria-live="polite">{found.length} {found.length===1?'prayer':'prayers'} · Qur’anic text with English renderings of meaning</p><div className="dua-grid">{found.map(d=><DuaCard key={d.id} dua={d} transliteration={trans}/>)}</div>{!found.length&&<div className="empty"><h3>No prayers found.</h3><p>Try another word or category.</p><button className="button" onClick={()=>{setQuery('');setCategory('All')}}>Reset filters</button></div>}<p className="source-note">Each entry links to its source. English meanings and transliteration are reading aids. This starter collection will grow only after text, reference, and editorial review.</p></main>}
-function MyDuas(){const c=useCollection(),[reading,setReading]=useState(false),[index,setIndex]=useState(0),[trans,setTrans]=useState(false),[personal,setPersonal]=useState(false),[title,setTitle]=useState(''),[prayer,setPrayer]=useState('');const current=c.items[Math.min(index,c.items.length-1)];return <main className="section page"><Heading eyebrow="YOUR PERSONAL COLLECTION" title="A place for your prayers." text="Gather the words that matter. Return whenever your heart needs them."/><div className="collection-toolbar"><span>{c.items.length} saved · {c.items.filter(d=>c.read.includes(d.id)).length} read this session</span><div><button className="underlined" onClick={c.reset}>Reset reading progress</button><button className="button" onClick={()=>{setIndex(0);setReading(true)}} disabled={!c.items.length}><BookOpen size={17}/> Begin reading</button></div></div>{!c.items.length&&<div className="empty"><span>✧</span><h3>Your collection begins with one du’a.</h3><p>Save from the library, or write a personal prayer below.</p><Link className="button" to="/discover">Discover Du’as <ArrowUpRight size={17}/></Link></div>}<div className="saved-list">{c.items.map((d,i)=><div className="saved-row" key={d.id}><div className="row-tools"><button className={c.read.includes(d.id)?'read-toggle checked':'read-toggle'} aria-label={`${c.read.includes(d.id)?'Mark unread':'Mark read'}: ${d.title}`} aria-pressed={c.read.includes(d.id)} onClick={()=>c.mark(d.id)}>{c.read.includes(d.id)?<Check size={16}/>:String(i+1).padStart(2,'0')}</button><button aria-label={`Move ${d.title} up`} disabled={i===0} onClick={()=>c.move(d.id,-1)}><ArrowUp size={17}/></button><button aria-label={`Move ${d.title} down`} disabled={i===c.items.length-1} onClick={()=>c.move(d.id,1)}><ArrowDown size={17}/></button></div><DuaCard dua={d}/></div>)}</div><section className="personal-section"><button className="underlined" aria-expanded={personal} onClick={()=>setPersonal(!personal)}><Plus size={17}/> A prayer in your own words</button>{personal&&<form className="personal-form" onSubmit={e=>{e.preventDefault();if(!title.trim()||!prayer.trim())return;c.addPersonal(title.trim(),prayer.trim());setTitle('');setPrayer('');setPersonal(false)}}><p>Personal entries are labeled as your own prayers, separate from sourced supplications.</p><label>Title<input required maxLength={120} value={title} onChange={e=>setTitle(e.target.value)}/></label><label>Your prayer<textarea required maxLength={4000} rows={4} value={prayer} onChange={e=>setPrayer(e.target.value)}/></label><button className="button">Add personal prayer</button></form>}</section>{reading&&current&&<ReadingDialog onClose={()=>setReading(false)} onKeyDown={e=>{if(e.key==='Escape')setReading(false);if(e.key==='ArrowRight')setIndex(i=>Math.min(c.items.length-1,i+1));if(e.key==='ArrowLeft')setIndex(i=>Math.max(0,i-1))}}><div className="reading-top"><span className="eyebrow">A MOMENT FOR YOU · {index+1} / {c.items.length}</span><button autoFocus onClick={()=>setReading(false)} aria-label="Close reading mode"><X/></button></div><progress max={c.items.length} value={index+1}/><div className="reading-content"><DuaCard dua={current} transliteration={trans}/></div><div className="reading-bottom"><label className="checkbox"><input type="checkbox" checked={trans} onChange={e=>setTrans(e.target.checked)}/> Transliteration</label><button className="underlined" onClick={()=>c.mark(current.id)}>{c.read.includes(current.id)?'✓ Read · mark unread':'Mark as read'}</button><div><button className="button outline" disabled={index===0} onClick={()=>setIndex(index-1)}>Previous</button><button className="button" onClick={()=>{if(index===c.items.length-1)setReading(false);else setIndex(index+1)}}>{index===c.items.length-1?'Finish':'Next'} →</button></div></div></ReadingDialog>}</main>}
-function Tahajjud(){const reduced=useReducedMotion();const pageLocation=useLocation();const [intro,setIntro]=useState(!reduced);useEffect(()=>{if(!pageLocation.hash)setIntro(!reduced)},[pageLocation.key,pageLocation.hash,reduced]);if(intro&&!reduced)return <TahajjudEntrance onComplete={()=>{setIntro(false);window.scrollTo(0,0)}}/>;return <main><section className="tahajjud-hero"><span className="eyebrow">THE NIGHT HOLDS A QUIET INVITATION</span><Moon size={30}/><h1>In the quiet<br/>of the <i>night.</i></h1><p>A moment to turn to Allah, when the world is still.</p><a href="#calculator" className="text-link">Find the last third ↓</a></section><div className="section" id="calculator"><TahajjudCalculator/><div className="night-explanation"><Heading eyebrow="UNDERSTANDING THE NIGHT" title="A little time. A sincere heart."/><div><p>Tahajjud is voluntary night prayer, commonly prayed after waking from sleep. The last third of the night is a particularly recommended time for du’a; night prayer is not limited to this interval.</p><p>The calculator measures from Maghrib to the following Fajr, then subtracts one third of that duration from Fajr. For example, 6 PM to 6 AM gives a last-third window of 2 AM–6 AM. These are illustrative times.</p><p>Begin with wudu and your intention. Pray in units of two, and make du’a in your own words as well as with sourced supplications. For detailed practice, consult a trusted teacher.</p><a href="https://sunnah.com/bukhari:1145" target="_blank" rel="noreferrer">The last third · Sahih al-Bukhari 1145 ↗</a><br/><a href="https://sunnah.com/bukhari:990" target="_blank" rel="noreferrer">Night prayer in pairs · Sahih al-Bukhari 990 ↗</a></div></div><Heading eyebrow="BRING YOUR HOPES WITH YOU" title="Prayers to return to." text="Qur’anic prayers you can include in your du’a, without a claim of special night-specific wording."/><div className="dua-grid">{duas.filter(d=>d.id!=='knowledge').map(d=><DuaCard key={d.id} dua={d}/>)}</div></div></main>}
-function About(){return <main className="about-page"><div className="about-painting"/><article><span className="eyebrow">إجابة · ANSWER / RESPONSE</span><h1>One Du’a<br/><i>Away.</i></h1><p className="lead">Ijabah was created around a simple belief: making du’a should feel accessible, intentional, and personal.</p><p>Sometimes the words come easily. Sometimes we need somewhere to begin. Ijabah is a quiet space to discover meaningful supplications, understand their meaning, and keep them close.</p><p>Explore a sourced collection. Save what speaks to you. Write what is on your heart. Then return, in the ordinary moments and the difficult ones.</p><p>This first version keeps your collection in this browser. There are no accounts or cloud backups yet. Clearing browser data will remove your saved prayers.</p><Link className="button" to="/discover">Find your first du’a <ArrowUpRight size={18}/></Link></article></main>}
-export default function App(){const location=useLocation(),reduced=useReducedMotion(),c=useCollection();useEffect(()=>{window.scrollTo(0,0);document.title=({ '/discover':'Discover Du’as','/my-duas':'My Du’as','/tahajjud':'Tahajjud','/about':'About Ijabah'}[location.pathname]||'One Dua Away')+' · Ijabah'},[location.pathname]);return <><a className="skip-link" href="#content">Skip to content</a><Navbar/>{c.storageError&&<div role="alert" className="storage-warning">{c.storageError}</div>}<motion.div id="content" key={location.pathname} initial={{opacity:reduced?1:0}} animate={{opacity:1}} transition={{duration:.25}}><Routes><Route path="/" element={<Home/>}/><Route path="/discover" element={<Discover/>}/><Route path="/my-duas" element={<MyDuas/>}/><Route path="/tahajjud" element={<Tahajjud/>}/><Route path="/about" element={<About/>}/><Route path="*" element={<main className="section page"><h1>A quiet wrong turn.</h1><Link className="button" to="/">Return home</Link></main>}/></Routes></motion.div><Footer/></>}
+function Navbar() {
+  const [open, setOpen] = useState(false),
+    c = useCollection(),
+    location = useLocation();
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+  return (
+    <header className="navbar">
+      <Link to="/" className="brand" aria-label="Ijabah home">
+        <img src="/assets/ijabah-logo.webp" alt="إجابة" />
+        <span>
+          IJABAH<small>ONE DUA AWAY</small>
+        </span>
+      </Link>
+      <button
+        className="menu-toggle"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        aria-controls="main-nav"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? <X /> : <Menu />}
+      </button>
+      <nav
+        id="main-nav"
+        className={open ? "open" : ""}
+        aria-label="Main navigation"
+      >
+        <NavLink to="/discover">Discover</NavLink>
+        <NavLink to="/my-duas">
+          My Du’as <span className="count">{c.items.length}</span>
+        </NavLink>
+        <NavLink to="/tahajjud">Tahajjud</NavLink>
+        <NavLink to="/about">About</NavLink>
+      </nav>
+      <Link className="nav-quiet" to="/my-duas">
+        <BookOpen size={16} /> A moment for you
+      </Link>
+    </header>
+  );
+}
+function Footer() {
+  return (
+    <footer>
+      <Link className="footer-brand" to="/">
+        Ijabah <span lang="ar">إجابة</span>
+      </Link>
+      <span>A little closer, one du’a at a time.</span>
+      <span>Made for moments that matter.</span>
+    </footer>
+  );
+}
+function Heading({
+  eyebrow,
+  title,
+  text,
+}: {
+  eyebrow: string;
+  title: string;
+  text?: string;
+}) {
+  return (
+    <div className="section-heading">
+      <span className="eyebrow">{eyebrow}</span>
+      <h2>{title}</h2>
+      {text && <p>{text}</p>}
+    </div>
+  );
+}
+function Home({ onReplay }: { onReplay: () => void }) {
+  const c = useCollection();
+  return (
+    <>
+      <section className="hero">
+        <div className="hero-copy">
+          <span className="eyebrow">A SPACE FOR YOUR HEART TO RETURN</span>
+          <h1>
+            One <i>Du’a</i>
+            <br /> Away.
+          </h1>
+          <p>
+            A space to discover, collect, and return to
+            <br className="desktop-break" /> the du’as that matter most.
+          </p>
+          <div className="hero-actions">
+            <Link className="button light" to="/discover">
+              Explore Du’as <ArrowUpRight size={18} />
+            </Link>
+            <Link className="text-link" to="/my-duas">
+              My Du’a List <span>↗</span>
+            </Link>
+          </div>
+          <div className="hero-note">
+            <span className="tiny-star">✧</span> For every hope. Every hardship.
+            Every quiet moment.
+          </div>
+        </div>
+        <button className="replay-arrival" onClick={onReplay}>
+          Replay the three ways ↗
+        </button>
+        <a href="#featured" className="scroll-note">
+          SCROLL TO DISCOVER ↓
+        </a>
+      </section>
+      <section className="intro-strip">
+        <span lang="ar" dir="rtl">
+          وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ
+        </span>
+        <p>
+          “Call upon Me; I will respond to you.”{" "}
+          <a href="https://quran.com/40/60" target="_blank" rel="noreferrer">
+            Qur’an 40:60 ↗
+          </a>
+        </p>
+      </section>
+      <section id="featured" className="section">
+        <div className="section-top">
+          <Heading
+            eyebrow="WORDS TO CARRY WITH YOU"
+            title="A du’a for where you are."
+          />
+          <Link className="underlined" to="/discover">
+            Explore the library <ArrowUpRight size={16} />
+          </Link>
+        </div>
+        <div className="dua-grid">
+          {duas.slice(0, 2).map((d) => (
+            <DuaCard key={d.id} dua={d} />
+          ))}
+        </div>
+      </section>
+      <section className="section categories-section">
+        <Heading
+          eyebrow="COME AS YOU ARE"
+          title="What’s on your heart?"
+          text="Begin with a feeling. Find words to meet it."
+        />
+        <div className="category-grid">
+          {[
+            ["Everyday blessings", "01", "For the ordinary & extraordinary"],
+            ["Guidance", "02", "When you need a little direction"],
+            ["Knowledge", "03", "For a mind that keeps growing"],
+          ].map(([name, no, desc]) => (
+            <Link
+              key={name}
+              to={"/discover?category=" + encodeURIComponent(name)}
+            >
+              <span className="eyebrow">{no} /</span>
+              <h3>{name}</h3>
+              <p>{desc}</p>
+              <ArrowUpRight size={22} />
+            </Link>
+          ))}
+        </div>
+      </section>
+      <section className="night-feature">
+        <div className="night-feature-image" />
+        <div>
+          <span className="eyebrow">TAHAJJUD TONIGHT</span>
+          <h2>
+            When the world rests,
+            <br />
+            <i>let your heart speak.</i>
+          </h2>
+          <p>
+            Find the last third of your night. Make room for a moment of prayer,
+            reflection, and hope.
+          </p>
+          <Link className="button light" to="/tahajjud">
+            In the quiet of the night <Moon size={17} />
+          </Link>
+          <small>YOUR QUIET MOMENT AWAITS</small>
+        </div>
+      </section>
+      <section className="collection-invite section">
+        <span className="eyebrow">YOUR PERSONAL PRAYER JOURNAL</span>
+        <h2>
+          Keep what speaks
+          <br />
+          to your <i>heart.</i>
+        </h2>
+        <p>
+          Gather your du’as in one place. Return to them in your own time,
+          <br /> at your own pace.{" "}
+          {c.items.length > 0 && `${c.items.length} already waiting for you.`}
+        </p>
+        <Link className="button" to="/my-duas">
+          Your Du’a Collection <ArrowUpRight size={18} />
+        </Link>
+      </section>
+      <section className="purpose">
+        <span className="eyebrow">THE HEART OF IJABAH</span>
+        <p>
+          Making du’a should feel accessible,
+          <br />
+          intentional, and deeply personal.
+        </p>
+        <Link to="/about" className="underlined">
+          Our story <ArrowUpRight size={16} />
+        </Link>
+      </section>
+    </>
+  );
+}
+function Discover() {
+  const location = useLocation(),
+    [query, setQuery] = useState(""),
+    [category, setCategory] = useState(
+      new URLSearchParams(location.search).get("category") || "All",
+    ),
+    [trans, setTrans] = useState(false);
+  const categories = ["All", ...new Set(duas.map((d) => d.category))];
+  const found = duas.filter(
+    (d) =>
+      (category === "All" || d.category === category) &&
+      [
+        d.title,
+        d.translation,
+        d.context,
+        d.category,
+        d.reference,
+        d.transliteration,
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(query.toLowerCase()),
+  );
+  return (
+    <main className="section page">
+      <Heading
+        eyebrow="THE DU’A LIBRARY"
+        title="Words for every season."
+        text="A small, carefully sourced beginning. Find a prayer to carry with you."
+      />
+      <div className="library-controls">
+        <label className="search">
+          <Search size={19} />
+          <input
+            aria-label="Search duas"
+            placeholder="Search a feeling, a word, a hope…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={trans}
+            onChange={(e) => setTrans(e.target.checked)}
+          />{" "}
+          Show transliteration
+        </label>
+      </div>
+      <div className="filters" aria-label="Filter by category">
+        {categories.map((x) => (
+          <button
+            key={x}
+            aria-pressed={category === x}
+            className={category === x ? "selected" : ""}
+            onClick={() => setCategory(x)}
+          >
+            {x}
+          </button>
+        ))}
+      </div>
+      <p className="small" aria-live="polite">
+        {found.length} {found.length === 1 ? "prayer" : "prayers"} · Qur’anic
+        text with English renderings of meaning
+      </p>
+      <div className="dua-grid">
+        {found.map((d) => (
+          <DuaCard key={d.id} dua={d} transliteration={trans} />
+        ))}
+      </div>
+      {!found.length && (
+        <div className="empty">
+          <h3>No prayers found.</h3>
+          <p>Try another word or category.</p>
+          <button
+            className="button"
+            onClick={() => {
+              setQuery("");
+              setCategory("All");
+            }}
+          >
+            Reset filters
+          </button>
+        </div>
+      )}
+      <p className="source-note">
+        Each entry links to its source. English meanings and transliteration are
+        reading aids. This starter collection will grow only after text,
+        reference, and editorial review.
+      </p>
+    </main>
+  );
+}
+function MyDuas() {
+  const c = useCollection(),
+    [reading, setReading] = useState(false),
+    [index, setIndex] = useState(0),
+    [trans, setTrans] = useState(false),
+    [personal, setPersonal] = useState(false),
+    [title, setTitle] = useState(""),
+    [prayer, setPrayer] = useState("");
+  const current = c.items[Math.min(index, c.items.length - 1)];
+  return (
+    <main className="section page">
+      <Heading
+        eyebrow="YOUR PERSONAL COLLECTION"
+        title="A place for your prayers."
+        text="Gather the words that matter. Return whenever your heart needs them."
+      />
+      <div className="collection-toolbar">
+        <span>
+          {c.items.length} saved ·{" "}
+          {c.items.filter((d) => c.read.includes(d.id)).length} read this
+          session
+        </span>
+        <div>
+          <button className="underlined" onClick={c.reset}>
+            Reset reading progress
+          </button>
+          <button
+            className="button"
+            onClick={() => {
+              setIndex(0);
+              setReading(true);
+            }}
+            disabled={!c.items.length}
+          >
+            <BookOpen size={17} /> Begin reading
+          </button>
+        </div>
+      </div>
+      {!c.items.length && (
+        <div className="empty">
+          <span>✧</span>
+          <h3>Your collection begins with one du’a.</h3>
+          <p>Save from the library, or write a personal prayer below.</p>
+          <Link className="button" to="/discover">
+            Discover Du’as <ArrowUpRight size={17} />
+          </Link>
+        </div>
+      )}
+      <div className="saved-list">
+        {c.items.map((d, i) => (
+          <div className="saved-row" key={d.id}>
+            <div className="row-tools">
+              <button
+                className={
+                  c.read.includes(d.id) ? "read-toggle checked" : "read-toggle"
+                }
+                aria-label={`${c.read.includes(d.id) ? "Mark unread" : "Mark read"}: ${d.title}`}
+                aria-pressed={c.read.includes(d.id)}
+                onClick={() => c.mark(d.id)}
+              >
+                {c.read.includes(d.id) ? (
+                  <Check size={16} />
+                ) : (
+                  String(i + 1).padStart(2, "0")
+                )}
+              </button>
+              <button
+                aria-label={`Move ${d.title} up`}
+                disabled={i === 0}
+                onClick={() => c.move(d.id, -1)}
+              >
+                <ArrowUp size={17} />
+              </button>
+              <button
+                aria-label={`Move ${d.title} down`}
+                disabled={i === c.items.length - 1}
+                onClick={() => c.move(d.id, 1)}
+              >
+                <ArrowDown size={17} />
+              </button>
+            </div>
+            <DuaCard dua={d} />
+          </div>
+        ))}
+      </div>
+      <section className="personal-section">
+        <button
+          className="underlined"
+          aria-expanded={personal}
+          onClick={() => setPersonal(!personal)}
+        >
+          <Plus size={17} /> A prayer in your own words
+        </button>
+        {personal && (
+          <form
+            className="personal-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!title.trim() || !prayer.trim()) return;
+              c.addPersonal(title.trim(), prayer.trim());
+              setTitle("");
+              setPrayer("");
+              setPersonal(false);
+            }}
+          >
+            <p>
+              Personal entries are labeled as your own prayers, separate from
+              sourced supplications.
+            </p>
+            <label>
+              Title
+              <input
+                required
+                maxLength={120}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </label>
+            <label>
+              Your prayer
+              <textarea
+                required
+                maxLength={4000}
+                rows={4}
+                value={prayer}
+                onChange={(e) => setPrayer(e.target.value)}
+              />
+            </label>
+            <button className="button">Add personal prayer</button>
+          </form>
+        )}
+      </section>
+      {reading && current && (
+        <ReadingDialog
+          onClose={() => setReading(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setReading(false);
+            if (e.key === "ArrowRight")
+              setIndex((i) => Math.min(c.items.length - 1, i + 1));
+            if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
+          }}
+        >
+          <div className="reading-top">
+            <span className="eyebrow">
+              A MOMENT FOR YOU · {index + 1} / {c.items.length}
+            </span>
+            <button
+              autoFocus
+              onClick={() => setReading(false)}
+              aria-label="Close reading mode"
+            >
+              <X />
+            </button>
+          </div>
+          <progress max={c.items.length} value={index + 1} />
+          <div className="reading-content">
+            <DuaCard dua={current} transliteration={trans} />
+          </div>
+          <div className="reading-bottom">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={trans}
+                onChange={(e) => setTrans(e.target.checked)}
+              />{" "}
+              Transliteration
+            </label>
+            <button className="underlined" onClick={() => c.mark(current.id)}>
+              {c.read.includes(current.id)
+                ? "✓ Read · mark unread"
+                : "Mark as read"}
+            </button>
+            <div>
+              <button
+                className="button outline"
+                disabled={index === 0}
+                onClick={() => setIndex(index - 1)}
+              >
+                Previous
+              </button>
+              <button
+                className="button"
+                onClick={() => {
+                  if (index === c.items.length - 1) setReading(false);
+                  else setIndex(index + 1);
+                }}
+              >
+                {index === c.items.length - 1 ? "Finish" : "Next"} →
+              </button>
+            </div>
+          </div>
+        </ReadingDialog>
+      )}
+    </main>
+  );
+}
+function Tahajjud() {
+  const reduced = useReducedMotion();
+  const pageLocation = useLocation();
+  const [intro, setIntro] = useState(!reduced);
+  useEffect(() => {
+    if (!pageLocation.hash) setIntro(!reduced);
+  }, [pageLocation.key, pageLocation.hash, reduced]);
+  if (intro && !reduced)
+    return (
+      <TahajjudEntrance
+        onComplete={() => {
+          setIntro(false);
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
+  return (
+    <main>
+      <section className="tahajjud-hero">
+        <span className="eyebrow">THE NIGHT HOLDS A QUIET INVITATION</span>
+        <Moon size={30} />
+        <h1>
+          In the quiet
+          <br />
+          of the <i>night.</i>
+        </h1>
+        <p>A moment to turn to Allah, when the world is still.</p>
+        <a href="#calculator" className="text-link">
+          Find the last third ↓
+        </a>
+      </section>
+      <div className="section" id="calculator">
+        <TahajjudCalculator />
+        <div className="night-explanation">
+          <Heading
+            eyebrow="UNDERSTANDING THE NIGHT"
+            title="A little time. A sincere heart."
+          />
+          <div>
+            <p>
+              Tahajjud is voluntary night prayer, commonly prayed after waking
+              from sleep. The last third of the night is a particularly
+              recommended time for du’a; night prayer is not limited to this
+              interval.
+            </p>
+            <p>
+              The calculator measures from Maghrib to the following Fajr, then
+              subtracts one third of that duration from Fajr. For example, 6 PM
+              to 6 AM gives a last-third window of 2 AM–6 AM. These are
+              illustrative times.
+            </p>
+            <p>
+              Begin with wudu and your intention. Pray in units of two, and make
+              du’a in your own words as well as with sourced supplications. For
+              detailed practice, consult a trusted teacher.
+            </p>
+            <a
+              href="https://sunnah.com/bukhari:1145"
+              target="_blank"
+              rel="noreferrer"
+            >
+              The last third · Sahih al-Bukhari 1145 ↗
+            </a>
+            <br />
+            <a
+              href="https://sunnah.com/bukhari:990"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Night prayer in pairs · Sahih al-Bukhari 990 ↗
+            </a>
+          </div>
+        </div>
+        <Heading
+          eyebrow="BRING YOUR HOPES WITH YOU"
+          title="Prayers to return to."
+          text="Qur’anic prayers you can include in your du’a, without a claim of special night-specific wording."
+        />
+        <div className="dua-grid">
+          {duas
+            .filter((d) => d.id !== "knowledge")
+            .map((d) => (
+              <DuaCard key={d.id} dua={d} />
+            ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+function About() {
+  return (
+    <main className="about-page">
+      <div className="about-painting" />
+      <article>
+        <span className="eyebrow">إجابة · ANSWER / RESPONSE</span>
+        <h1>
+          One Du’a
+          <br />
+          <i>Away.</i>
+        </h1>
+        <p className="lead">
+          Ijabah was created around a simple belief: making du’a should feel
+          accessible, intentional, and personal.
+        </p>
+        <p>
+          Sometimes the words come easily. Sometimes we need somewhere to begin.
+          Ijabah is a quiet space to discover meaningful supplications,
+          understand their meaning, and keep them close.
+        </p>
+        <p>
+          Explore a sourced collection. Save what speaks to you. Write what is
+          on your heart. Then return, in the ordinary moments and the difficult
+          ones.
+        </p>
+        <p>
+          This first version keeps your collection in this browser. There are no
+          accounts or cloud backups yet. Clearing browser data will remove your
+          saved prayers.
+        </p>
+        <Link className="button" to="/discover">
+          Find your first du’a <ArrowUpRight size={18} />
+        </Link>
+      </article>
+    </main>
+  );
+}
+export default function App() {
+  const [opening, setOpening] = useState(true);
+  const location = useLocation(),
+    reduced = useReducedMotion(),
+    c = useCollection();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title =
+      ({
+        "/discover": "Discover Du’as",
+        "/my-duas": "My Du’as",
+        "/tahajjud": "Tahajjud",
+        "/about": "About Ijabah",
+      }[location.pathname] || "One Dua Away") + " · Ijabah";
+  }, [location.pathname]);
+  if (opening)
+    return (
+      <Arrival
+        onEnter={() => {
+          setOpening(false);
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
+  return (
+    <>
+      <a className="skip-link" href="#content">
+        Skip to content
+      </a>
+      <Navbar />
+      {c.storageError && (
+        <div role="alert" className="storage-warning">
+          {c.storageError}
+        </div>
+      )}
+      <motion.div
+        id="content"
+        key={location.pathname}
+        initial={{ opacity: reduced ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25 }}
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={<Home onReplay={() => setOpening(true)} />}
+          />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/my-duas" element={<MyDuas />} />
+          <Route path="/tahajjud" element={<Tahajjud />} />
+          <Route path="/about" element={<About />} />
+          <Route
+            path="*"
+            element={
+              <main className="section page">
+                <h1>A quiet wrong turn.</h1>
+                <Link className="button" to="/">
+                  Return home
+                </Link>
+              </main>
+            }
+          />
+        </Routes>
+      </motion.div>
+      <Footer />
+    </>
+  );
+}

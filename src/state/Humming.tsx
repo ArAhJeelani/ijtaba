@@ -1,73 +1,111 @@
-import {createContext, useContext, useEffect, useRef, useState, type ReactNode} from 'react';
-import {Volume2, VolumeX} from 'lucide-react';
-const Context = createContext<{enabled: boolean; toggle: () => Promise<void>; error: string}>({enabled: false, toggle: async () => {}, error: ''});
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 
-export function HummingProvider({children}: {children: ReactNode}) {
+const Context = createContext({
+  start: (_reset: boolean) => {},
+  stop: () => {},
+  setLevel: (_level: number) => {},
+});
+
+/** Sound belongs to animation lifecycles, never to the reading pages. */
+export function HummingProvider({ children }: { children: ReactNode }) {
   const audio = useRef<HTMLAudioElement>(null);
+  const wanted = useRef(false);
+  const level = useRef(1);
   const channel = useRef<BroadcastChannel | null>(null);
-  const wanted = useRef(false), remote = useRef(false), request = useRef(0);
-  const [enabled, setEnabled] = useState(false), [error, setError] = useState('');
-  function stopLocal() {
+  const stop = useCallback(() => {
     wanted.current = false;
-    request.current++;
-    if (audio.current) { audio.current.muted = true; audio.current.pause(); }
-  }
-  useEffect(() => {
     const track = audio.current;
-    if (track) track.volume = 0.3;
-    const bus = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ijabah-nasheed') : null;
-    channel.current = bus;
-    if (bus) bus.onmessage = event => {
-      if (event.data === 'playing') {
-        remote.current = true; stopLocal(); setEnabled(true);
-      } else if (event.data === 'pause') {
-        remote.current = false; stopLocal(); setEnabled(false);
-      } else if (event.data === 'status' && wanted.current) bus.postMessage('playing');
-    };
-    const leavingPage = () => {
-      if (wanted.current) bus?.postMessage('pause');
-      remote.current = false; stopLocal(); setEnabled(false);
-    };
-    window.addEventListener('pagehide', leavingPage);
-    bus?.postMessage('status');
-    return () => {
-      if (wanted.current) bus?.postMessage('pause');
-      stopLocal(); bus?.close(); channel.current = null;
-      window.removeEventListener('pagehide', leavingPage);
-    };
+    if (track) {
+      track.muted = true;
+      track.pause();
+    }
   }, []);
-  async function toggle() {
+  const play = useCallback(() => {
     const track = audio.current;
-    if (!track) return;
-    if (enabled || wanted.current) {
-      remote.current = false; stopLocal(); setEnabled(false);
-      channel.current?.postMessage('pause'); return;
-    }
-    remote.current = false; wanted.current = true;
-    const attempt = ++request.current;
-    track.muted = false; setEnabled(true); setError('');
-    channel.current?.postMessage('playing');
-    try {
-      await track.play();
-      if (!wanted.current) track.pause();
-    } catch {
-      if (attempt !== request.current) return;
-      wanted.current = false; setEnabled(false);
-      channel.current?.postMessage('pause');
-      setError('The nasheed could not play. Tap again to retry.');
-    }
-  }
-  return <Context.Provider value={{enabled, toggle, error}}>
-    <audio ref={audio} src="/audio/nasheed-humming.mp3" loop preload="none"
-      onPlaying={() => {if (!wanted.current) audio.current?.pause(); else {setEnabled(true); setError('');}}}
-      onPause={() => setEnabled(remote.current)}
-      onError={() => {wanted.current=false; setEnabled(false); channel.current?.postMessage('pause'); setError('The nasheed could not load. Please refresh and retry.');}}/>
-    {children}
-  </Context.Provider>;
+    if (!wanted.current || !track) return;
+    track.volume = 0.3 * level.current;
+    track.muted = false;
+    void track
+      .play()
+      .then(() => {
+        if (!wanted.current) track.pause();
+      })
+      .catch(() => {
+        // Autoplay may be blocked. The next interaction retries while animation is active.
+      });
+  }, []);
+  const start = useCallback(
+    (reset: boolean) => {
+      wanted.current = true;
+      if (reset && audio.current) audio.current.currentTime = 0;
+      channel.current?.postMessage("playing");
+      play();
+    },
+    [play],
+  );
+  const setLevel = useCallback((value: number) => {
+    level.current = Math.max(0, Math.min(1, value));
+    if (audio.current) audio.current.volume = 0.3 * level.current;
+  }, []);
+  useEffect(() => {
+    const bus =
+      typeof BroadcastChannel !== "undefined"
+        ? new BroadcastChannel("ijabah-nasheed")
+        : null;
+    channel.current = bus;
+    if (bus)
+      bus.onmessage = (e) => {
+        if (e.data === "playing" || e.data === "pause") stop();
+      };
+    const retry = () => {
+      if (wanted.current && audio.current?.paused) play();
+    };
+    document.addEventListener("pointerdown", retry, true);
+    document.addEventListener("keydown", retry, true);
+    window.addEventListener("pagehide", stop);
+    return () => {
+      stop();
+      bus?.close();
+      channel.current = null;
+      document.removeEventListener("pointerdown", retry, true);
+      document.removeEventListener("keydown", retry, true);
+      window.removeEventListener("pagehide", stop);
+    };
+  }, [play, stop]);
+  return (
+    <Context.Provider value={{ start, stop, setLevel }}>
+      <audio
+        ref={audio}
+        src="/audio/nasheed-humming.mp3"
+        loop
+        preload="none"
+        onPlaying={() => {
+          if (!wanted.current) audio.current?.pause();
+        }}
+      />
+      {children}
+    </Context.Provider>
+  );
 }
-export function HummingControl() {
-  const {enabled, toggle, error} = useContext(Context);
-  return <div className="humming-control"><button onClick={() => void toggle()} aria-pressed={enabled} title="Play or pause background nasheed">
-    {enabled ? <Volume2 size={16}/> : <VolumeX size={16}/>}<span>{enabled ? 'Pause nasheed' : 'Play nasheed'}</span>
-  </button>{error && <p role="alert">{error}</p>}</div>;
+
+export function useAnimationNasheed(active: boolean, replay = 0, level = 1) {
+  const { start, stop, setLevel } = useContext(Context);
+  const previousReplay = useRef<number | null>(null);
+  useEffect(() => {
+    setLevel(level);
+  }, [level, setLevel]);
+  useEffect(() => {
+    if (active) {
+      start(previousReplay.current !== replay);
+      previousReplay.current = replay;
+    } else stop();
+    return stop;
+  }, [active, replay, start, stop]);
 }
