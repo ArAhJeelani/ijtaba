@@ -1,0 +1,113 @@
+.daily-browse-bar,
+.daily-calendar,
+.daily-selection-header {
+  border: 1px solid #80684755;
+  background: #fffaf0df;
+  border-radius: 18px;
+  padding: clamp(14px, 3vw, 26px);
+}
+
+.daily-browse-bar,
+.daily-browse-bar > div,
+.daily-selection-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.daily-browse-bar,
+.daily-selection-header {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.daily-browse-bar {
+  margin: 18px 0;
+}
+
+.daily-browse-bar .count {
+  color: inherit;
+  background: #fff3;
+}
+
+.daily-layout {
+  display: grid;
+  grid-template-columns: minmax(290px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+}
+
+.daily-month {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  text-align: center;
+}
+
+.daily-month h3,
+.daily-selection-header h3,
+.daily-selection-header p {
+  margin: 0;
+}
+
+.daily-month button,
+.daily-date {
+  display: grid;
+  place-content: center;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: inherit;
+}
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin: 15px 0;
+}
+
+.daily-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+}
+
+.daily-date {
+  background: #e2d6be5c;
+  min-height: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-date small {
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.daily-date[aria-current="date"],
+.daily-date:hover,
+.daily-month button:hover {
+  border-color: #806847;
+}
+
+.daily-date[aria-pressed="true"] {
+  background: #263d36;
+  color: #fffaf0;
+}
+
+.daily-selection {
+  display: grid;
+  gap: 14px;
+}
+
+.daily-selection .dua-card {
+  transform: none;
+}
+
+@media (max-width: 740px) {
+  .daily-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

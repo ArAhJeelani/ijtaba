@@ -1,4 +1,4 @@
-import { Check, Plus } from "lucide-react";
+import { Check, Plus, ShoppingBag, X } from "lucide-react";
 import type { Dua } from "../data/duas";
 import { useCollection } from "../state/Collection";
 export function SaveDuaButton({ id }: { id: string }) {
@@ -18,10 +18,16 @@ export function SaveDuaButton({ id }: { id: string }) {
 export function DuaCard({
   dua,
   transliteration = false,
+  day,
+  dailyView = false,
 }: {
   dua: Dua;
   transliteration?: boolean;
+  day?: string;
+  dailyView?: boolean;
 }) {
+  const c = useCollection();
+  const added = day && c.data.days[day]?.includes(dua.id);
   return (
     <article className="dua-card">
       <div className="eyebrow">{dua.category}</div>
@@ -44,7 +50,17 @@ export function DuaCard({
         ) : (
           <span>{dua.reference}</span>
         )}
-        <SaveDuaButton id={dua.id} />
+        {day ? (
+          <button
+            className={"save" + (added && !dailyView ? " saved" : "")}
+            aria-pressed={dailyView ? undefined : Boolean(added)}
+            aria-label={dailyView ? `Remove ${dua.title} from this day` : undefined}
+            onClick={() => c.toggleDay(day, dua.id)}
+          >
+            {dailyView ? <X size={16} /> : added ? <Check size={16} /> : <ShoppingBag size={16} />}
+            {dailyView ? "Remove from day" : added ? "Added to day" : "Add to collection"}
+          </button>
+        ) : <SaveDuaButton id={dua.id} />}
       </div>
     </article>
   );

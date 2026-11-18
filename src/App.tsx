@@ -11,6 +11,8 @@ import {
   Moon,
   Search,
   Plus,
+  CalendarDays,
+  ShoppingBag,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { duas } from "./data/duas";
@@ -20,6 +22,8 @@ import { TahajjudCalculator } from "./components/TahajjudCalculator";
 import { ReadingDialog } from "./components/ReadingDialog";
 import { Arrival } from "./components/Arrival";
 import { TahajjudEntrance } from "./components/TahajjudEntrance";
+import { DuaCalendar } from "./components/DuaCalendar";
+import { collectionDate, dateKey, fullDate } from "./utils/calendar";
 
 function Navbar() {
   const [open, setOpen] = useState(false),
@@ -54,6 +58,7 @@ function Navbar() {
         <NavLink to="/my-duas">
           My Du’as <span className="count">{c.items.length}</span>
         </NavLink>
+        <NavLink to="/calendar">Calendar</NavLink>
         <NavLink to="/tahajjud">Tahajjud</NavLink>
         <NavLink to="/about">About</NavLink>
       </nav>
@@ -233,6 +238,10 @@ function Discover() {
       new URLSearchParams(location.search).get("category") || "All",
     ),
     [trans, setTrans] = useState(false);
+  const collection = useCollection();
+  const selected = collectionDate(new URLSearchParams(location.search).get("date"));
+  const day = dateKey(selected);
+  const count = collection.data.days[day]?.length ?? 0;
   const categories = ["All", ...new Set(duas.map((d) => d.category))];
   const found = duas.filter(
     (d) =>
@@ -275,6 +284,16 @@ function Discover() {
           Show transliteration
         </label>
       </div>
+      <div className="daily-browse-bar">
+        <div>
+          <CalendarDays size={20} aria-hidden="true" />
+          <span>Collecting for <strong>{fullDate.format(selected)}</strong></span>
+        </div>
+        <Link className="button" to={`/calendar?date=${day}`}>
+          <ShoppingBag size={17} />
+          Daily collection <span className="count" aria-live="polite">{count}</span>
+        </Link>
+      </div>
       <div className="filters" aria-label="Filter by category">
         {categories.map((x) => (
           <button
@@ -293,7 +312,7 @@ function Discover() {
       </p>
       <div className="dua-grid">
         {found.map((d) => (
-          <DuaCard key={d.id} dua={d} transliteration={trans} />
+          <DuaCard key={d.id} dua={d} transliteration={trans} day={day} />
         ))}
       </div>
       {!found.length && (
@@ -342,6 +361,9 @@ function MyDuas() {
           session
         </span>
         <div>
+          <Link className="underlined" to="/calendar">
+            <CalendarDays size={17} /> Du’a Calendar
+          </Link>
           <button className="underlined" onClick={c.reset}>
             Reset reading progress
           </button>
@@ -652,6 +674,7 @@ export default function App() {
       ({
         "/discover": "Discover Du’as",
         "/my-duas": "My Du’as",
+        "/calendar": "Du’a Calendar",
         "/tahajjud": "Tahajjud",
         "/about": "About Ijabah",
       }[location.pathname] || "One Dua Away") + " · Ijabah";
@@ -690,6 +713,7 @@ export default function App() {
           />
           <Route path="/discover" element={<Discover />} />
           <Route path="/my-duas" element={<MyDuas />} />
+          <Route path="/calendar" element={<DuaCalendar />} />
           <Route path="/tahajjud" element={<Tahajjud />} />
           <Route path="/about" element={<About />} />
           <Route

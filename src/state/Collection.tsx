@@ -9,13 +9,14 @@ import { duas, type Dua } from "../data/duas";
 interface Stored {
   ids: string[];
   personal: Dua[];
+  days: Record<string, string[]>;
 }
 const key = "ijabah.collection.v1";
 function load(): Stored {
   try {
     const s = JSON.parse(localStorage.getItem(key) || "null");
     if (!s || !Array.isArray(s.ids) || !Array.isArray(s.personal))
-      return { ids: [], personal: [] };
+      return { ids: [], personal: [], days: {} };
     const personal = s.personal.filter(
       (d: Dua) =>
         d &&
@@ -23,7 +24,16 @@ function load(): Stored {
         typeof d.translation === "string" &&
         d.personal === true,
     );
+    const available = new Set([...duas, ...personal].map((d) => d.id));
+    const days: Stored["days"] = {};
+    for (const [date, ids] of Object.entries(s.days ?? {})) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date) && Array.isArray(ids)) {
+        const valid = [...new Set<string>(ids.filter((id) => available.has(id)))];
+        if (valid.length) days[date] = valid;
+      }
+    }
     return {
+      days,
       personal,
       ids: [
         ...new Set<string>(
@@ -36,7 +46,7 @@ function load(): Stored {
       ],
     };
   } catch {
-    return { ids: [], personal: [] };
+    return { ids: [], personal: [], days: {} };
   }
 }
 function useCollectionState() {
@@ -53,13 +63,33 @@ function useCollectionState() {
       );
     }
   }, [data]);
+  const library = [...duas, ...data.personal];
   return {
     data,
     read,
     storageError,
     items: data.ids
-      .map((id) => [...duas, ...data.personal].find((d) => d.id === id)!)
+      .map((id) => library.find((d) => d.id === id)!)
       .filter(Boolean),
+    itemsForDay: (date: string) =>
+      (data.days[date] ?? []).flatMap((id) => {
+        const dua = library.find((item) => item.id === id);
+        return dua ? [dua] : [];
+      }),
+    toggleDay: (date: string, id: string) =>
+      set((s) => {
+        const current = s.days[date] ?? [];
+        const removing = current.includes(id);
+        const days = { ...s.days };
+        const next = removing ? current.filter((item) => item !== id) : [...current, id];
+        if (next.length) days[date] = next;
+        else delete days[date];
+        return {
+          ...s,
+          days,
+          ids: removing || s.ids.includes(id) ? s.ids : [...s.ids, id],
+        };
+      }),
     toggle: (id: string) =>
       set((s) => ({
         ...s,
@@ -72,7 +102,7 @@ function useCollectionState() {
         const ids = [...s.ids],
           i = ids.indexOf(id),
           j = i + delta;
-        if (j >= 0 && j < ids.length) [ids[i], ids[j]] = [ids[j], ids[i]];
+        if (i >= 0 && j >= 0 && j < ids.length) [ids[i], ids[j]] = [ids[j], ids[i]];
         return { ...s, ids };
       }),
     mark: (id: string) =>
@@ -88,7 +118,7 @@ function useCollectionState() {
         context: "In your own words.",
         personal: true,
       };
-      set((s) => ({ ids: [...s.ids, d.id], personal: [...s.personal, d] }));
+      set((s) => ({ ...s, ids: [...s.ids, d.id], personal: [...s.personal, d] }));
     },
   };
 }
