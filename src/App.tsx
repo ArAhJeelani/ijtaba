@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -16,6 +16,7 @@ import { DuaCard } from "./components/DuaCard";
 import { TahajjudCalculator } from "./components/TahajjudCalculator";
 import { Arrival } from "./components/Arrival";
 import { DesertHero } from "./components/DesertHero";
+import { DiscoverSections, DuaProfilesPage } from "./components/DuaProfiles";
 import { TahajjudEntrance } from "./components/TahajjudEntrance";
 import { MyDuasPage } from './components/MyDuasPage';
 import { TahajjudCollection } from './components/TahajjudCollection';
@@ -31,11 +32,11 @@ function Navbar() {
   }, [location.pathname]);
   const home = location.pathname === "/";
   return (
-    <header className={home ? "navbar desert-nav" : "navbar"}>
-      <Link to="/" className="brand" aria-label="Ijtaba home">
+    <header className={home ? "navbar desert-nav desert-nav-home" : "navbar desert-nav"}>
+      <Link to="/" className="brand" aria-label="Ijabab home">
         <img src="/assets/ijabah-logo.webp" alt="" />
         <span>
-          Ijtaba{!home && <small>ONE DUA AWAY</small>}
+          Ijabab{!home && <small>ONE DUA AWAY</small>}
         </span>
       </Link>
       <button
@@ -67,11 +68,10 @@ function Navbar() {
   );
 }
 function Footer() {
-  const { pathname } = useLocation();
   return (
-    <footer className={pathname === "/" ? "desert-footer" : undefined}>
+    <footer className="desert-footer">
       <Link className="footer-brand" to="/">
-        Ijtaba
+        Ijabab
       </Link>
       <span>A little closer, one du’a at a time.</span>
       <span>Made for moments that matter.</span>
@@ -95,7 +95,7 @@ function Heading({
     </div>
   );
 }
-function Home({ onReplay }: { onReplay: () => void }) {
+function Home({ onReplayIntro }: { onReplayIntro: () => void }) {
   const c = useCollection();
   return (
     <main className="desert-home">
@@ -110,8 +110,8 @@ function Home({ onReplay }: { onReplay: () => void }) {
             Qur’an 40:60 ↗
           </a>
         </p>
-        <button type="button" className="desert-replay" onClick={onReplay}>
-          Replay the three ways ↗
+        <button type="button" className="desert-replay" onClick={onReplayIntro}>
+          Replay the Three Ways intro
         </button>
       </section>
       <section id="featured" className="section">
@@ -188,7 +188,7 @@ function Home({ onReplay }: { onReplay: () => void }) {
         </Link>
       </section>
       <section className="purpose">
-        <span className="eyebrow">THE HEART OF IJTABA</span>
+        <span className="eyebrow">THE HEART OF IJABAB</span>
         <p>
           Making du’a should feel accessible,
           <br />
@@ -238,14 +238,7 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
         title={prophetic ? "Prophetic Du’as" : "Words for every season."}
         text={prophetic ? "Read and save supplications from the lives of the prophets in the Qur’an." : "Find a prayer to carry with you."}
       />
-      <nav className="filters" aria-label="Du’a library sections">
-        <Link className="button" to={`/discover${location.search}`} aria-current={!prophetic ? "page" : undefined}>
-          All du’as
-        </Link>
-        <Link className="button" to={`/discover/prophetic${location.search}`} aria-current={prophetic ? "page" : undefined}>
-          Prophetic Du’as
-        </Link>
-      </nav>
+      <DiscoverSections />
       <div className="library-controls">
         <label className="search">
           <Search size={19} />
@@ -424,12 +417,12 @@ function About() {
           <i>Away.</i>
         </h1>
         <p className="lead">
-          Ijtaba was created around a simple belief: making du’a should feel
+          Ijabab was created around a simple belief: making du’a should feel
           accessible, intentional, and personal.
         </p>
         <p>
           Sometimes the words come easily. Sometimes we need somewhere to begin.
-          Ijtaba is a quiet space to discover meaningful supplications,
+          Ijabab is a quiet space to discover meaningful supplications,
           understand their meaning, and keep them close.
         </p>
         <p>
@@ -449,27 +442,51 @@ function About() {
     </main>
   );
 }
+const introSeenKey = "ijabah:three-ways-intro-seen";
+
 export default function App() {
-  const [opening, setOpening] = useState(false);
+  const [introPending, setIntroPending] = useState(() => {
+    try {
+      return localStorage.getItem(introSeenKey) === null;
+    } catch {
+      return true;
+    }
+  });
+  const introStarted = useRef(false);
   const location = useLocation(),
     reduced = useReducedMotion(),
     c = useCollection();
+  const opening = location.pathname === "/" && introPending;
+  useEffect(() => {
+    if (opening) {
+      introStarted.current = true;
+      try {
+        localStorage.setItem(introSeenKey, "1");
+      } catch {
+        // Navigation still works when browser storage is unavailable.
+      }
+    } else if (introStarted.current) {
+      setIntroPending(false);
+    }
+  }, [opening]);
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title =
       ({
         "/discover": "Discover Du’as",
+        "/discover/prophetic": "Prophetic Du’as",
+        "/discover/profiles": "Du’a Profiles",
         "/my-duas": "My Du’as",
         "/calendar": "Du’a Calendar",
         "/tahajjud": "Tahajjud",
-        "/about": "About Ijtaba",
-      }[location.pathname] || "One Dua Away") + " · Ijtaba";
+        "/about": "About Ijabab",
+      }[location.pathname] || "One Dua Away") + " · Ijabab";
   }, [location.pathname]);
   if (opening)
     return (
       <Arrival
         onEnter={() => {
-          setOpening(false);
+          setIntroPending(false);
           window.scrollTo(0, 0);
         }}
       />
@@ -487,18 +504,20 @@ export default function App() {
       )}
       <motion.div
         id="content"
+        className={location.pathname === "/" ? undefined : "desert-pages"}
         key={location.pathname}
         initial={reduced || location.pathname === "/" ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
       >
         <Routes>
-          <Route
-            path="/"
-            element={<Home onReplay={() => setOpening(true)} />}
-          />
+          <Route path="/" element={<Home onReplayIntro={() => {
+            window.scrollTo(0, 0);
+            setIntroPending(true);
+          }} />} />
           <Route path="/discover" element={<Discover key="all" />} />
           <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
+          <Route path="/discover/profiles/:profileId?" element={<DuaProfilesPage />} />
           <Route path="/my-duas" element={<MyDuasPage />} />
           <Route path="/calendar" element={<DuaCalendar />} />
           <Route path="/tahajjud" element={<Tahajjud />} />
