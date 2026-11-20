@@ -1,10 +1,14 @@
+import { approvedDuas } from "./approvedDuas.ts";
+
 export interface Dua {
   id: string;
   title: string;
   arabic?: string;
   translation: string;
+  translationAttribution?: string;
   transliteration?: string;
   category: string;
+  categories?: string[];
   reference: string;
   url?: string;
   context: string;
@@ -50,4 +54,5 @@ export const duas: Dua[] = [
     url: "https://quran.com/3/8",
     context: "A prayer for steadfastness and mercy.",
   },
+  ...approvedDuas,
 ];

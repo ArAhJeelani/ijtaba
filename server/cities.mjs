@@ -56,11 +56,18 @@ export function parseDay(body, date) {
 }
 const cache = new Map(),
   pending = new Map();
+const maxPendingLookups = 16;
+class LookupCapacityError extends Error {}
+
 async function day(city, date) {
   const key = city.id + date,
     existing = cache.get(key);
   if (existing && Date.now() - existing.fetchedAt < 3600000) return existing;
   if (pending.has(key)) return pending.get(key);
+  if (pending.size >= maxPendingLookups)
+    throw new LookupCapacityError(
+      "Prayer times are busy. Try again shortly or enter your times manually.",
+    );
   const promise = (async () => {
     const params = new URLSearchParams({
       latitude: String(city.latitude),
@@ -73,10 +80,12 @@ async function day(city, date) {
       `https://api.aladhan.com/v1/timings/${date.split("-").reverse().join("-")}?${params}`,
       { signal: AbortSignal.timeout(12000) },
     );
-    if (!response.ok)
+    if (!response.ok) {
+      await response.body?.cancel();
       throw new Error(
         "Prayer times are temporarily unavailable. Please enter your times manually.",
       );
+    }
     const value = {
       ...parseDay(await response.json(), date),
       fetchedAt: Date.now(),
@@ -128,7 +137,16 @@ export async function getCityNight(id, date) {
   return nightResult(city, date, evening, morning);
 }
 export async function cityMiddleware(req, res, next) {
-  const url = new URL(req.url, "http://localhost");
+  let url;
+  try {
+    url = new URL(req.url, "http://localhost");
+  } catch {
+    res.statusCode = 400;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.setHeader("Cache-Control", "no-store");
+    res.end(JSON.stringify({ error: "Invalid request URL." }));
+    return;
+  }
   if (!url.pathname.startsWith("/api/")) return next();
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -156,7 +174,7 @@ export async function cityMiddleware(req, res, next) {
       ),
     );
   } catch (e) {
-    res.statusCode = 422;
+    res.statusCode = e instanceof LookupCapacityError ? 503 : 422;
     res.end(
       JSON.stringify({
         error:

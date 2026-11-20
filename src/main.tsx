@@ -17,3 +17,5 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </React.StrictMode>,
 );
+
+import './components/organizer.css';

@@ -2,26 +2,22 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
-  ArrowUp,
-  ArrowDown,
   BookOpen,
-  Check,
   Menu,
   X,
   Moon,
   Search,
-  Plus,
   CalendarDays,
-  ShoppingBag,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { duas } from "./data/duas";
 import { useCollection } from "./state/Collection";
 import { DuaCard } from "./components/DuaCard";
 import { TahajjudCalculator } from "./components/TahajjudCalculator";
-import { ReadingDialog } from "./components/ReadingDialog";
 import { Arrival } from "./components/Arrival";
 import { TahajjudEntrance } from "./components/TahajjudEntrance";
+import { MyDuasPage } from './components/MyDuasPage';
+import { TahajjudCollection } from './components/TahajjudCollection';
 import { DuaCalendar } from "./components/DuaCalendar";
 import { collectionDate, dateKey, fullDate } from "./utils/calendar";
 
@@ -242,15 +238,16 @@ function Discover() {
   const selected = collectionDate(new URLSearchParams(location.search).get("date"));
   const day = dateKey(selected);
   const count = collection.data.days[day]?.length ?? 0;
-  const categories = ["All", ...new Set(duas.map((d) => d.category))];
+  const categories = ["All", ...new Set(duas.flatMap((d) => d.categories ?? [d.category]))];
   const found = duas.filter(
     (d) =>
-      (category === "All" || d.category === category) &&
+      (category === "All" || (d.categories ?? [d.category]).includes(category)) &&
       [
         d.title,
+        d.arabic,
         d.translation,
         d.context,
-        d.category,
+        ...(d.categories ?? [d.category]),
         d.reference,
         d.transliteration,
       ]
@@ -284,16 +281,17 @@ function Discover() {
           Show transliteration
         </label>
       </div>
-      <div className="daily-browse-bar">
+      {new URLSearchParams(location.search).has("date") && <div className="daily-browse-bar">
         <div>
           <CalendarDays size={20} aria-hidden="true" />
           <span>Collecting for <strong>{fullDate.format(selected)}</strong></span>
         </div>
         <Link className="button" to={`/calendar?date=${day}`}>
-          <ShoppingBag size={17} />
-          Daily collection <span className="count" aria-live="polite">{count}</span>
+          <BookOpen size={17} />
+          Gathered for this day <span className="count" aria-live="polite">{count}</span>
         </Link>
       </div>
+      }
       <div className="filters" aria-label="Filter by category">
         {categories.map((x) => (
           <button
@@ -312,7 +310,7 @@ function Discover() {
       </p>
       <div className="dua-grid">
         {found.map((d) => (
-          <DuaCard key={d.id} dua={d} transliteration={trans} day={day} />
+          <DuaCard key={d.id} dua={d} transliteration={trans} day={new URLSearchParams(location.search).has("date") ? day : undefined} />
         ))}
       </div>
       {!found.length && (
@@ -335,205 +333,6 @@ function Discover() {
         reading aids. This starter collection will grow only after text,
         reference, and editorial review.
       </p>
-    </main>
-  );
-}
-function MyDuas() {
-  const c = useCollection(),
-    [reading, setReading] = useState(false),
-    [index, setIndex] = useState(0),
-    [trans, setTrans] = useState(false),
-    [personal, setPersonal] = useState(false),
-    [title, setTitle] = useState(""),
-    [prayer, setPrayer] = useState("");
-  const current = c.items[Math.min(index, c.items.length - 1)];
-  return (
-    <main className="section page">
-      <Heading
-        eyebrow="YOUR PERSONAL COLLECTION"
-        title="A place for your prayers."
-        text="Gather the words that matter. Return whenever your heart needs them."
-      />
-      <div className="collection-toolbar">
-        <span>
-          {c.items.length} saved ·{" "}
-          {c.items.filter((d) => c.read.includes(d.id)).length} read this
-          session
-        </span>
-        <div>
-          <Link className="underlined" to="/calendar">
-            <CalendarDays size={17} /> Du’a Calendar
-          </Link>
-          <button className="underlined" onClick={c.reset}>
-            Reset reading progress
-          </button>
-          <button
-            className="button"
-            onClick={() => {
-              setIndex(0);
-              setReading(true);
-            }}
-            disabled={!c.items.length}
-          >
-            <BookOpen size={17} /> Begin reading
-          </button>
-        </div>
-      </div>
-      {!c.items.length && (
-        <div className="empty">
-          <span>✧</span>
-          <h3>Your collection begins with one du’a.</h3>
-          <p>Save from the library, or write a personal prayer below.</p>
-          <Link className="button" to="/discover">
-            Discover Du’as <ArrowUpRight size={17} />
-          </Link>
-        </div>
-      )}
-      <div className="saved-list">
-        {c.items.map((d, i) => (
-          <div className="saved-row" key={d.id}>
-            <div className="row-tools">
-              <button
-                className={
-                  c.read.includes(d.id) ? "read-toggle checked" : "read-toggle"
-                }
-                aria-label={`${c.read.includes(d.id) ? "Mark unread" : "Mark read"}: ${d.title}`}
-                aria-pressed={c.read.includes(d.id)}
-                onClick={() => c.mark(d.id)}
-              >
-                {c.read.includes(d.id) ? (
-                  <Check size={16} />
-                ) : (
-                  String(i + 1).padStart(2, "0")
-                )}
-              </button>
-              <button
-                aria-label={`Move ${d.title} up`}
-                disabled={i === 0}
-                onClick={() => c.move(d.id, -1)}
-              >
-                <ArrowUp size={17} />
-              </button>
-              <button
-                aria-label={`Move ${d.title} down`}
-                disabled={i === c.items.length - 1}
-                onClick={() => c.move(d.id, 1)}
-              >
-                <ArrowDown size={17} />
-              </button>
-            </div>
-            <DuaCard dua={d} />
-          </div>
-        ))}
-      </div>
-      <section className="personal-section">
-        <button
-          className="underlined"
-          aria-expanded={personal}
-          onClick={() => setPersonal(!personal)}
-        >
-          <Plus size={17} /> A prayer in your own words
-        </button>
-        {personal && (
-          <form
-            className="personal-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!title.trim() || !prayer.trim()) return;
-              c.addPersonal(title.trim(), prayer.trim());
-              setTitle("");
-              setPrayer("");
-              setPersonal(false);
-            }}
-          >
-            <p>
-              Personal entries are labeled as your own prayers, separate from
-              sourced supplications.
-            </p>
-            <label>
-              Title
-              <input
-                required
-                maxLength={120}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <label>
-              Your prayer
-              <textarea
-                required
-                maxLength={4000}
-                rows={4}
-                value={prayer}
-                onChange={(e) => setPrayer(e.target.value)}
-              />
-            </label>
-            <button className="button">Add personal prayer</button>
-          </form>
-        )}
-      </section>
-      {reading && current && (
-        <ReadingDialog
-          onClose={() => setReading(false)}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") setReading(false);
-            if (e.key === "ArrowRight")
-              setIndex((i) => Math.min(c.items.length - 1, i + 1));
-            if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
-          }}
-        >
-          <div className="reading-top">
-            <span className="eyebrow">
-              A MOMENT FOR YOU · {index + 1} / {c.items.length}
-            </span>
-            <button
-              autoFocus
-              onClick={() => setReading(false)}
-              aria-label="Close reading mode"
-            >
-              <X />
-            </button>
-          </div>
-          <progress max={c.items.length} value={index + 1} />
-          <div className="reading-content">
-            <DuaCard dua={current} transliteration={trans} />
-          </div>
-          <div className="reading-bottom">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={trans}
-                onChange={(e) => setTrans(e.target.checked)}
-              />{" "}
-              Transliteration
-            </label>
-            <button className="underlined" onClick={() => c.mark(current.id)}>
-              {c.read.includes(current.id)
-                ? "✓ Read · mark unread"
-                : "Mark as read"}
-            </button>
-            <div>
-              <button
-                className="button outline"
-                disabled={index === 0}
-                onClick={() => setIndex(index - 1)}
-              >
-                Previous
-              </button>
-              <button
-                className="button"
-                onClick={() => {
-                  if (index === c.items.length - 1) setReading(false);
-                  else setIndex(index + 1);
-                }}
-              >
-                {index === c.items.length - 1 ? "Finish" : "Next"} →
-              </button>
-            </div>
-          </div>
-        </ReadingDialog>
-      )}
     </main>
   );
 }
@@ -570,6 +369,7 @@ function Tahajjud() {
       </section>
       <div className="section" id="calculator">
         <TahajjudCalculator />
+        <TahajjudCollection />
         <div className="night-explanation">
           <Heading
             eyebrow="UNDERSTANDING THE NIGHT"
@@ -712,7 +512,7 @@ export default function App() {
             element={<Home onReplay={() => setOpening(true)} />}
           />
           <Route path="/discover" element={<Discover />} />
-          <Route path="/my-duas" element={<MyDuas />} />
+          <Route path="/my-duas" element={<MyDuasPage />} />
           <Route path="/calendar" element={<DuaCalendar />} />
           <Route path="/tahajjud" element={<Tahajjud />} />
           <Route path="/about" element={<About />} />
@@ -730,6 +530,8 @@ export default function App() {
         </Routes>
       </motion.div>
       <Footer />
+      {c.notice && <div className="collection-toast" role="status">{c.notice}</div>}
     </>
   );
 }
+
