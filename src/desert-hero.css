@@ -1,4 +1,5 @@
-.desert-home {
+.desert-home,
+.desert-pages {
   --desert-ink: #33221c;
   --desert-muted: #654a3c;
   --desert-linen: #eee0c8;
@@ -27,6 +28,24 @@
 
 .desert-home .intro-strip p {
   margin: 0;
+}
+
+.desert-replay {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #edc79d80;
+  border-radius: 0.25rem;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.desert-replay:hover {
+  background: #edc79d1a;
+}
+
+.desert-replay:focus-visible {
+  outline: 2px solid #ffe1b8;
+  outline-offset: 3px;
 }
 
 .desert-home :is(.section-heading h2, .collection-invite h2, .night-feature h2, .purpose p, .dua-card h3, .category-grid h3) {
@@ -84,8 +103,13 @@
 .navbar.desert-nav {
   --home-nav-height: 84px;
   height: var(--home-nav-height);
-  margin-bottom: calc(-1 * var(--home-nav-height));
+  background: #30201c;
   color: #f8eedc;
+}
+
+.navbar.desert-nav-home {
+  margin-bottom: calc(-1 * var(--home-nav-height));
+  background: transparent;
 }
 
 .navbar.desert-nav::before {
@@ -117,7 +141,7 @@
   color: #fff1dc;
 }
 
-.desert-hero-art,
+.desert-scene,
 .desert-hero::after {
   position: absolute;
   inset: 0;
@@ -125,10 +149,82 @@
   height: 100%;
 }
 
-.desert-hero-art {
+.desert-scene {
+  --scene-anchor: 65%;
   z-index: -2;
+  container-type: size;
+  overflow: hidden;
+}
+
+.desert-hero-art {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: 65% center;
+  object-position: var(--scene-anchor) center;
+}
+
+/* Match the cover crop of the flattened artwork so lights stay registered. */
+.desert-light-map {
+  position: absolute;
+  top: 50%;
+  left: var(--scene-anchor);
+  width: max(100cqw, 177.6833cqh);
+  aspect-ratio: 1672 / 941;
+  transform: translate(calc(-1 * var(--scene-anchor)), -50%);
+  pointer-events: none;
+}
+
+.desert-night-light {
+  position: absolute;
+  inset: 0;
+  transform: translate(var(--breeze-x, 0px), var(--breeze-y, 0px));
+  transition: transform 900ms ease-out;
+}
+
+.desert-moonlight,
+.desert-star,
+.desert-sand-haze,
+.desert-trail-light {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.desert-moonlight {
+  inset: 1% 14% auto auto;
+  width: 19%;
+  height: 25%;
+  background: radial-gradient(ellipse, #f8cc8f22, #efb56e0b 40%, transparent 71%);
+  opacity: 0.54;
+}
+
+.desert-star {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f7d9ae 0%, transparent 74%);
+  opacity: 0;
+}
+
+.desert-star:nth-child(2) { top: 5.3%; left: 54.6%; --twinkle: 9.7s; --phase: -2.4s; }
+.desert-star:nth-child(3) { top: 17.8%; left: 50.4%; --twinkle: 13.1s; --phase: -7.7s; }
+.desert-star:nth-child(4) { top: 5.8%; left: 92.4%; --twinkle: 10.9s; --phase: -4.1s; }
+.desert-star:nth-child(5) { top: 2.5%; left: 69%; --twinkle: 15.3s; --phase: -9.2s; }
+
+.desert-sand-haze {
+  inset: 64% 2% 12% 34%;
+  background: radial-gradient(ellipse, #eeb78314, transparent 69%);
+  opacity: 0;
+}
+
+.desert-trail-light {
+  left: 60%;
+  top: 84%;
+  width: 18%;
+  height: 15%;
+  background: radial-gradient(ellipse, #ffcb8840, #edb27416 42%, transparent 72%);
+  opacity: 0;
 }
 
 .desert-hero::after {
@@ -180,17 +276,6 @@
   outline-offset: 5px;
 }
 
-.desert-replay {
-  display: block;
-  margin: 0.8rem auto 0;
-  padding: 0.55rem;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
 @media (max-width: 760px) {
   .navbar.desert-nav {
     --home-nav-height: 70px;
@@ -208,8 +293,12 @@
   }
 
   .desert-hero-art {
+    object-position: var(--scene-anchor) center;
+  }
+
+  .desert-scene {
+    --scene-anchor: 73%;
     height: 78%;
-    object-position: 73% center;
   }
 
   .desert-hero::after {
@@ -234,7 +323,113 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .desert-hero-cta {
+  .desert-hero-cta,
+  .desert-night-light {
     transition: none;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .desert-scene {
+    animation: desert-reveal 1.95s cubic-bezier(0.22, 0.61, 0.35, 1) both;
+    transform-origin: 63% 56%;
+  }
+
+  .desert-moonlight {
+    animation: desert-moon-breathe 14s ease-in-out infinite alternate;
+  }
+
+  .desert-star {
+    animation: desert-twinkle var(--twinkle) ease-in-out var(--phase) infinite;
+  }
+
+  .desert-sand-haze {
+    animation: desert-drift 19s ease-in-out infinite alternate;
+  }
+
+  .desert-trail-light {
+    animation: desert-trail 1.9s ease-in-out both;
+  }
+
+  .desert-hero h1 > span {
+    display: inline-block;
+  }
+
+  .desert-hero h1 > :is(span, em) {
+    animation: desert-type-in 1.2s cubic-bezier(0.22, 0.61, 0.35, 1) 0.17s both;
+  }
+
+  .desert-hero h1 > em {
+    animation-delay: 0.38s;
+  }
+
+  .desert-nav-home > :is(.brand, nav, .menu-toggle),
+  .desert-hero-cta {
+    animation: desert-controls-in 0.95s ease-out 0.22s both;
+  }
+
+  .desert-hero-cta {
+    animation-delay: 0.58s;
+  }
+
+  .desert-nav > :focus-within,
+  .desert-hero-cta:focus-visible {
+    animation: none;
+  }
+
+  @supports (animation-timeline: view()) {
+    .desert-home .intro-strip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(#d7936133, transparent 82%);
+      animation: desert-crossfade linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes desert-reveal {
+  from { opacity: 0.72; transform: scale(1.016); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes desert-type-in {
+  from { opacity: 0.3; transform: translateY(0.12em); clip-path: inset(17% -0.12em -0.32em); }
+  to { opacity: 1; transform: none; clip-path: inset(-0.3em -0.12em -0.32em); }
+}
+
+@keyframes desert-controls-in {
+  from { opacity: 0.52; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes desert-moon-breathe {
+  from { opacity: 0.34; }
+  to { opacity: 0.72; }
+}
+
+@keyframes desert-twinkle {
+  0%, 12%, 30%, 61%, 100% { opacity: 0; }
+  20% { opacity: 0.55; }
+  50% { opacity: 0.24; }
+}
+
+@keyframes desert-drift {
+  from { opacity: 0.2; transform: translateX(-3%); }
+  to { opacity: 0.75; transform: translateX(3%); }
+}
+
+@keyframes desert-trail {
+  0% { opacity: 0; transform: translate(-17%, 22%); }
+  42% { opacity: 0.65; }
+  76% { opacity: 0.46; }
+  100% { opacity: 0; transform: translate(31%, -78%); }
+}
+
+@keyframes desert-crossfade {
+  from { opacity: 0.72; }
+  to { opacity: 0; }
 }

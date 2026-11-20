@@ -1,0 +1,167 @@
+.desert-pages {
+  --desert-accent: #87482f;
+  --desert-line: #80503450;
+  --desert-paper: #fff3dcd9;
+  --desert-night: #30201c;
+  --desert-light: #fff1dc;
+  accent-color: var(--desert-accent);
+  min-height: 80svh;
+}
+
+.desert-pages .page {
+  padding-top: clamp(24px, 4vw, 54px);
+}
+
+.desert-pages .page::before {
+  content: none;
+}
+
+.desert-pages :is(h1, h2, h3) {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.desert-pages :is(.page > .section-heading, .tahajjud-hero) {
+  background:
+    linear-gradient(90deg, #281b19ee 8%, #281b19a8 50%, #281b1933),
+    var(--desert-night) url("/assets/desert-dua-hero-textured.jpg") 70% 40% / cover no-repeat;
+  color: var(--desert-light);
+}
+
+.desert-pages .page > .section-heading {
+  padding: clamp(24px, 5vw, 64px);
+  margin-bottom: clamp(24px, 4vw, 46px);
+  background-position: 70% 12%;
+}
+
+.desert-pages .page > .section-heading h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.65rem, 6.5vw, 5.5rem);
+  line-height: 0.98;
+}
+
+.desert-pages :is(.page > .section-heading, .tahajjud-hero) :is(.eyebrow, p, em, i) {
+  color: #f2d3b0;
+}
+
+.desert-pages .page > .section-heading p {
+  margin-top: 0.85rem;
+}
+
+.desert-pages :is(.small, .source-note, .context, .card-bottom > a, .schedule-clock, .schedule-note, .section-heading p, .daily-weekday, .calculator p, .night-explanation p, .about-page p:not(.lead)) {
+  color: var(--desert-muted);
+}
+
+.desert-pages :is(.arabic, .translation, .save, .underlined, .night-explanation a, .timetable-source) {
+  color: var(--desert-accent);
+}
+
+.desert-pages .save.saved {
+  color: #536038;
+}
+
+.desert-pages :is(.search, .collection-tabs button, .filters button, .daily-date, .result, .chosen-masjid) {
+  background: #bd835a24;
+}
+
+.desert-pages :is(.search, .filters button, .collection-tabs button, .result) {
+  clip-path: none;
+  border: 1px solid var(--desert-line);
+  border-radius: 4px;
+}
+
+.desert-pages :is(.filters button, .filters a, .collection-tabs button) {
+  min-height: 44px;
+}
+
+.desert-pages .filters[aria-label="Du’a library sections"] a {
+  padding: 9px 16px;
+  border: 1px solid var(--desert-line);
+  border-radius: 4px;
+  color: var(--desert-ink);
+}
+
+.desert-pages .filters[aria-label="Du’a library sections"] a::before {
+  content: none;
+}
+
+.desert-pages :is(.filters button.selected, .filters a[aria-current="page"], .collection-tabs .selected, .daily-date[aria-pressed="true"]) {
+  background: #794430 !important;
+  color: #fff3de;
+}
+
+.desert-pages .button::before {
+  background: #794430;
+}
+
+.desert-pages :is(.daily-browse-bar, .daily-calendar, .daily-selection-header, .schedule-entry, .calculator form) {
+  background-color: var(--desert-paper);
+  border-color: var(--desert-line);
+}
+
+.desert-pages :is(.collections-panel, .tahajjud-collection, .all-schedules) {
+  border-color: var(--desert-line);
+}
+
+.desert-pages :is(input, textarea, select) {
+  color: var(--desert-ink);
+  border-color: var(--desert-line);
+  accent-color: var(--desert-accent);
+}
+
+.desert-pages :focus-visible {
+  outline: 2px solid var(--desert-accent);
+  outline-offset: 3px;
+}
+
+.desert-pages .tahajjud-hero {
+  min-height: clamp(440px, 68svh, 690px);
+  clip-path: none;
+}
+
+.desert-pages :is(.tahajjud-hero, .tahajjud-arrival)::before {
+  content: none;
+}
+
+.desert-pages .tahajjud-hero h1 {
+  font-size: clamp(3.5rem, 8vw, 7.25rem);
+}
+
+.desert-pages :is(.tahajjud-hero, .tahajjud-arrival) :focus-visible {
+  outline-color: var(--desert-light);
+}
+
+.desert-pages .tahajjud-arrival {
+  background:
+    linear-gradient(#281b1980, #281b1955),
+    var(--desert-night) url("/assets/desert-dua-hero-textured.jpg") 70% center / cover no-repeat;
+  color: var(--desert-light);
+}
+
+.desert-pages .about-painting {
+  background: var(--desert-night) url("/assets/desert-dua-hero-textured.jpg") 72% center / cover no-repeat;
+  mask-image: none;
+}
+
+.desert-pages .about-page article {
+  background: var(--desert-paper);
+}
+
+.desert-pages .about-page h1 {
+  font-size: clamp(3.25rem, 7vw, 6.5rem);
+}
+
+.desert-pages :is(.organizer-dialog, .reading-content) {
+  background-color: #f5e6cf;
+  color: var(--desert-ink);
+  border-color: var(--desert-line);
+}
+
+.desert-pages :is(.organizer-dialog, .reading-overlay)::backdrop {
+  background-color: #2b1915bb;
+}
+
+@media (max-width: 650px) {
+  .desert-pages .page > .section-heading {
+    background-position: 65% center;
+  }
+}

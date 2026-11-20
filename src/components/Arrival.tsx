@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { ArrowUpRight, Pause, Play, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Pause, Play } from "lucide-react";
 import "./arrival.css";
 import { useAnimationNasheed } from "../state/Humming";
 import { ClosingWriting } from "./ClosingWriting";
@@ -17,11 +17,10 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
   const reduced = useReducedMotion();
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [cycle, setCycle] = useState(0);
   const [leaving, setLeaving] = useState(false);
   useAnimationNasheed(
     !paused && !leaving && !reduced,
-    cycle,
+    0,
     Math.min(1, (LENGTH - elapsed) / 3000),
   );
   const complete = !!reduced || elapsed >= LENGTH;
@@ -51,7 +50,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
       last = now;
     }, 100);
     return () => window.clearInterval(timer);
-  }, [paused, reduced, complete, cycle]);
+  }, [paused, reduced, complete]);
 
   useEffect(() => {
     if (!leaving) return;
@@ -65,13 +64,13 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
     >
       <div className="arrival-top">
         <span>
-          IJTABA
+          IJABAB
         </span>
         <button onClick={() => setLeaving(true)} disabled={leaving}>
           Skip introduction ↗
         </button>
       </div>
-      <div className="painted-film" key={cycle} aria-hidden="true">
+      <div className="painted-film" aria-hidden="true">
         <svg
           viewBox="0 0 1440 900"
           preserveAspectRatio="xMidYMid slice"
@@ -127,12 +126,19 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
               />
             </mask>
           </defs>
+          <image
+            href="/assets/desert-dua-hero-textured.jpg"
+            width="1440"
+            height="900"
+            preserveAspectRatio="xMidYMid slice"
+            opacity=".74"
+          />
           <g className="first-ink" filter="url(#film-drybrush)">
             <path
               d="M-80 580 C200 390 380 670 690 545 S1150 360 1510 500"
               pathLength="1"
               fill="none"
-              stroke="#536d90"
+              stroke="#b07851"
               strokeWidth="10"
               strokeLinecap="round"
             />
@@ -140,49 +146,11 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
               d="M-40 600 C300 440 430 675 790 535 S1220 415 1500 470"
               pathLength="1"
               fill="none"
-              stroke="#a3aac4"
+              stroke="#ddb186"
               strokeWidth="3"
             />
           </g>
           <g className="night-scene" mask="url(#film-sky-reveal)">
-            <rect width="1440" height="900" fill="#182d50" />
-            <g filter="url(#film-pigment)">
-              <path
-                d="M-80 180 Q290 320 670 165 T1530 190"
-                fill="none"
-                stroke="#4c547d"
-                strokeWidth="220"
-              />
-              <path
-                d="M-80 425 Q380 170 870 330 T1530 200"
-                fill="none"
-                stroke="#7b779b"
-                strokeWidth="105"
-                opacity=".5"
-              />
-              <path
-                d="M-80 510 Q410 350 850 460 T1530 345"
-                fill="none"
-                stroke="#526785"
-                strokeWidth="135"
-              />
-              <path
-                d="M-80 840 Q420 640 850 755 T1530 715 L1530 1000 L-80 1000Z"
-                fill="#34486a"
-              />
-              <path
-                d="M-80 900 Q400 720 900 850 T1530 790"
-                fill="none"
-                stroke="#7e7c9b"
-                strokeWidth="45"
-                opacity=".4"
-              />
-            </g>
-            <path
-              d="M1090 125 Q1030 199 1110 232 Q1010 239 1017 166 Q1028 127 1090 125"
-              fill="#e4d6af"
-              filter="url(#film-drybrush)"
-            />
             <g className="painted-stars" fill="#e4d6af">
               {[
                 [210, 165],
@@ -198,27 +166,17 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
                 <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 3 : 1.6} />
               ))}
             </g>
-            <image
-              href="/assets/painted-canvas-v1.webp"
-              x="0"
-              y="0"
-              width="1440"
-              height="900"
-              preserveAspectRatio="xMidYMax slice"
-              opacity=".5"
-              style={{ mixBlendMode: "soft-light" }}
-            />
           </g>
           <g className="garden-scene" filter="url(#film-pigment)">
             <path
               className="earth-wash"
               d="M-100 820 Q240 600 720 720 T1540 690 L1540 1000 L-100 1000Z"
-              fill="#a9ad8e"
+              fill="#a96943"
             />
             <path
               className="earth-wash"
               d="M-100 860 Q360 680 740 795 T1540 735 L1540 1000 L-100 1000Z"
-              fill="#7f927c"
+              fill="#653925"
               opacity=".6"
             />
             <ellipse
@@ -227,26 +185,26 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
               cy="740"
               rx="12"
               ry="19"
-              fill="#8a6e56"
+              fill="#593321"
             />
             <path
               className="growing-stem"
               pathLength="1"
               d="M720 755 Q690 610 726 465 Q747 410 718 350"
               fill="none"
-              stroke="#637c69"
+              stroke="#8b8855"
               strokeWidth="12"
               strokeLinecap="round"
             />
             <path
               className="leaf leaf-left"
               d="M713 625 Q590 630 602 535 Q694 534 713 625Z"
-              fill="#87977b"
+              fill="#9e9a62"
             />
             <path
               className="leaf leaf-right"
               d="M718 560 Q835 570 838 474 Q747 472 718 560Z"
-              fill="#6e866f"
+              fill="#797647"
             />
             <g className="bloom">
               {[0, 60, 120, 180, 240, 300].map((r, i) => (
@@ -257,7 +215,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
                   rx="35"
                   ry="73"
                   transform={`rotate(${r} 720 350)`}
-                  fill={["#aea5ca", "#c2afcd", "#8e91b9"][i % 3]}
+                  fill={["#c77e63", "#e0ad82", "#a9604e"][i % 3]}
                   opacity=".88"
                 />
               ))}
@@ -268,29 +226,9 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
               className="earth-wash"
               d="M-50 845 Q420 730 710 803 T1490 760"
               fill="none"
-              stroke="#ddd1ac"
+              stroke="#e0a672"
               strokeWidth="30"
               opacity=".65"
-            />
-          </g>
-          <g className="prayer-hands" filter="url(#film-drybrush)">
-            <path
-              d="M565 940 L593 767 Q591 713 623 656 Q633 638 644 653 L632 714 Q648 669 663 648 Q676 632 685 649 L669 716 Q690 681 702 689 Q715 698 704 722 Q688 760 680 790 L682 940Z"
-              fill="#c3a894"
-            />
-            <path
-              d="M875 940 L847 767 Q849 713 817 656 Q807 638 796 653 L808 714 Q792 669 777 648 Q764 632 755 649 L771 716 Q750 681 738 689 Q725 698 736 722 Q752 760 760 790 L758 940Z"
-              fill="#d7bca0"
-            />
-            <path
-              d="M582 874 Q630 848 684 862 L690 950 H560Z M858 874 Q810 848 756 862 L750 950 H880Z"
-              fill="#61738b"
-            />
-            <path
-              d="M615 780 Q639 749 663 748 M825 780 Q801 749 777 748"
-              fill="none"
-              stroke="#a58478"
-              strokeWidth="5"
             />
           </g>
           <path
@@ -330,18 +268,18 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
             <path
               className="harm-left"
               d="M-200 240 C150 140 420 320 540 460 C600 550 430 630 190 590 L-200 800Z"
-              fill="#090f27"
+              fill="#1a100d"
             />
             <path
               className="harm-right"
               d="M1640 260 C1250 120 1040 320 895 440 C810 535 1040 645 1330 580 L1640 820Z"
-              fill="#0b142e"
+              fill="#241510"
             />
             <path
               className="diverted-ink"
               d="M-80 450 C280 300 420 400 490 560 S260 760 -80 790 M1520 450 C1180 300 1010 390 950 560 S1200 770 1520 800"
               fill="none"
-              stroke="#716a91"
+              stroke="#815039"
               strokeWidth="54"
             />
           </g>
@@ -419,7 +357,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
                 onClick={() => setLeaving(true)}
                 disabled={leaving}
               >
-                Enter Ijtaba <ArrowUpRight size={19} />
+                Enter Ijabab <ArrowUpRight size={19} />
               </button>
             )}
           </div>
@@ -427,15 +365,6 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
       </div>
       <div className="film-footer">
         <div className="animation-controls">
-          <button
-            onClick={() => {
-              setElapsed(0);
-              setPaused(false);
-              setCycle((n) => n + 1);
-            }}
-          >
-            <RotateCcw size={14} /> Replay
-          </button>
           {!complete && (
             <button onClick={() => setPaused(!paused)}>
               {paused ? <Play size={14} /> : <Pause size={14} />}{" "}

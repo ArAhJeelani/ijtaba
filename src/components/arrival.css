@@ -497,9 +497,6 @@
 .living-arrival .film-footer {
   color: #f5ead5 !important;
 }
-.prayer-hands {
-  animation: prayer-hands var(--film-length) ease both;
-}
 .answer-branches path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -515,7 +512,6 @@
 .is-paused .film-canvas {
   animation-play-state: paused !important;
 }
-.is-reduced .prayer-hands,
 .is-reduced .answer-branches,
 .is-reduced .kept-light {
   display: none;
@@ -545,22 +541,6 @@
   24%,
   100% {
     stroke-dashoffset: 0;
-  }
-}
-@keyframes prayer-hands {
-  0% {
-    opacity: 0;
-    transform: translateY(70px);
-  }
-  5%,
-  18% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  29%,
-  100% {
-    opacity: 0;
-    transform: translateY(140px);
   }
 }
 @keyframes carry-stroke {
@@ -926,4 +906,64 @@
   .is-reduced .film-signature ol {
     font-size: 11px;
   }
+}
+
+.arrival.living-arrival {
+  background: #241815;
+  color: #fff0da;
+  transition: opacity 0.65s ease;
+}
+
+.arrival.living-arrival::after {
+  background: linear-gradient(#21161380, transparent 25%, transparent 70%, #211613c7);
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+.arrival.living-arrival.is-leaving {
+  filter: none;
+}
+
+.arrival.living-arrival :is(.arrival-top, .film-footer) {
+  color: #fff0da;
+  mix-blend-mode: normal;
+}
+
+.arrival.living-arrival .film-words {
+  color: #fff0da;
+  text-shadow: 0 2px 14px #211613;
+}
+
+.arrival.living-arrival .film-words h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.arrival.living-arrival .film-words :is(.eyebrow, h1 em) {
+  color: #f0c69b;
+}
+
+.arrival.living-arrival .earth-wash {
+  fill-opacity: 0.48;
+  stroke-opacity: 0.43;
+}
+
+.arrival.living-arrival .film-progress {
+  background: #e4b3884d;
+}
+
+.arrival.living-arrival .film-footer details[open] {
+  background: #30201c;
+}
+
+.arrival.living-arrival .film-signature .film-enter {
+  color: #2e1c17;
+  text-shadow: none;
+}
+
+.arrival.living-arrival .film-signature .film-enter::before {
+  background: #edc79d;
+}
+
+.arrival.living-arrival.is-paused .film-words {
+  animation-play-state: paused;
 }

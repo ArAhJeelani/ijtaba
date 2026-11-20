@@ -6,6 +6,8 @@ import App from "./App";
 import "./styles.css";
 import "./painted.css";
 import "./desert-hero.css";
+import "./components/organizer.css";
+import "./desert-pages.css";
 import { HummingProvider } from "./state/Humming";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -18,5 +20,3 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </React.StrictMode>,
 );
-
-import './components/organizer.css';

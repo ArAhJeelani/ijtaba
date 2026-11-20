@@ -1,11 +1,22 @@
 import type {Dua} from '../data/duas.ts';
 import type {OrganizerData,ScheduledDua} from '../data/organizer.ts';
 import {validDay} from '../utils/schedules.ts';
+import {findDuaProfile} from '../data/duaProfiles.ts';
 export const storageKey='ijabah.collection.v1'; // Extend the same store; preserve existing data.
-export const emptyData=():OrganizerData=>({version:2,ids:[],personal:[],days:{},savedAt:{},collections:[],memberships:[],schedules:[]});
+export const emptyData=():OrganizerData=>({version:2,ids:[],personal:[],days:{},savedAt:{},collections:[],memberships:[],schedules:[],followedProfiles:[]});
+export function upsertSchedule(schedules: ScheduledDua[], schedule: ScheduledDua): ScheduledDua[] {
+  const match = schedules.find(existing => existing.id === schedule.id ||
+    (schedule.target.kind === 'profile' && existing.target.kind === 'profile' &&
+      existing.target.id === schedule.target.id));
+  if (!match) return [...schedules, schedule];
+  return schedules.map(existing => existing.id === match.id
+    ? { ...schedule, id: match.id, createdAt: match.createdAt }
+    : existing);
+}
 export function migrateOrganizer(raw:unknown,duas:Dua[]):OrganizerData{
   const data=emptyData();if(!raw||typeof raw!=='object')return data;
   const s=raw as Partial<OrganizerData>;
+  if(Array.isArray(s.followedProfiles))data.followedProfiles=[...new Set(s.followedProfiles.filter(id=>typeof id==='string'&&findDuaProfile(id)))];
   data.personal=Array.isArray(s.personal)?s.personal.filter(d=>d&&typeof d.id==='string'&&typeof d.title==='string'&&typeof d.translation==='string'&&d.personal===true):[];
   const available=new Set([...duas,...data.personal].map(d=>d.id));
   data.ids=Array.isArray(s.ids)?[...new Set(s.ids.filter(id=>typeof id==='string'&&available.has(id)))]:[];
@@ -21,9 +32,14 @@ export function migrateOrganizer(raw:unknown,duas:Dua[]):OrganizerData{
     if(!m||!groupIds.has(m.collectionId)||!available.has(m.duaId))return false;
     const key=JSON.stringify([m.collectionId,m.duaId]);if(members.has(key))return false;members.add(key);return true;
   });
-  const scheduleIds=new Set<string>();
+  const scheduleIds=new Set<string>(), scheduledProfiles=new Set<string>();
   if(Array.isArray(s.schedules))data.schedules=s.schedules.filter((r):r is ScheduledDua=>{
-    if(!r||typeof r.id!=='string'||scheduleIds.has(r.id)||!r.target||!(r.target.kind==='dua'?available.has(r.target.id):r.target.kind==='collection'&&groupIds.has(r.target.id))||!validDay(r.date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(r.time)||!r.recurrence||!['once','daily','weekdays','weekly','monthly'].includes(r.recurrence.frequency)||!Array.isArray(r.recurrence.weekdays)||!r.recurrence.weekdays.every(n=>Number.isInteger(n)&&n>=0&&n<=6)||r.recurrence.frequency==='weekdays'&&!r.recurrence.weekdays.length||typeof r.note!=='string'||typeof r.paused!=='boolean')return false;
+    if(!r||typeof r.id!=='string'||scheduleIds.has(r.id)||!r.target||!validDay(r.date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(r.time)||!r.recurrence||!['once','daily','weekdays','weekly','monthly'].includes(r.recurrence.frequency)||!Array.isArray(r.recurrence.weekdays)||!r.recurrence.weekdays.every(n=>Number.isInteger(n)&&n>=0&&n<=6)||r.recurrence.frequency==='weekdays'&&!r.recurrence.weekdays.length||typeof r.note!=='string'||typeof r.paused!=='boolean')return false;
+    const { kind, id } = r.target;
+    if (kind === 'profile') {
+      if (!findDuaProfile(id) || scheduledProfiles.has(id)) return false;
+      scheduledProfiles.add(id);
+    } else if (!(kind === 'dua' ? available.has(id) : kind === 'collection' && groupIds.has(id))) return false;
     scheduleIds.add(r.id);return true;
   });
   return data;
