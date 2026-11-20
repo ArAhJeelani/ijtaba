@@ -65,7 +65,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
     >
       <div className="arrival-top">
         <span>
-          IJABAH <span lang="ar">إجابة</span>
+          IJTABA
         </span>
         <button onClick={() => setLeaving(true)} disabled={leaving}>
           Skip introduction ↗
@@ -401,7 +401,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
           </>
         ) : (
           <div className="film-signature">
-            <img src="/assets/ijabah-logo.webp" alt="إجابة — Ijabah" />
+            <img src="/assets/ijabah-logo.webp" alt="" />
             <h1>One Dua Away.</h1>
             <ClosingWriting elapsed={elapsed - 20000} reduced={!!reduced} />
             {reduced && (
@@ -419,7 +419,7 @@ export function Arrival({ onEnter }: { onEnter: () => void }) {
                 onClick={() => setLeaving(true)}
                 disabled={leaving}
               >
-                Enter Ijabah <ArrowUpRight size={19} />
+                Enter Ijtaba <ArrowUpRight size={19} />
               </button>
             )}
           </div>

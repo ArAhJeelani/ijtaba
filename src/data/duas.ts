@@ -1,8 +1,10 @@
 import { approvedDuas } from "./approvedDuas.ts";
+import { propheticDuas } from "./propheticDuas.ts";
 
 export interface Dua {
   id: string;
   title: string;
+  prophet?: string;
   arabic?: string;
   translation: string;
   translationAttribution?: string;
@@ -54,5 +56,6 @@ export const duas: Dua[] = [
     url: "https://quran.com/3/8",
     context: "A prayer for steadfastness and mercy.",
   },
+  ...propheticDuas,
   ...approvedDuas,
 ];

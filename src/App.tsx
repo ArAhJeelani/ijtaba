@@ -28,12 +28,13 @@ function Navbar() {
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+  const home = location.pathname === "/";
   return (
-    <header className="navbar">
-      <Link to="/" className="brand" aria-label="Ijabah home">
-        <img src="/assets/ijabah-logo.webp" alt="إجابة" />
+    <header className={home ? "navbar desert-nav" : "navbar"}>
+      <Link to="/" className="brand" aria-label="Ijtaba home">
+        <img src="/assets/ijabah-logo.webp" alt="" />
         <span>
-          IJABAH<small>ONE DUA AWAY</small>
+          Ijtaba{!home && <small>ONE DUA AWAY</small>}
         </span>
       </Link>
       <button
@@ -58,17 +59,18 @@ function Navbar() {
         <NavLink to="/tahajjud">Tahajjud</NavLink>
         <NavLink to="/about">About</NavLink>
       </nav>
-      <Link className="nav-quiet" to="/my-duas">
+      {!home && <Link className="nav-quiet" to="/my-duas">
         <BookOpen size={16} /> A moment for you
-      </Link>
+      </Link>}
     </header>
   );
 }
 function Footer() {
+  const { pathname } = useLocation();
   return (
-    <footer>
+    <footer className={pathname === "/" ? "desert-footer" : undefined}>
       <Link className="footer-brand" to="/">
-        Ijabah <span lang="ar">إجابة</span>
+        Ijtaba
       </Link>
       <span>A little closer, one du’a at a time.</span>
       <span>Made for moments that matter.</span>
@@ -95,37 +97,22 @@ function Heading({
 function Home({ onReplay }: { onReplay: () => void }) {
   const c = useCollection();
   return (
-    <>
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">A SPACE FOR YOUR HEART TO RETURN</span>
-          <h1>
-            One <i>Du’a</i>
-            <br /> Away.
-          </h1>
-          <p>
-            A space to discover, collect, and return to
-            <br className="desktop-break" /> the du’as that matter most.
-          </p>
-          <div className="hero-actions">
-            <Link className="button light" to="/discover">
-              Explore Du’as <ArrowUpRight size={18} />
-            </Link>
-            <Link className="text-link" to="/my-duas">
-              My Du’a List <span>↗</span>
-            </Link>
-          </div>
-          <div className="hero-note">
-            <span className="tiny-star">✧</span> For every hope. Every hardship.
-            Every quiet moment.
-          </div>
+    <main className="desert-home">
+      <section className="desert-hero" aria-labelledby="desert-hero-title">
+        <img
+          className="desert-hero-art"
+          src="/assets/desert-dua-hero-prayer-mat.png"
+          alt="Footprints lead to a prayer mat in moonlit desert dunes, with a masjid in the distance."
+          width={1672}
+          height={941}
+          fetchPriority="high"
+        />
+        <div className="desert-hero-copy">
+          <h1 id="desert-hero-title">One Dua <em>Away</em></h1>
+          <Link className="desert-hero-cta" to="/discover">
+            Explore Du’as <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
         </div>
-        <button className="replay-arrival" onClick={onReplay}>
-          Replay the three ways ↗
-        </button>
-        <a href="#featured" className="scroll-note">
-          SCROLL TO DISCOVER ↓
-        </a>
       </section>
       <section className="intro-strip">
         <span lang="ar" dir="rtl">
@@ -137,6 +124,9 @@ function Home({ onReplay }: { onReplay: () => void }) {
             Qur’an 40:60 ↗
           </a>
         </p>
+        <button type="button" className="desert-replay" onClick={onReplay}>
+          Replay the three ways ↗
+        </button>
       </section>
       <section id="featured" className="section">
         <div className="section-top">
@@ -162,15 +152,14 @@ function Home({ onReplay }: { onReplay: () => void }) {
         />
         <div className="category-grid">
           {[
-            ["Everyday blessings", "01", "For the ordinary & extraordinary"],
-            ["Guidance", "02", "When you need a little direction"],
-            ["Knowledge", "03", "For a mind that keeps growing"],
-          ].map(([name, no, desc]) => (
+            ["Everyday blessings", "For the ordinary & extraordinary"],
+            ["Guidance", "When you need a little direction"],
+            ["Knowledge", "For a mind that keeps growing"],
+          ].map(([name, desc]) => (
             <Link
               key={name}
               to={"/discover?category=" + encodeURIComponent(name)}
             >
-              <span className="eyebrow">{no} /</span>
               <h3>{name}</h3>
               <p>{desc}</p>
               <ArrowUpRight size={22} />
@@ -194,7 +183,6 @@ function Home({ onReplay }: { onReplay: () => void }) {
           <Link className="button light" to="/tahajjud">
             In the quiet of the night <Moon size={17} />
           </Link>
-          <small>YOUR QUIET MOMENT AWAITS</small>
         </div>
       </section>
       <section className="collection-invite section">
@@ -214,7 +202,7 @@ function Home({ onReplay }: { onReplay: () => void }) {
         </Link>
       </section>
       <section className="purpose">
-        <span className="eyebrow">THE HEART OF IJABAH</span>
+        <span className="eyebrow">THE HEART OF IJTABA</span>
         <p>
           Making du’a should feel accessible,
           <br />
@@ -224,10 +212,10 @@ function Home({ onReplay }: { onReplay: () => void }) {
           Our story <ArrowUpRight size={16} />
         </Link>
       </section>
-    </>
+    </main>
   );
 }
-function Discover() {
+function Discover({ prophetic = false }: { prophetic?: boolean }) {
   const location = useLocation(),
     [query, setQuery] = useState(""),
     [category, setCategory] = useState(
@@ -238,12 +226,14 @@ function Discover() {
   const selected = collectionDate(new URLSearchParams(location.search).get("date"));
   const day = dateKey(selected);
   const count = collection.data.days[day]?.length ?? 0;
-  const categories = ["All", ...new Set(duas.flatMap((d) => d.categories ?? [d.category]))];
-  const found = duas.filter(
+  const library = prophetic ? duas.filter((dua) => dua.prophet) : duas;
+  const categories = ["All", ...new Set(library.flatMap((d) => d.categories ?? [d.category]))];
+  const found = library.filter(
     (d) =>
       (category === "All" || (d.categories ?? [d.category]).includes(category)) &&
       [
         d.title,
+        d.prophet,
         d.arabic,
         d.translation,
         d.context,
@@ -259,9 +249,17 @@ function Discover() {
     <main className="section page">
       <Heading
         eyebrow="THE DU’A LIBRARY"
-        title="Words for every season."
-        text="A small, carefully sourced beginning. Find a prayer to carry with you."
+        title={prophetic ? "Prophetic Du’as" : "Words for every season."}
+        text={prophetic ? "Read and save supplications from the lives of the prophets in the Qur’an." : "Find a prayer to carry with you."}
       />
+      <nav className="filters" aria-label="Du’a library sections">
+        <Link className="button" to={`/discover${location.search}`} aria-current={!prophetic ? "page" : undefined}>
+          All du’as
+        </Link>
+        <Link className="button" to={`/discover/prophetic${location.search}`} aria-current={prophetic ? "page" : undefined}>
+          Prophetic Du’as
+        </Link>
+      </nav>
       <div className="library-controls">
         <label className="search">
           <Search size={19} />
@@ -305,8 +303,7 @@ function Discover() {
         ))}
       </div>
       <p className="small" aria-live="polite">
-        {found.length} {found.length === 1 ? "prayer" : "prayers"} · Qur’anic
-        text with English renderings of meaning
+        {found.length} {found.length === 1 ? "prayer" : "prayers"}
       </p>
       <div className="dua-grid">
         {found.map((d) => (
@@ -330,8 +327,11 @@ function Discover() {
       )}
       <p className="source-note">
         Each entry links to its source. English meanings and transliteration are
-        reading aids. This starter collection will grow only after text,
-        reference, and editorial review.
+        reading aids. {prophetic && (
+          <a href="https://quran.com/duas/prophets" target="_blank" rel="noreferrer">
+            View the collection on Quran.com ↗
+          </a>
+        )}
       </p>
     </main>
   );
@@ -438,12 +438,12 @@ function About() {
           <i>Away.</i>
         </h1>
         <p className="lead">
-          Ijabah was created around a simple belief: making du’a should feel
+          Ijtaba was created around a simple belief: making du’a should feel
           accessible, intentional, and personal.
         </p>
         <p>
           Sometimes the words come easily. Sometimes we need somewhere to begin.
-          Ijabah is a quiet space to discover meaningful supplications,
+          Ijtaba is a quiet space to discover meaningful supplications,
           understand their meaning, and keep them close.
         </p>
         <p>
@@ -464,7 +464,7 @@ function About() {
   );
 }
 export default function App() {
-  const [opening, setOpening] = useState(true);
+  const [opening, setOpening] = useState(false);
   const location = useLocation(),
     reduced = useReducedMotion(),
     c = useCollection();
@@ -476,8 +476,8 @@ export default function App() {
         "/my-duas": "My Du’as",
         "/calendar": "Du’a Calendar",
         "/tahajjud": "Tahajjud",
-        "/about": "About Ijabah",
-      }[location.pathname] || "One Dua Away") + " · Ijabah";
+        "/about": "About Ijtaba",
+      }[location.pathname] || "One Dua Away") + " · Ijtaba";
   }, [location.pathname]);
   if (opening)
     return (
@@ -511,7 +511,8 @@ export default function App() {
             path="/"
             element={<Home onReplay={() => setOpening(true)} />}
           />
-          <Route path="/discover" element={<Discover />} />
+          <Route path="/discover" element={<Discover key="all" />} />
+          <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
           <Route path="/my-duas" element={<MyDuasPage />} />
           <Route path="/calendar" element={<DuaCalendar />} />
           <Route path="/tahajjud" element={<Tahajjud />} />

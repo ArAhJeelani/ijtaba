@@ -15,7 +15,7 @@ export function DuaCard({dua,transliteration=false,day,dailyView=false}:{dua:Dua
   const schedules=c.schedulesFor(dua.id).filter(s=>!s.paused);
   const next=schedules.map(s=>({s,date:nextOccurrence(s,dateKey(new Date()),new Date().toTimeString().slice(0,5))})).filter(x=>x.date).sort((a,b)=>(a.date!+a.s.time).localeCompare(b.date!+b.s.time))[0];
   return <><motion.article className="dua-card" initial={{opacity:reduced?1:0,y:reduced?0:8}} animate={{opacity:1,y:0}} transition={{duration:.22}}>
-    <div className="eyebrow">{dua.category}{next&&<span className="scheduled-indicator"><CalendarDays size={14}/> Scheduled</span>}</div><h3>{dua.title}</h3>
+    <div className="eyebrow">{dua.prophet ? `${dua.prophet} · ${dua.category}` : dua.category}{next&&<span className="scheduled-indicator"><CalendarDays size={14}/> Scheduled</span>}</div><h3>{dua.title}</h3>
     {dua.arabic&&<p className="arabic" lang="ar" dir="rtl">{dua.arabic}</p>}{transliteration&&dua.transliteration&&<p className="transliteration">{dua.transliteration}</p>}
     {dua.translation ? <p className="translation">{dua.translation}</p> : <p className="small">English translation unavailable.</p>}
     {dua.translationAttribution && <p className="small">{dua.translationAttribution}</p>}

@@ -5,6 +5,7 @@ import { CollectionProvider } from "./state/Collection";
 import App from "./App";
 import "./styles.css";
 import "./painted.css";
+import "./desert-hero.css";
 import { HummingProvider } from "./state/Humming";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
