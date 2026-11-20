@@ -15,6 +15,7 @@ import { useCollection } from "./state/Collection";
 import { DuaCard } from "./components/DuaCard";
 import { TahajjudCalculator } from "./components/TahajjudCalculator";
 import { Arrival } from "./components/Arrival";
+import { DesertHero } from "./components/DesertHero";
 import { TahajjudEntrance } from "./components/TahajjudEntrance";
 import { MyDuasPage } from './components/MyDuasPage';
 import { TahajjudCollection } from './components/TahajjudCollection';
@@ -98,22 +99,7 @@ function Home({ onReplay }: { onReplay: () => void }) {
   const c = useCollection();
   return (
     <main className="desert-home">
-      <section className="desert-hero" aria-labelledby="desert-hero-title">
-        <img
-          className="desert-hero-art"
-          src="/assets/desert-dua-hero-prayer-mat.png"
-          alt="Footprints lead to a prayer mat in moonlit desert dunes, with a masjid in the distance."
-          width={1672}
-          height={941}
-          fetchPriority="high"
-        />
-        <div className="desert-hero-copy">
-          <h1 id="desert-hero-title">One Dua <em>Away</em></h1>
-          <Link className="desert-hero-cta" to="/discover">
-            Explore Du’as <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
-        </div>
-      </section>
+      <DesertHero />
       <section className="intro-strip">
         <span lang="ar" dir="rtl">
           وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ
@@ -502,7 +488,7 @@ export default function App() {
       <motion.div
         id="content"
         key={location.pathname}
-        initial={{ opacity: reduced ? 1 : 0 }}
+        initial={reduced || location.pathname === "/" ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
       >
