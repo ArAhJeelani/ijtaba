@@ -99,14 +99,26 @@ test('rejects duplicate IDs and broken references without dropping otherwise val
     {schedules:[schedule,schedule]},
     {schedules:[{...schedule,target:{kind:'collection',id:'missing'}}]},
     {schedules:[{...schedule,target:{kind:'dua',id:'missing'}}]},
-    {schedules:[{...schedule,target:{kind:'profile',id:'missing'}}]},
     {days:{'2026-11-20':['missing']}},
     {savedAt:{missing:exportedAt}},
-    {followedProfiles:['missing']},
+    {followedProfiles:['students','students']},
   ] satisfies Partial<OrganizerData>[]){
     assert.throws(()=>parseOrganizerBackup(exportOrganizerBackup({...data,...changes}),duas),/duplicate|broken references/);
   }
   assert.deepEqual(parseOrganizerBackup(exportOrganizerBackup(data),duas),data);
+});
+
+test('backups preserve unavailable profile schedules and follows',()=>{
+  const data=fixture();
+  const profileIds=['career','students','missing'];
+  const saved: OrganizerData={
+    ...data,
+    followedProfiles:profileIds,
+    schedules:[...data.schedules,...profileIds.map(id=>({
+      ...data.schedules[0],id:`profile-${id}`,target:{kind:'profile' as const,id},
+    }))],
+  };
+  assert.deepEqual(parseOrganizerBackup(exportOrganizerBackup(saved),duas),saved);
 });
 
 test('a validated backup changes storage only when committed and reloads with all relationships',()=>{
