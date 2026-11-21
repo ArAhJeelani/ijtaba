@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {duas} from '../data/duas.ts';
+import {duaProfiles, findDuaProfile, resolveProfileItems} from '../data/duaProfiles.ts';
 import type {ScheduledDua} from '../data/organizer.ts';
 import {occursOn} from '../utils/schedules.ts';
 import {deleteCollection,deletePersonalDua,editPersonalDua,migrateOrganizer,upsertSchedule} from './organizerStorage.ts';
@@ -109,30 +110,68 @@ test('personal helpers protect sourced entries and can delete an unsaved entry',
   assert.deepEqual(deletePersonalDua(data,'unsaved'),{...data,personal:[data.personal[0]]});
 });
 
-test('empty profiles keep independent recurring schedules and follows across reloads', () => {
+test('legacy profile schedules and follows survive when profiles are empty, hidden or unknown', () => {
   const students: ScheduledDua = {
     id: 'student-schedule', target: {kind: 'profile', id: 'students'},
     date: '2026-11-20', time: '20:00', recurrence: {frequency: 'daily', weekdays: []},
     paused: false, note: '', createdAt: '2026-11-20',
   };
-  const parents: ScheduledDua = {
-    ...students, id: 'parent-schedule', target: {kind: 'profile', id: 'parents'},
+  const career: ScheduledDua = {
+    ...students, id: 'career-schedule', target: {kind: 'profile', id: 'career'},
     recurrence: {frequency: 'weekdays', weekdays: [1, 3]},
   };
-  const edited = upsertSchedule([students, parents], {...students, id: 'duplicate', time: '19:30'});
   const stored = {
-    followedProfiles: ['students', 'students', 'missing'],
-    schedules: [...edited, {...students, id: 'another-duplicate'}, {
+    followedProfiles: ['students', 'students', 'career', 'missing'],
+    schedules: [students, career, {...students, id: 'another-duplicate'}, {
       ...students, id: 'missing', target: {kind: 'profile', id: 'missing'},
     }],
   };
   const restored = migrateOrganizer(JSON.parse(JSON.stringify(stored)), duas);
-  assert.deepEqual(restored.followedProfiles, ['students']);
+  assert.deepEqual(restored.followedProfiles, ['students', 'career', 'missing']);
   assert.deepEqual(restored.schedules.map(({id, time}) => [id, time]), [
-    ['student-schedule', '19:30'], ['parent-schedule', '20:00'],
+    ['student-schedule', '20:00'], ['career-schedule', '20:00'], ['missing', '20:00'],
   ]);
   assert.equal(occursOn(restored.schedules[0], '2026-11-22'), true);
   assert.equal(occursOn(restored.schedules[1], '2026-11-22'), false);
   assert.equal(occursOn(restored.schedules[1], '2026-11-23'), true);
   assert.deepEqual(restored.ids, []);
+  assert.deepEqual(migrateOrganizer(restored, duas), restored);
+
+  for (const id of ['career', 'duas-for-parents', 'hardship-healing', 'missing']) {
+    assert.equal(findDuaProfile(id), undefined);
+    assert.deepEqual(resolveProfileItems(id, duas), []);
+  }
+  assert.deepEqual(duaProfiles.map(({id}) => id),
+    ['students', 'parents', 'marriage-family', 'new-muslims', 'daily-essentials']);
+});
+
+test('profile reminders require usable public du’as and preserve unrelated schedules', () => {
+  const {schedules} = personalManagementFixture();
+  const target: ScheduledDua = {
+    ...schedules[0], id: 'student-schedule', target: {kind: 'profile', id: 'students'},
+  };
+  const profile = findDuaProfile('students')!;
+  assert.deepEqual(resolveProfileItems(profile.id, duas), []);
+  assert.equal(upsertSchedule(schedules, target, duas), schedules);
+  assert.equal(upsertSchedule(schedules, {...target, target: {kind: 'profile', id: 'career'}}, duas), schedules);
+
+  const originalIds = profile.duaIds;
+  const knowledge = duas.find(dua => dua.id === 'knowledge')!;
+  const library = [...duas, {...knowledge, id: 'private', personal: true}];
+  try {
+    profile.duaIds = ['missing', 'private'];
+    assert.deepEqual(resolveProfileItems(profile.id, library), []);
+    assert.equal(upsertSchedule(schedules, target, library), schedules);
+
+    profile.duaIds.push(knowledge.id, knowledge.id);
+    assert.deepEqual(resolveProfileItems(profile.id, library), [knowledge]);
+    const added = upsertSchedule(schedules, target, library);
+    assert.deepEqual(added, [...schedules, target]);
+    const edited = upsertSchedule(added, {...target, id: 'duplicate', time: '20:30'}, library);
+    assert.deepEqual(edited, [...schedules, {...target, time: '20:30'}]);
+  } finally {
+    profile.duaIds = originalIds;
+  }
+  const updatedDirect = {...schedules[0], time: '19:00'};
+  assert.deepEqual(upsertSchedule(schedules, updatedDirect, duas), [updatedDirect, ...schedules.slice(1)]);
 });

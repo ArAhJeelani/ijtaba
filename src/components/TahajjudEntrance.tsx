@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import "./tahajjud-entrance.css";
 import { useAnimationNasheed } from "../state/Humming";
 
 /** A short visual metaphor, not a quotation attributed to scripture. */
 export function TahajjudEntrance({ onComplete }: { onComplete: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
   const [elapsed, setElapsed] = useState(0);
   useAnimationNasheed(true, 0, Math.min(1, (4600 - elapsed) / 1000));
+  useLayoutEffect(() => {
+    const scene = dialog.current;
+    scene?.showModal();
+    return () => scene?.close();
+  }, []);
   useEffect(() => {
     const started = performance.now();
     const ticker = window.setInterval(
@@ -19,7 +26,17 @@ export function TahajjudEntrance({ onComplete }: { onComplete: () => void }) {
     };
   }, [onComplete]);
   return (
-    <main className="tahajjud-arrival" aria-label="Tahajjud introduction">
+    <motion.dialog
+      ref={dialog}
+      className="tahajjud-arrival"
+      aria-label="Tahajjud introduction"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.55, ease: "easeInOut" }}
+      onCancel={(event) => {
+        event.preventDefault();
+        onComplete();
+      }}
+    >
       <button className="arrow-skip" onClick={onComplete}>
         Skip animation ↗
       </button>
@@ -128,6 +145,6 @@ export function TahajjudEntrance({ onComplete }: { onComplete: () => void }) {
         </g>
       </svg>
       <span className="arrow-caption">TAHAJJUD · MAKE ROOM FOR YOUR DU’A</span>
-    </main>
+    </motion.dialog>
   );
 }

@@ -5,7 +5,9 @@ import json
 import sqlite3
 
 from pydantic import TypeAdapter
-from records import COLLECTIONS, SourceRecord, possible_variants
+from records import COLLECTIONS, DiscoveryCandidate, SourceRecord, possible_variants
+
+QUEUE_RECORD = TypeAdapter(SourceRecord | DiscoveryCandidate)
 
 
 @contextmanager
@@ -51,8 +53,22 @@ def import_file(db, path, *, correction=False):
 
 
 def queue(db):
-    return [(SourceRecord.model_validate_json(row["payload"]), row["status"])
+    return [(QUEUE_RECORD.validate_json(row["payload"]), row["status"])
             for row in db.execute("SELECT * FROM candidates ORDER BY id")]
+
+
+def stage_discovery(db, candidate: DiscoveryCandidate):
+    payload = candidate.model_dump_json()
+    status = "needs_review" if candidate.needs_correction else "pending"
+    inserted = db.execute(
+        "INSERT INTO candidates VALUES (?, ?, ?) ON CONFLICT(id) DO NOTHING",
+        (candidate.id, payload, status),
+    )
+    if inserted.rowcount:
+        db.execute("""INSERT INTO history (candidate_id, action, reviewer, note, occurred_at, payload)
+                      VALUES (?, 'discovered', '', ?, ?, ?)""",
+                   (candidate.id, candidate.source_provider, candidate.retrieved_at.isoformat(), payload))
+    return bool(inserted.rowcount)
 
 
 def details(db, candidate_id):
@@ -62,6 +78,8 @@ def details(db, candidate_id):
             history = db.execute("""SELECT action, reviewer, note, occurred_at FROM history
                                   WHERE candidate_id = ? ORDER BY id""", (candidate_id,))
             return {**record.model_dump(mode="json"), "id": record.id, "arabic": record.arabic,
+                    "record_type": "unverified_discovery" if isinstance(record, DiscoveryCandidate)
+                    else "reviewable_source_record",
                     "collection_name": COLLECTIONS[record.collection], "source_type": "hadith",
                     "status": status,
                     "possible_duplicates": possible_variants(record, (item for item, _ in records)),
@@ -79,7 +97,9 @@ def review(db, candidate_id, action, reviewer, note):
     if status == row["status"]:
         raise ValueError(f"{candidate_id} already has status {status}.")
     if action == "approve":
-        record = SourceRecord.model_validate_json(row["payload"])
+        record = QUEUE_RECORD.validate_json(row["payload"])
+        if isinstance(record, DiscoveryCandidate):
+            raise ValueError("Import a manually verified source record as a correction before approval.")
         if record.uncertainties or row["status"] != "pending":
             raise ValueError("Resolve review flags and import a correction before approval.")
     db.execute("UPDATE candidates SET status = ? WHERE id = ?", (status, candidate_id))

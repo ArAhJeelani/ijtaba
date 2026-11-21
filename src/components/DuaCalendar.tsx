@@ -19,9 +19,9 @@ export function DuaCalendar(){
   const select=(date:string)=>setParams({date},{replace:true});
   const leading=calendarDate(year,month,1).getDay(),length=calendarDate(year,month+1,0).getDate();
   const dates=view==='week'?Array.from({length:7},(_,i)=>addDays(day,i-selected.getDay())):Array.from({length},(_,i)=>dateKey(calendarDate(year,month,i+1)));
-  const forDay=(date:string)=>c.data.schedules.filter(s=>occursOn(s,date)).sort((a,b)=>a.time.localeCompare(b.time));
+  const forDay=(date:string)=>c.calendarSchedules.filter(s=>occursOn(s,date)).sort((a,b)=>a.time.localeCompare(b.time));
   const scheduled=forDay(day),legacy=c.itemsForDay(day);
-  const upcoming=c.data.schedules.map(s=>({s,date:nextOccurrence(s,today,new Date().toTimeString().slice(0,5))})).filter(x=>x.date).sort((a,b)=>(a.date!+a.s.time).localeCompare(b.date!+b.s.time)).slice(0,8);
+  const upcoming=c.calendarSchedules.map(s=>({s,date:nextOccurrence(s,today,new Date().toTimeString().slice(0,5))})).filter(x=>x.date).sort((a,b)=>(a.date!+a.s.time).localeCompare(b.date!+b.s.time)).slice(0,8);
   const rangeKey=view==='month'?`${year}-${month}`:dates[0];
   function navigate(delta:number){select(view==='week'?addDays(day,delta*7):dateKey(calendarDate(year,month+delta,1)))}
   return <main className="section page daily-page"><div className="section-heading"><span className="eyebrow">A GENTLE INVITATION TO RETURN</span><h2>My Du’a Calendar</h2><p>Your prayers, in your own time. Invitations to remember, never obligations.</p><p className="small">Local clock time · {Intl.DateTimeFormat().resolvedOptions().timeZone}. No notifications are sent.</p></div>

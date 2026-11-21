@@ -5,7 +5,7 @@ from re import fullmatch
 import unicodedata
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 Text = Annotated[str, StringConstraints(min_length=1, max_length=20000, pattern=r"\S")]
 Reference = Annotated[str, StringConstraints(pattern=r"^[1-9][0-9]{0,5}[a-z]?$")]
@@ -81,13 +81,69 @@ def normalized_arabic(text):
                    and char != "ـ")
 
 
+class Narration(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    collection: Literal["bukhari", "muslim"]
+    reference: Reference
+    source_url: Text
+    source_arabic: Text
+
+    @model_validator(mode="after")
+    def validate_url(self):
+        if self.source_url != f"https://sunnah.com/{self.collection}:{self.reference}":
+            raise ValueError("Use the matching canonical Sunnah.com hadith URL.")
+        if not normalized_arabic(self.source_arabic):
+            raise ValueError("The narration must include Arabic text.")
+        return self
+
+    @property
+    def id(self):
+        return f"hadith-{self.collection}-{self.reference}"
+
+
+class DiscoveryCandidate(Narration):
+    retrieved_at: AwareDatetime
+    source_provider: Text
+    extraction_method: Text
+    title: Text
+    excerpt: Text | None = None
+    categories: list[Category]
+    context: Text
+    unverified_english_explanation: Text
+    uncertainties: list[Text]
+
+    @property
+    def arabic(self):
+        if self.excerpt and self.source_arabic.count(self.excerpt) == 1:
+            if normalized_arabic(self.excerpt):
+                return self.excerpt
+        return ""
+
+    @property
+    def needs_correction(self):
+        return not self.arabic
+
+    @model_validator(mode="after")
+    def flag_invalid_excerpt(self):
+        if self.needs_correction:
+            warning = "The proposed excerpt must occur exactly once and contain Arabic letters."
+            if warning not in self.uncertainties:
+                self.uncertainties.append(warning)
+        return self
+
+
 def possible_variants(record, others):
     key = normalized_arabic(record.arabic)
     matches = []
+    if not key:
+        return matches
     for other in others:
         if other.id == record.id:
             continue
         other_key = normalized_arabic(other.arabic)
+        if not other_key:
+            continue
         if key == other_key:
             matches.append({"id": other.id, "match": "same normalized wording"})
         elif SequenceMatcher(None, key, other_key, autojunk=False).ratio() >= 0.80:

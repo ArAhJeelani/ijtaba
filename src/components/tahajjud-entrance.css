@@ -1,15 +1,26 @@
-body:has(.tahajjud-arrival) .navbar,
-body:has(.tahajjud-arrival) footer {
-  display: none;
+html:has(.tahajjud-hero) {
+  scrollbar-gutter: stable;
+}
+html:has(.tahajjud-arrival[open]) {
+  overflow: hidden;
 }
 .tahajjud-arrival {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  max-width: none;
   height: 100svh;
-  min-height: 600px;
-  position: relative;
+  max-height: none;
   overflow: hidden;
   isolation: isolate;
   background: #182d4b url("/assets/painted-canvas-v1.webp") center top/cover;
   color: #f5ead4;
+}
+.tahajjud-arrival::backdrop {
+  background: transparent;
 }
 .tahajjud-arrival:before {
   content: "";
@@ -193,6 +204,9 @@ body:has(.tahajjud-arrival) footer {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .tahajjud-arrival {
+    visibility: hidden;
+  }
   .tahajjud-arrival,
   .tahajjud-arrival * {
     animation: none !important;

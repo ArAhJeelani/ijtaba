@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -10,7 +10,7 @@ import {
   CalendarDays,
   FolderHeart,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { duas, type Dua } from "./data/duas";
 import { useCollection } from "./state/Collection";
 import { DuaCard } from "./components/DuaCard";
@@ -380,25 +380,29 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
 function Tahajjud() {
   const reduced = useReducedMotion();
   const pageLocation = useLocation();
-  const [intro, setIntro] = useState(!reduced);
+  const [intro, setIntro] = useState(!reduced && !pageLocation.hash);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const finishIntro = useCallback(() => setIntro(false), []);
   useEffect(() => {
     if (!pageLocation.hash) setIntro(!reduced);
   }, [pageLocation.key, pageLocation.hash, reduced]);
-  if (intro && !reduced)
-    return (
-      <TahajjudEntrance
-        onComplete={() => {
-          setIntro(false);
-          window.scrollTo(0, 0);
-        }}
-      />
-    );
   return (
     <main>
+      <AnimatePresence
+        onExitComplete={() => {
+          if (!pageLocation.hash) {
+            requestAnimationFrame(() => heading.current?.focus({ preventScroll: true }));
+          }
+        }}
+      >
+        {intro && !reduced && !pageLocation.hash && (
+          <TahajjudEntrance onComplete={finishIntro} />
+        )}
+      </AnimatePresence>
       <section className="tahajjud-hero">
         <span className="eyebrow">THE NIGHT HOLDS A QUIET INVITATION</span>
         <Moon size={30} />
-        <h1>
+        <h1 ref={heading} tabIndex={-1}>
           In the quiet
           <br />
           of the <i>night.</i>

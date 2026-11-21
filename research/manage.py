@@ -4,7 +4,9 @@ import json
 import logging
 from pathlib import Path
 import sqlite3
+import sys
 
+from discovery import FixtureProvider, run_batch
 from publisher import publish
 from staging import details, import_file, queue, review, transaction
 
@@ -35,6 +37,9 @@ def dashboard(path):
         action = input("approve / reject / request-correction / Enter to go back: ").strip()
         if action not in {"approve", "reject", "request-correction"}:
             continue
+        if action == "approve" and reviewed["record_type"] == "unverified_discovery":
+            print("Import a manually verified source record as a correction before approval.")
+            continue
         if action == "approve" and input(
             "Confirm you checked the source, excerpt, context, grading and reuse rights (type yes): "
         ) != "yes":
@@ -63,10 +68,19 @@ def main():
     commands.add_parser("list")
     commands.add_parser("dashboard")
     commands.add_parser("publish")
+    discover = commands.add_parser("discover", help="Run an offline discovery batch using local fixtures.")
+    discover.add_argument("--limit", type=int, default=5, help="Maximum narrations to examine (default: 5).")
+    discover.add_argument("--offset", type=int, default=0, help="Number of fixture entries to skip.")
+    discover.add_argument("--dry-run", action="store_true", help="Compare candidates without writing the database.")
     args = parser.parse_args()
     try:
         if args.command == "publish" and not args.db.is_file():
             raise ValueError("Import the source records before publishing.")
+        if args.command == "discover":
+            report = run_batch(args.db, FixtureProvider(), limit=args.limit, offset=args.offset,
+                               dry_run=args.dry_run, progress=lambda message: print(message, file=sys.stderr))
+            display(report)
+            return int(bool(report["errors"]))
         if args.command == "dashboard":
             dashboard(args.db)
         else:

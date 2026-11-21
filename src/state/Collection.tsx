@@ -1,6 +1,6 @@
 import {createContext,useContext,useEffect,useLayoutEffect,useRef,useState,type ReactNode} from 'react';
 import {duas,type Dua} from '../data/duas';
-import {findDuaProfile} from '../data/duaProfiles';
+import {duaProfileTitle, resolveProfileItems} from '../data/duaProfiles';
 import type {OrganizerData,ScheduledDua,ScheduleTarget} from '../data/organizer';
 import {deleteCollection,deletePersonalDua,editPersonalDua,storageKey,upsertSchedule} from './organizerStorage';
 import {commitOrganizerStorage,readOrganizerStorage,type OrganizerStorageSnapshot} from './organizerBackup';
@@ -67,11 +67,15 @@ function useCollectionState(){
   useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(''),3200);return()=>clearTimeout(timer)},[notice]);
   const library=[...duas,...data.personal];
   const resolve=(ids:string[])=>ids.flatMap(id=>{const d=library.find(d=>d.id===id);return d?[d]:[]});
+  const profileItems = (id: string) => resolveProfileItems(id, duas);
   const targetIds = ({kind,id}: ScheduleTarget) => {
     if (kind === 'dua') return [id];
-    if (kind === 'profile') return findDuaProfile(id)?.duaIds ?? [];
+    if (kind === 'profile') return profileItems(id).map(dua => dua.id);
     return data.memberships.filter(m => m.collectionId === id).map(m => m.duaId);
   };
+  const targetItems = (target: ScheduleTarget) => target.kind === 'profile'
+    ? profileItems(target.id)
+    : resolve(targetIds(target));
   const ensure=(ids:string[],id:string)=>ids.includes(id)?ids:[...ids,id];
   const save=(id:string)=>set(s=>({...s,ids:ensure(s.ids,id),savedAt:{...s.savedAt,[id]:s.savedAt[id]||new Date().toISOString()}}));
   const replaceOrganizer=(next:OrganizerData,expectedData:OrganizerData,expectedRecovery:string|null)=>{
@@ -97,15 +101,19 @@ function useCollectionState(){
     announce:setNotice,
     itemsForDay:(date:string)=>resolve(data.days[date]??[]),
     collectionItems:(id:string)=>resolve(data.memberships.filter(m=>m.collectionId===id).map(m=>m.duaId)),
-    targetItems:(target:ScheduleTarget)=>resolve(targetIds(target)),
+    targetItems,
+    calendarSchedules:data.schedules.filter(({target}) => target.kind !== 'profile' || profileItems(target.id).length > 0),
     targetName:({kind,id}:ScheduleTarget)=>{
       if (kind === 'dua') return library.find(d=>d.id===id)?.title || 'Du’a';
-      if (kind === 'profile') return findDuaProfile(id)?.title || 'Du’a profile';
+      if (kind === 'profile') return duaProfileTitle(id) || 'Du’a profile';
       return data.collections.find(g=>g.id===id)?.name || 'Collection';
     },
     schedulesFor:(id:string)=>data.schedules.filter(s=>targetIds(s.target).includes(id)),
-    toggleProfile:(id:string)=>set(s=>({...s,followedProfiles:s.followedProfiles.includes(id)
-      ? s.followedProfiles.filter(profileId=>profileId!==id) : [...s.followedProfiles,id]})),
+    toggleProfile:(id:string)=>{
+      if (!profileItems(id).length) return;
+      set(s=>({...s,followedProfiles:s.followedProfiles.includes(id)
+        ? s.followedProfiles.filter(profileId=>profileId!==id) : [...s.followedProfiles,id]}));
+    },
     toggleDay:(date:string,id:string)=>set(s=>{const current=s.days[date]??[],removing=current.includes(id);return {...s,days:{...s.days,[date]:removing?current.filter(x=>x!==id):[...current,id]},ids:removing?s.ids:ensure(s.ids,id),savedAt:removing?s.savedAt:{...s.savedAt,[id]:s.savedAt[id]||new Date().toISOString()}}}),
     toggle:(id:string,origin:DOMRect)=>{
       const saved=data.ids.includes(id);
@@ -127,7 +135,12 @@ function useCollectionState(){
     renameCollection:(id:string,name:string)=>set(s=>({...s,collections:s.collections.map(g=>g.id===id?{...g,name:name.trim()}:g)})),
     deleteCollection:(id:string)=>set(s=>deleteCollection(s,id)),
     toggleMembership:(collectionId:string,duaId:string)=>set(s=>{const exists=s.memberships.some(m=>m.collectionId===collectionId&&m.duaId===duaId);return {...s,ids:ensure(s.ids,duaId),savedAt:{...s.savedAt,[duaId]:s.savedAt[duaId]||new Date().toISOString()},memberships:exists?s.memberships.filter(m=>m.collectionId!==collectionId||m.duaId!==duaId):[...s.memberships,{collectionId,duaId}]}}),
-    saveSchedule:(schedule:ScheduledDua)=>{set(s=>({...s,schedules:upsertSchedule(s.schedules,schedule),ids:schedule.target.kind==='dua'?ensure(s.ids,schedule.target.id):s.ids,savedAt:schedule.target.kind==='dua'?{...s.savedAt,[schedule.target.id]:s.savedAt[schedule.target.id]||new Date().toISOString()}:s.savedAt}));setNotice('Schedule saved. A gentle invitation to return.')},
+    saveSchedule:(schedule:ScheduledDua)=>{
+      if (schedule.target.kind === 'profile' && !profileItems(schedule.target.id).length) return false;
+      set(s=>({...s,schedules:upsertSchedule(s.schedules,schedule,duas),ids:schedule.target.kind==='dua'?ensure(s.ids,schedule.target.id):s.ids,savedAt:schedule.target.kind==='dua'?{...s.savedAt,[schedule.target.id]:s.savedAt[schedule.target.id]||new Date().toISOString()}:s.savedAt}));
+      setNotice('Schedule saved. A gentle invitation to return.');
+      return true;
+    },
     pauseSchedule:(id:string)=>set(s=>({...s,schedules:s.schedules.map(r=>r.id===id?{...r,paused:!r.paused}:r)})),
     deleteSchedule:(id:string)=>{set(s=>({...s,schedules:s.schedules.filter(r=>r.id!==id)}));setNotice('Schedule removed.')},
   };
