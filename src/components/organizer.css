@@ -9,3 +9,62 @@
 @keyframes organizer-arrive{from{opacity:0;translate:0 7px}to{opacity:1;translate:0 0}}
 @media(max-width:740px){.calendar-agendas{grid-template-columns:1fr}.collection-create{align-items:stretch;flex-direction:column}.collection-create label{max-width:none}.organizer-two{gap:10px}.schedule-entry{padding:18px}.daily-calendar{padding:18px 10px}.daily-month h3{font-size:23px}.daily-date{min-height:44px}.scheduled-indicator{display:flex;margin:8px 0 0}.organizer-dialog .organizer-actions{gap:8px}.collection-toolbar{align-items:flex-start;flex-direction:column}.collection-toolbar>div{flex-wrap:wrap}.saved-list .saved-row{min-width:0}.dua-card h3,.schedule-entry h3,.collection-tabs button{overflow-wrap:anywhere}}
 @media(prefers-reduced-motion:reduce){.organizer-dialog,.collection-toast{animation:none}.daily-date{transition:none}}
+
+#saved-dua-count, .membership-count { position: relative; }
+.membership-count {
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #e7d9be;
+  font-variant-numeric: tabular-nums;
+}
+.membership-count .collection-count-gain { animation-delay: 0s; }
+.collection-count-gain {
+  position: absolute;
+  inset: auto auto -6px 50%;
+  color: #fff2d8;
+  background: #684a24;
+  border-radius: 12px;
+  padding: 2px 5px;
+  pointer-events: none;
+  animation: collection-count-rise 1s .52s both;
+}
+@keyframes collection-count-rise {
+  0% { opacity: 0; transform: translate(-50%, 0); }
+  20%, 70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -24px); }
+}
+.collection-flight {
+  position: fixed;
+  z-index: 201;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #c4a778;
+  color: #172d49;
+  background: #fff2d8;
+  box-shadow: 0 5px 16px #07162d44;
+  pointer-events: none;
+}
+.collection-added {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  animation-delay: .48s;
+  animation-fill-mode: both;
+}
+.collection-added strong { color: #ffdb91; }
+.backup-counts {
+  display: grid;
+  gap: 8px;
+  max-width: 280px;
+}
+.backup-counts div { display: flex; justify-content: space-between; gap: 16px; }
+.backup-counts dd { margin: 0; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  .collection-count-gain, .collection-flight { display: none; }
+  .collection-added { animation: none; }
+}

@@ -715,7 +715,7 @@
   }
   35%,
   79% {
-    transform: scale(1.09);
+    transform: scale(1.035);
   }
   94%,
   100% {
@@ -727,33 +727,11 @@
   animation-timing-function: cubic-bezier(0.3, 0, 0.12, 1);
 }
 @keyframes light-journey {
-  0%,
-  14% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.7);
-  }
-  17% {
-    opacity: 1;
-    transform: translate(0, -30px) scale(1);
-  }
-  18% {
-    transform: translate(-15px, -120px) scale(0.7, 2);
-  }
-  19% {
-    transform: translate(10px, -350px) scale(0.6, 3);
-  }
-  20% {
-    transform: translate(0, -620px) scale(0.65, 4);
-  }
-  21% {
-    transform: translate(0, -800px) scale(0.8, 2);
-    opacity: 1;
-  }
-  22%,
-  100% {
-    transform: translate(0, -900px) scale(0.5);
-    opacity: 0;
-  }
+  0%, 14% { opacity: 0; transform: translateY(0) scale(.76); }
+  17% { opacity: .9; transform: translateY(-34px) scale(.9, 1.1); }
+  19% { opacity: 1; transform: translateY(-320px) scale(.67, 2.2); }
+  21% { opacity: .7; transform: translateY(-730px) scale(.62, 1.45); }
+  23%, 100% { opacity: 0; transform: translateY(-900px) scale(.5); }
 }
 @keyframes carry-stroke {
   0%,
@@ -780,7 +758,7 @@
 }
 .travelling-light {
   transform-origin: 720px 710px;
-  animation-timing-function: cubic-bezier(0.55, 0, 0.95, 0.5);
+  animation-timing-function: cubic-bezier(0.35, 0, 0.55, 1);
 }
 .sky-impact {
   animation: sky-impact var(--film-length) ease-out both;
@@ -921,7 +899,14 @@
 }
 
 .arrival.living-arrival.is-leaving {
+  opacity: 1;
   filter: none;
+}
+
+.arrival.living-arrival.is-leaving :is(.arrival-top, .film-words, .film-footer) {
+  opacity: 0;
+  animation: none;
+  transition: opacity 0.65s ease;
 }
 
 .arrival.living-arrival :is(.arrival-top, .film-footer) {
@@ -966,4 +951,20 @@
 
 .arrival.living-arrival.is-paused .film-words {
   animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .arrival.living-arrival:not(.is-leaving) :is(.phase-1, .phase-2, .phase-3) {
+    animation: film-chapter-in-out 4.5s ease-in-out both;
+  }
+
+  .arrival.living-arrival.is-paused :is(.phase-1, .phase-2, .phase-3) {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes film-chapter-in-out {
+  0% { opacity: 0; transform: translateY(5px); }
+  13%, 87% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-4px); }
 }

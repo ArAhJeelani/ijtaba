@@ -19,7 +19,7 @@ export function ClosingWriting({
       size: 46,
     },
     {
-      text: "Every du’a has an Ijabah…",
+      text: "In ways we may not see…",
       y: 181,
       delay: 3200,
       duration: 2250,
@@ -31,7 +31,7 @@ export function ClosingWriting({
       className="closing-writing"
       viewBox="0 0 800 225"
       role="img"
-      aria-label="Just know… Every du’a has an answer. Every du’a has an Ijabah."
+      aria-label="Just know… Every du’a has an answer, in ways we may not see."
     >
       <defs>
         <filter id={`${id}-grain`} x="-5%" y="-20%" width="110%" height="140%">

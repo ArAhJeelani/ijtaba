@@ -10,7 +10,6 @@ body:has(.tahajjud-arrival) footer {
   isolation: isolate;
   background: #182d4b url("/assets/painted-canvas-v1.webp") center top/cover;
   color: #f5ead4;
-  animation: arrow-scene-out 4.6s ease both;
 }
 .tahajjud-arrival:before {
   content: "";
@@ -166,15 +165,6 @@ body:has(.tahajjud-arrival) footer {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-@keyframes arrow-scene-out {
-  0%,
-  87% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
   }
 }
 @media (max-width: 650px) {

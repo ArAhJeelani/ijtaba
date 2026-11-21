@@ -1,5 +1,6 @@
 import type {Dua} from '../data/duas.ts';
 import type {OrganizerData,ScheduledDua} from '../data/organizer.ts';
+import {personalDuaLimits} from '../data/organizer.ts';
 import {validDay} from '../utils/schedules.ts';
 import {findDuaProfile} from '../data/duaProfiles.ts';
 export const storageKey='ijabah.collection.v1'; // Extend the same store; preserve existing data.
@@ -46,4 +47,33 @@ export function migrateOrganizer(raw:unknown,duas:Dua[]):OrganizerData{
 }
 export function deleteCollection(data:OrganizerData,id:string):OrganizerData{
   return {...data,collections:data.collections.filter(g=>g.id!==id),memberships:data.memberships.filter(m=>m.collectionId!==id),schedules:data.schedules.filter(s=>s.target.kind!=='collection'||s.target.id!==id)};
+}
+
+export function editPersonalDua(data:OrganizerData,id:string,title:string,translation:string):OrganizerData{
+  const existing=data.personal.find(dua=>dua.id===id && dua.personal===true);
+  if(!existing)return data;
+  title=title.trim();
+  translation=translation.trim();
+  if(!title || !translation || title.length>personalDuaLimits.title || translation.length>personalDuaLimits.prayer)return data;
+  if(existing.title===title && existing.translation===translation)return data;
+  return {...data,personal:data.personal.map(dua=>dua===existing?{...dua,title,translation}:dua)};
+}
+
+export function deletePersonalDua(data:OrganizerData,id:string):OrganizerData{
+  if(!data.personal.some(dua=>dua.id===id && dua.personal===true))return data;
+  const savedAt={...data.savedAt};
+  delete savedAt[id];
+  const days={...data.days};
+  for(const [date,ids] of Object.entries(days)){
+    if(ids.includes(id))days[date]=ids.filter(duaId=>duaId!==id);
+  }
+  return {
+    ...data,
+    personal:data.personal.filter(dua=>dua.id!==id),
+    ids:data.ids.filter(duaId=>duaId!==id),
+    days,
+    savedAt,
+    memberships:data.memberships.filter(membership=>membership.duaId!==id),
+    schedules:data.schedules.filter(({target})=>target.kind!=='dua' || target.id!==id),
+  };
 }

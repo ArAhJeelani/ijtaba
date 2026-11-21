@@ -18,8 +18,7 @@ body {
   background: #f3ecde;
 }
 body {
-  background: #ddd8cd url("/assets/painted-canvas-v1.webp") center top/100%
-    2200px repeat-y;
+  background: #30201c;
   position: relative;
 }
 body:after {
@@ -304,11 +303,8 @@ footer:before {
 }
 .dua-grid {
   gap: 35px;
-  align-items: start;
+  align-items: stretch;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.dua-grid > .dua-card:nth-child(even) {
-  margin-top: 70px;
 }
 .dua-card {
   background: none;
@@ -828,9 +824,6 @@ footer:before {
   .page .dua-grid {
     column-gap: 50px;
   }
-  .dua-grid > .dua-card:nth-child(3n) {
-    margin-top: 20px;
-  }
 }
 @media (max-width: 850px) {
   .navbar nav {
@@ -869,9 +862,6 @@ footer:before {
   }
 }
 @media (max-width: 650px) {
-  body {
-    background-size: 1400px 2200px;
-  }
   .navbar {
     height: 90px;
   }
@@ -956,9 +946,6 @@ footer:before {
   .dua-grid {
     gap: 35px;
     grid-template-columns: 1fr;
-  }
-  .dua-grid > .dua-card:nth-child(even) {
-    margin-top: 0;
   }
   .dua-card {
     padding: 35px 23px;

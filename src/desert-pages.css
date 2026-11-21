@@ -47,6 +47,37 @@
   margin-top: 0.85rem;
 }
 
+.dua-library-group {
+  margin-block: 2rem 3.5rem;
+}
+
+.dua-library-group > h3 {
+  margin: 0;
+  padding-bottom: .55rem;
+  border-bottom: 1px solid var(--desert-line);
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.dua-library-group > .dua-grid {
+  margin-top: 1.25rem;
+}
+
+.dua-grid > .dua-card {
+  padding: clamp(22px, 3vw, 42px);
+  border: 1px solid #80503440;
+  background: #fff4df9e;
+}
+
+.dua-grid > .dua-card::before {
+  content: none;
+}
+
+.dua-library-group .dua-card h4 {
+  margin: .65rem 0 1.25rem;
+  font: 500 clamp(1.65rem, 3vw, 2.35rem)/1.12 "Cormorant Garamond", Georgia, serif;
+}
+
 .desert-pages :is(.small, .source-note, .context, .card-bottom > a, .schedule-clock, .schedule-note, .section-heading p, .daily-weekday, .calculator p, .night-explanation p, .about-page p:not(.lead)) {
   color: var(--desert-muted);
 }

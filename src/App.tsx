@@ -8,9 +8,10 @@ import {
   Moon,
   Search,
   CalendarDays,
+  FolderHeart,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { duas } from "./data/duas";
+import { duas, type Dua } from "./data/duas";
 import { useCollection } from "./state/Collection";
 import { DuaCard } from "./components/DuaCard";
 import { TahajjudCalculator } from "./components/TahajjudCalculator";
@@ -33,10 +34,10 @@ function Navbar() {
   const home = location.pathname === "/";
   return (
     <header className={home ? "navbar desert-nav desert-nav-home" : "navbar desert-nav"}>
-      <Link to="/" className="brand" aria-label="Ijabab home">
+      <Link to="/" className="brand" aria-label="Ijtaba home">
         <img src="/assets/ijabah-logo.webp" alt="" />
         <span>
-          Ijabab{!home && <small>ONE DUA AWAY</small>}
+          Ijtaba{!home && <small>ONE DUA AWAY</small>}
         </span>
       </Link>
       <button
@@ -55,7 +56,10 @@ function Navbar() {
       >
         <NavLink to="/discover">Discover</NavLink>
         <NavLink to="/my-duas">
-          My Du’as <span className="count">{c.items.length}</span>
+          My Du’as <span id="saved-dua-count" className="count">
+            {c.items.length}
+            {c.addition && <span key={c.addition.key} className="collection-count-gain" aria-hidden="true">+1</span>}
+          </span>
         </NavLink>
         <NavLink to="/calendar">Calendar</NavLink>
         <NavLink to="/tahajjud">Tahajjud</NavLink>
@@ -67,11 +71,48 @@ function Navbar() {
     </header>
   );
 }
+function CollectionFeedback() {
+  const { addition, items, notice } = useCollection();
+  const reducedMotion = useReducedMotion();
+  if (notice) return <div className="collection-toast" role="status">{notice}</div>;
+  if (!addition) return null;
+
+  const { origin, key } = addition;
+  const target = document.getElementById("saved-dua-count")?.getBoundingClientRect();
+  const targetVisible = target && target.width > 0 && target.top >= 0 && target.bottom <= window.innerHeight;
+  const startX = origin.left + origin.width / 2;
+  const startY = origin.top + origin.height / 2;
+  const endX = targetVisible ? target.left + target.width / 2 : window.innerWidth / 2;
+  const endY = targetVisible ? target.top + target.height / 2 : window.innerHeight - 48;
+  const bend = Math.min(70, Math.abs(endX - startX) / 3 + 20);
+
+  return <>
+    {!reducedMotion && <motion.span
+      key={key}
+      className="collection-flight"
+      aria-hidden="true"
+      style={{ left: startX - 18, top: startY - 18 }}
+      initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+      animate={{
+        x: [0, (endX - startX) * .45, endX - startX],
+        y: [0, (endY - startY) * .45 - bend, endY - startY],
+        scale: [1, 1.1, .35],
+        opacity: [1, 1, 0],
+      }}
+      transition={{ duration: .58, ease: "easeInOut" }}
+    ><BookOpen size={16} /></motion.span>}
+    <div key={`added-${key}`} className="collection-toast collection-added" role="status">
+      <FolderHeart size={17} aria-hidden="true" />
+      <strong>+1</strong> Added to My Du’as <span>· {items.length} total</span>
+    </div>
+  </>;
+}
+
 function Footer() {
   return (
     <footer className="desert-footer">
       <Link className="footer-brand" to="/">
-        Ijabab
+        Ijtaba
       </Link>
       <span>A little closer, one du’a at a time.</span>
       <span>Made for moments that matter.</span>
@@ -188,7 +229,7 @@ function Home({ onReplayIntro }: { onReplayIntro: () => void }) {
         </Link>
       </section>
       <section className="purpose">
-        <span className="eyebrow">THE HEART OF IJABAB</span>
+        <span className="eyebrow">THE HEART OF IJTABA</span>
         <p>
           Making du’a should feel accessible,
           <br />
@@ -212,6 +253,7 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
   const selected = collectionDate(new URLSearchParams(location.search).get("date"));
   const day = dateKey(selected);
   const count = collection.data.days[day]?.length ?? 0;
+  const calendarDay = new URLSearchParams(location.search).has("date") ? day : undefined;
   const library = prophetic ? duas.filter((dua) => dua.prophet) : duas;
   const categories = ["All", ...new Set(library.flatMap((d) => d.categories ?? [d.category]))];
   const found = library.filter(
@@ -220,6 +262,7 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
       [
         d.title,
         d.prophet,
+        d.prophetGroup,
         d.arabic,
         d.translation,
         d.context,
@@ -231,6 +274,18 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
         .toLowerCase()
         .includes(query.toLowerCase()),
   );
+  const groups = new Map<string, Dua[]>();
+  for (const dua of found) {
+    const prophet = dua.prophetGroup ?? dua.prophet ?? "";
+    const entries = groups.get(prophet);
+    if (entries) entries.push(dua);
+    else groups.set(prophet, [dua]);
+  }
+  const orderedGroups = [...groups].sort(([left], [right]) => {
+    if (!left) return 1;
+    if (!right) return -1;
+    return left.localeCompare(right, "en");
+  });
   return (
     <main className="section page">
       <Heading
@@ -258,7 +313,7 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
           Show transliteration
         </label>
       </div>
-      {new URLSearchParams(location.search).has("date") && <div className="daily-browse-bar">
+      {calendarDay && <div className="daily-browse-bar">
         <div>
           <CalendarDays size={20} aria-hidden="true" />
           <span>Collecting for <strong>{fullDate.format(selected)}</strong></span>
@@ -284,9 +339,16 @@ function Discover({ prophetic = false }: { prophetic?: boolean }) {
       <p className="small" aria-live="polite">
         {found.length} {found.length === 1 ? "prayer" : "prayers"}
       </p>
-      <div className="dua-grid">
-        {found.map((d) => (
-          <DuaCard key={d.id} dua={d} transliteration={trans} day={new URLSearchParams(location.search).has("date") ? day : undefined} />
+      <div className="dua-library-groups">
+        {orderedGroups.map(([prophet, entries]) => (
+          <section className="dua-library-group" key={prophet}>
+            <h3>{prophet ? `Prophet ${prophet}` : "Other du’as"}</h3>
+            <div className="dua-grid">
+              {entries.map(dua => (
+                <DuaCard key={dua.id} dua={dua} transliteration={trans} day={calendarDay} headingLevel={4} />
+              ))}
+            </div>
+          </section>
         ))}
       </div>
       {!found.length && (
@@ -410,19 +472,19 @@ function About() {
     <main className="about-page">
       <div className="about-painting" />
       <article>
-        <span className="eyebrow">إجابة · ANSWER / RESPONSE</span>
+        <span className="eyebrow" lang="ar" dir="rtl">اجتبى</span>
         <h1>
           One Du’a
           <br />
           <i>Away.</i>
         </h1>
         <p className="lead">
-          Ijabab was created around a simple belief: making du’a should feel
+          Ijtaba was created around a simple belief: making du’a should feel
           accessible, intentional, and personal.
         </p>
         <p>
           Sometimes the words come easily. Sometimes we need somewhere to begin.
-          Ijabab is a quiet space to discover meaningful supplications,
+          Ijtaba is a quiet space to discover meaningful supplications,
           understand their meaning, and keep them close.
         </p>
         <p>
@@ -453,9 +515,7 @@ export default function App() {
     }
   });
   const introStarted = useRef(false);
-  const location = useLocation(),
-    reduced = useReducedMotion(),
-    c = useCollection();
+  const location = useLocation(), c = useCollection();
   const opening = location.pathname === "/" && introPending;
   useEffect(() => {
     if (opening) {
@@ -479,8 +539,8 @@ export default function App() {
         "/my-duas": "My Du’as",
         "/calendar": "Du’a Calendar",
         "/tahajjud": "Tahajjud",
-        "/about": "About Ijabab",
-      }[location.pathname] || "One Dua Away") + " · Ijabab";
+        "/about": "About Ijtaba",
+      }[location.pathname] || "One Dua Away") + " · Ijtaba";
   }, [location.pathname]);
   if (opening)
     return (
@@ -502,13 +562,10 @@ export default function App() {
           {c.storageError}
         </div>
       )}
-      <motion.div
+      <div
         id="content"
         className={location.pathname === "/" ? undefined : "desert-pages"}
         key={location.pathname}
-        initial={reduced || location.pathname === "/" ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.25 }}
       >
         <Routes>
           <Route path="/" element={<Home onReplayIntro={() => {
@@ -534,9 +591,9 @@ export default function App() {
             }
           />
         </Routes>
-      </motion.div>
+      </div>
       <Footer />
-      {c.notice && <div className="collection-toast" role="status">{c.notice}</div>}
+      <CollectionFeedback />
     </>
   );
 }

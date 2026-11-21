@@ -5,6 +5,7 @@ export interface Dua {
   id: string;
   title: string;
   prophet?: string;
+  prophetGroup?: string;
   arabic?: string;
   translation: string;
   translationAttribution?: string;
