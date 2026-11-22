@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { ArrowUpRight, Pause, Play } from "lucide-react";
-import "./arrival.css";
 import { useAnimationNasheed } from "../state/Humming";
 import { ClosingWriting } from "./ClosingWriting";
 

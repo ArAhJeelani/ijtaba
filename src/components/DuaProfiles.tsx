@@ -1,29 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ArrowUpRight, CalendarDays, BookOpen } from "lucide-react";
 import { duaProfiles, findDuaProfile, type DuaProfile } from "../data/duaProfiles";
 import { useCollection } from "../state/Collection";
 import { DuaCard } from "./DuaCard";
 import { ScheduleDialog } from "./ScheduleDialog";
-import "./dua-profiles.css";
-
-
-export function DiscoverSections() {
-  const { pathname, search } = useLocation();
-  const links = [
-    ["/discover", "All du’as"],
-    ["/discover/prophetic", "Prophetic Du’as"],
-    ["/discover/profiles", "Du’a Profiles"],
-  ];
-  return <nav className="filters" aria-label="Du’a library sections">
-    {links.map(([path, label]) => (
-      <Link key={path} className="button" to={path + (path === "/discover/profiles" ? "" : search)}
-        aria-current={pathname === path || (path === "/discover/profiles" && pathname.startsWith(path + "/")) ? "page" : undefined}>
-        {label}
-      </Link>
-    ))}
-  </nav>;
-}
+import { DiscoverSections } from "./DiscoverSections";
 
 function ProfileIdentity({ profile, detail }: { profile: DuaProfile; detail?: boolean }) {
   const Title = detail ? "h1" : "h2";

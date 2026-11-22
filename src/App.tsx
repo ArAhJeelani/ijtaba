@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -15,25 +15,37 @@ import { duas, type Dua } from "./data/duas";
 import { useCollection } from "./state/Collection";
 import { DuaCard } from "./components/DuaCard";
 import { TahajjudCalculator } from "./components/TahajjudCalculator";
-import { Arrival } from "./components/Arrival";
+import "./components/arrival.css";
 import { DesertHero } from "./components/DesertHero";
-import { DiscoverSections, DuaProfilesPage } from "./components/DuaProfiles";
+import { DiscoverSections } from "./components/DiscoverSections";
 import { TahajjudEntrance } from "./components/TahajjudEntrance";
-import { MyDuasPage } from './components/MyDuasPage';
 import { TahajjudCollection } from './components/TahajjudCollection';
-import { DuaCalendar } from "./components/DuaCalendar";
+import "./components/dua-calendar.css";
 import { collectionDate, dateKey, fullDate } from "./utils/calendar";
+import { useOnline } from "./state/useOnline";
+
+const MyDuasPage = lazy(() => import("./components/MyDuasPage").then(({ MyDuasPage }) => ({ default: MyDuasPage })));
+const DuaCalendar = lazy(() => import("./components/DuaCalendar").then(({ DuaCalendar }) => ({ default: DuaCalendar })));
+const DuaProfilesPage = lazy(() => import("./components/DuaProfiles").then(({ DuaProfilesPage }) => ({ default: DuaProfilesPage })));
+const Arrival = lazy(() => import("./components/Arrival").then(({ Arrival }) => ({ default: Arrival })));
 
 function Navbar() {
   const [open, setOpen] = useState(false),
     c = useCollection(),
     location = useLocation();
+  const menuToggle = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
   const home = location.pathname === "/";
   return (
-    <header className={home ? "navbar desert-nav desert-nav-home" : "navbar desert-nav"}>
+    <header className={home ? "navbar desert-nav desert-nav-home" : "navbar desert-nav"}
+      onKeyDown={(event) => {
+        if (open && event.key === "Escape") {
+          setOpen(false);
+          menuToggle.current?.focus();
+        }
+      }}>
       <Link to="/" className="brand" aria-label="Ijtaba home">
         <img src="/assets/ijabah-logo.webp" alt="" />
         <span>
@@ -41,6 +53,7 @@ function Navbar() {
         </span>
       </Link>
       <button
+        ref={menuToggle}
         className="menu-toggle"
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
@@ -53,6 +66,12 @@ function Navbar() {
         id="main-nav"
         className={open ? "open" : ""}
         aria-label="Main navigation"
+        onClick={(event) => {
+          if (open && (event.target as Element).closest("a")) {
+            setOpen(false);
+            requestAnimationFrame(() => document.getElementById("content")?.focus({ preventScroll: true }));
+          }
+        }}
       >
         <NavLink to="/discover">Discover</NavLink>
         <NavLink to="/my-duas">
@@ -511,6 +530,7 @@ function About() {
 const introSeenKey = "ijabah:three-ways-intro-seen";
 
 export default function App() {
+  const online = useOnline();
   const [introPending, setIntroPending] = useState(() => {
     try {
       return localStorage.getItem(introSeenKey) === null;
@@ -548,12 +568,14 @@ export default function App() {
   }, [location.pathname]);
   if (opening)
     return (
-      <Arrival
-        onEnter={() => {
-          setIntroPending(false);
-          window.scrollTo(0, 0);
-        }}
-      />
+      <Suspense fallback={<main className="section page" role="status">Opening Ijtaba…</main>}>
+        <Arrival
+          onEnter={() => {
+            setIntroPending(false);
+            window.scrollTo(0, 0);
+          }}
+        />
+      </Suspense>
     );
   return (
     <>
@@ -561,6 +583,7 @@ export default function App() {
         Skip to content
       </a>
       <Navbar />
+      {!online && <div className="offline-notice" role="status">You’re offline. City prayer times and external links require a connection.</div>}
       {c.storageError && (
         <div role="alert" className="storage-warning">
           {c.storageError}
@@ -568,33 +591,36 @@ export default function App() {
       )}
       <div
         id="content"
+        tabIndex={-1}
         className={location.pathname === "/" ? undefined : "desert-pages"}
         key={location.pathname}
       >
-        <Routes>
-          <Route path="/" element={<Home onReplayIntro={() => {
-            window.scrollTo(0, 0);
-            setIntroPending(true);
-          }} />} />
-          <Route path="/discover" element={<Discover key="all" />} />
-          <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
-          <Route path="/discover/profiles/:profileId?" element={<DuaProfilesPage />} />
-          <Route path="/my-duas" element={<MyDuasPage />} />
-          <Route path="/calendar" element={<DuaCalendar />} />
-          <Route path="/tahajjud" element={<Tahajjud />} />
-          <Route path="/about" element={<About />} />
-          <Route
-            path="*"
-            element={
-              <main className="section page">
-                <h1>A quiet wrong turn.</h1>
-                <Link className="button" to="/">
-                  Return home
-                </Link>
-              </main>
-            }
-          />
-        </Routes>
+        <Suspense fallback={<main className="section page" role="status">Opening page…</main>}>
+          <Routes>
+            <Route path="/" element={<Home onReplayIntro={() => {
+              window.scrollTo(0, 0);
+              setIntroPending(true);
+            }} />} />
+            <Route path="/discover" element={<Discover key="all" />} />
+            <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
+            <Route path="/discover/profiles/:profileId?" element={<DuaProfilesPage />} />
+            <Route path="/my-duas" element={<MyDuasPage />} />
+            <Route path="/calendar" element={<DuaCalendar />} />
+            <Route path="/tahajjud" element={<Tahajjud />} />
+            <Route path="/about" element={<About />} />
+            <Route
+              path="*"
+              element={
+                <main className="section page">
+                  <h1>A quiet wrong turn.</h1>
+                  <Link className="button" to="/">
+                    Return home
+                  </Link>
+                </main>
+              }
+            />
+          </Routes>
+        </Suspense>
       </div>
       <Footer />
       <CollectionFeedback />

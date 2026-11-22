@@ -9,7 +9,6 @@ import {addDays,nextOccurrence,occursOn} from '../utils/schedules';
 import {DuaCard} from './DuaCard';
 import {ScheduleDialog} from './ScheduleDialog';
 import {ScheduleEntry} from './ScheduleEntry';
-import './dua-calendar.css';
 const monthLabel=new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'});
 const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 export function DuaCalendar(){

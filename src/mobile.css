@@ -1,0 +1,125 @@
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+body {
+  padding-inline: var(--safe-left) var(--safe-right);
+}
+
+.offline-notice {
+  padding: 0.75rem 1rem;
+  background: #192d49;
+  color: #fff2db;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.navbar.desert-nav {
+  height: calc(var(--home-nav-height) + var(--safe-top));
+  padding-top: var(--safe-top);
+}
+
+.navbar.desert-nav-home {
+  margin-bottom: calc(-1 * (var(--home-nav-height) + var(--safe-top)));
+}
+
+.navbar.desert-nav-home:has(+ .offline-notice) {
+  margin-bottom: 0;
+  background: #30201c;
+}
+
+.desert-footer {
+  margin-bottom: var(--safe-bottom);
+}
+
+.collection-toast {
+  bottom: calc(24px + var(--safe-bottom));
+}
+
+.living-arrival .arrival-top {
+  top: calc(24px + var(--safe-top));
+}
+
+.living-arrival .film-footer {
+  margin-bottom: var(--safe-bottom);
+}
+
+.arrow-skip {
+  top: calc(25px + var(--safe-top));
+  right: max(5%, var(--safe-right));
+}
+
+.reading-overlay {
+  padding-top: calc(25px + var(--safe-top));
+  padding-right: max(5%, var(--safe-right));
+  padding-bottom: calc(25px + var(--safe-bottom));
+  padding-left: max(5%, var(--safe-left));
+}
+
+@media (max-width: 740px) {
+  .desert-nav .menu-toggle,
+  .daily-month button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .navbar.desert-nav nav.open {
+    top: 100%;
+    max-height: calc(100dvh - var(--home-nav-height) - var(--safe-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(18px + var(--safe-bottom));
+  }
+
+  .desert-nav nav a,
+  .desert-replay,
+  .profile-actions > *,
+  .dua-organizer-actions button,
+  .calendar-schedule-actions > *,
+  .collection-tabs button,
+  .calculator .text-link,
+  .calculator input,
+  .calculator select,
+  .calculator button,
+  .organizer-dialog button {
+    min-height: 44px;
+  }
+
+  :is(.profile-actions, .calendar-schedule-actions) > a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :is(.calculator, .organizer-dialog, .library-controls, .collection-create, .personal-form) :is(input, textarea, select) {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  .dua-card .arabic {
+    font-size: clamp(1.65rem, 5.8vw, 2.2rem);
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+  }
+
+  .daily-month {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+  }
+
+  .daily-grid {
+    gap: 2px;
+  }
+
+  .organizer-dialog,
+  .reading-overlay {
+    overscroll-behavior: contain;
+  }
+
+  .organizer-dialog {
+    max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);
+  }
+}
+

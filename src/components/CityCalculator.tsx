@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useOnline } from "../state/useOnline";
 type City = { id: string; name: string };
 type Night = {
   city: string;
@@ -20,6 +21,7 @@ const format = (value: string) =>
     timeZoneName: "short",
   }).format(new Date(value));
 export function CityCalculator() {
+  const online = useOnline();
   const [cities, setCities] = useState<City[]>([]),
     [city, setCity] = useState(() => {
       try {
@@ -41,8 +43,14 @@ export function CityCalculator() {
     [busy, setBusy] = useState(false);
   const request = useRef<AbortController | null>(null);
   useEffect(() => {
+    setResult(null);
+    setBusy(false);
+    setError("");
+    setCities([]);
+    if (!online) return;
+
     const controller = new AbortController();
-    fetch("/api/cities", { signal: controller.signal })
+    fetch("/api/cities", { signal: controller.signal, cache: "no-store" })
       .then(async (r) => {
         if (!r.ok) throw new Error();
         const data = await r.json();
@@ -59,7 +67,7 @@ export function CityCalculator() {
       controller.abort();
       request.current?.abort();
     };
-  }, []);
+  }, [online]);
   function reset() {
     request.current?.abort();
     setBusy(false);
@@ -67,7 +75,7 @@ export function CityCalculator() {
     setError("");
   }
   async function calculate() {
-    if (!cities.some((c) => c.id === city) || !date) return;
+    if (!online || !cities.some((c) => c.id === city) || !date) return;
     reset();
     const controller = new AbortController();
     request.current = controller;
@@ -75,7 +83,7 @@ export function CityCalculator() {
     try {
       const response = await fetch(
         `/api/tahajjud?city=${encodeURIComponent(city)}&date=${encodeURIComponent(date)}`,
-        { signal: controller.signal },
+        { signal: controller.signal, cache: "no-store" },
       );
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
@@ -110,7 +118,7 @@ export function CityCalculator() {
           Prefer your own times? Enter them below ↓
         </a>
       </div>
-      <form
+      {!online ? <p role="status">City prayer times need an internet connection. Enter your times manually below.</p> : <form
         onSubmit={(e) => {
           e.preventDefault();
           void calculate();
@@ -131,7 +139,7 @@ export function CityCalculator() {
               }
             }}
           >
-            {!cities.length && <option>Loading cities…</option>}
+            {!cities.length && <option>{error ? "City lookup unavailable" : "Loading cities…"}</option>}
             {cities.map((c) => (
               <option value={c.id} key={c.id}>
                 {c.name}
@@ -187,7 +195,7 @@ export function CityCalculator() {
             </p>
           </div>
         )}
-      </form>
+      </form>}
     </section>
   );
 }

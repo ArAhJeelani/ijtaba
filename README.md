@@ -6,6 +6,14 @@ A React + TypeScript MVP for discovering Qur’anic duas, saving a personal coll
 
 Install Node.js 22+ and pnpm, then run `pnpm install` and `pnpm dev` from this folder. `pnpm build` checks TypeScript and builds `dist/`. `pnpm test` runs calculator tests (Node 22.6+).
 
+## Install and test offline
+
+Run `pnpm build`, then `pnpm exec vite preview --host 127.0.0.1` and open the loopback URL it prints. The service worker is enabled in production builds. For phone testing, use an HTTPS staging URL. In Safari on iPhone, use **Share → Add to Home Screen**, then enable **Open as Web App** if offered. In Chrome on Android, use **⋮ → Add to home screen → Install**.
+
+Open the app online once to finish downloading the offline files. Then turn off connectivity and reopen it to test the library, collections, calendar and manual Tahajjud calculator. City prayer times and external links require a connection. The optional intro soundtrack is outside the offline cache, and typography may use system fallback fonts. Personal entries, schedules, and backup/import continue to use browser-local storage and files.
+
+Publish the contents of `dist/` together, serve `/sw.js` as JavaScript with revalidation enabled, and configure the existing SPA route fallback and `/api/*` routing. The worker keeps the current release active while its tabs or installed windows are open. Close those windows and reopen the app to pick up a waiting release.
+
 ## Architecture
 
 - `src/App.tsx`: routed pages, navigation, footer and reading experience.

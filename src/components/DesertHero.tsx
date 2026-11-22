@@ -26,7 +26,9 @@ export function DesertHero() {
       <div className="desert-scene">
         <img
           className="desert-hero-art"
-          src="/assets/desert-dua-hero-prayer-mat.png"
+          src="/assets/desert-dua-hero-prayer-mat-1672.jpg"
+          srcSet="/assets/desert-dua-hero-prayer-mat-1000.jpg 1000w, /assets/desert-dua-hero-prayer-mat-1672.jpg 1672w"
+          sizes="100vw"
           alt="Footprints lead to a prayer mat in moonlit desert dunes, with a masjid in the distance."
           width={1672}
           height={941}

@@ -1,0 +1,14 @@
+{
+  "id": "/",
+  "name": "Ijtaba — One Dua Away",
+  "short_name": "Ijtaba",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#192d49",
+  "background_color": "#192d49",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
