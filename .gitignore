@@ -3,3 +3,8 @@ dist/
 .pnpm-store/
 *.tar.gz
 *.tsbuildinfo
+
+.env
+.env.*
+!.env.example
+supabase/.temp/
