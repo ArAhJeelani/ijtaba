@@ -39,7 +39,7 @@ export function ScheduleDialog({onClose,target,initial,date:initialDate}:{onClos
       paused: initial?.paused ?? false, createdAt: initial?.createdAt ?? new Date().toISOString(),
     });
     if (!saved) {
-      setError(unavailable);
+      setError(c.cloud && !c.cloud.ready ? 'Account editing is paused. Check your sync status.' : unavailable);
       return;
     }
     onClose();

@@ -27,7 +27,7 @@ type Preview={
 };
 
 export function OrganizerBackupPanel({onRestored}:{onRestored:()=>void}){
-  const {data,recoveryRaw,replaceOrganizer}=useCollection();
+  const {data,recoveryRaw,replaceOrganizer,cloud}=useCollection();
   const fileInput=useRef<HTMLInputElement>(null);
   const importButton=useRef<HTMLButtonElement>(null);
   const cancelButton=useRef<HTMLButtonElement>(null);
@@ -95,14 +95,14 @@ export function OrganizerBackupPanel({onRestored}:{onRestored:()=>void}){
     }
     const restored=preview.kind==='import';
     closePreview();
-    setStatus(restored?'Backup restored to this browser.':'Stored Ijabah data reset.');
+    setStatus(cloud?'Replacement queued. Check account sync status before closing this tab.':restored?'Backup restored to this browser.':'Stored Ijabah data reset.');
     onRestored();
     requestAnimationFrame(()=>importButton.current?.focus());
   };
 
   return <section className="personal-section" aria-labelledby="organizer-backup-heading">
     <h2 id="organizer-backup-heading">Backup &amp; recovery</h2>
-    <p className="small">Clearing browser data can erase your organizer. Keep a backup in a private place. The JSON file contains your personal du’as and notes in plain text and stays on your device during export and import.</p>
+    <p className="small">{cloud ? 'Import replaces the account organizer and uploads the replacement to Supabase.' : 'Clearing browser data can erase your organizer.'} Keep backups in a private place. The JSON file contains private data in plain text.</p>
     <div className="organizer-actions">
       <button type="button" className="button outline" onClick={exportCurrent}>Export My Data</button>
       <button ref={importButton} type="button" className="button outline" aria-disabled={reading} onClick={()=>{if(!reading)fileInput.current?.click()}}>Import Backup</button>

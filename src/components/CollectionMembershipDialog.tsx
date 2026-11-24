@@ -13,7 +13,7 @@ export function CollectionMembershipDialog({dua,onClose}:{dua:Dua;onClose:()=>vo
       const count=c.collectionItems(group.id).length;
       return <label key={group.id}>
         <input type="checkbox" checked={checked} onChange={()=>{
-          c.toggleMembership(group.id,dua.id);
+          if(!c.toggleMembership(group.id,dua.id))return;
           setAddedTo(checked?null:group.id);
         }}/>
         {group.name}
@@ -30,8 +30,8 @@ export function CollectionMembershipDialog({dua,onClose}:{dua:Dua;onClose:()=>vo
     <form className="organizer-form" onSubmit={e=>{
       e.preventDefault();
       if(!name.trim())return;
-      const id=c.createCollection(name);
-      c.toggleMembership(id,dua.id);
+      const id=c.createCollection(name,dua.id);
+      if(!id)return;
       setAddedTo(id);
       setName('');
     }}>

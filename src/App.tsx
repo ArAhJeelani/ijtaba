@@ -22,6 +22,10 @@ import { TahajjudEntrance } from "./components/TahajjudEntrance";
 import { TahajjudCollection } from './components/TahajjudCollection';
 import "./components/dua-calendar.css";
 import { collectionDate, dateKey, fullDate } from "./utils/calendar";
+import { supabase } from "./state/supabase";
+import { useAuth } from "./state/Auth";
+import { AuthCallback, AuthForm, AccountPage } from "./components/Account";
+import { CloudOrganizerStatus } from "./components/CloudOrganizerStatus";
 import { useOnline } from "./state/useOnline";
 
 const MyDuasPage = lazy(() => import("./components/MyDuasPage").then(({ MyDuasPage }) => ({ default: MyDuasPage })));
@@ -38,6 +42,7 @@ function Navbar() {
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+  const { session } = useAuth();
   const home = location.pathname === "/";
   return (
     <header className={home ? "navbar desert-nav desert-nav-home" : "navbar desert-nav"}
@@ -84,6 +89,7 @@ function Navbar() {
         <NavLink to="/calendar">Calendar</NavLink>
         <NavLink to="/tahajjud">Tahajjud</NavLink>
         <NavLink to="/about">About</NavLink>
+        {supabase && <NavLink to={session ? "/account" : "/login"}>{session ? "Account" : "Sign in"}</NavLink>}
       </nav>
       {!home && <Link className="nav-quiet" to="/my-duas">
         <BookOpen size={16} /> A moment for you
@@ -526,9 +532,7 @@ function About() {
           ones.
         </p>
         <p>
-          This first version keeps your collection in this browser. There are no
-          accounts or cloud backups yet. Clearing browser data will remove your
-          saved prayers.
+          Guest collections stay in this browser. When signed in, your private organizer syncs to your account.
         </p>
         <Link className="button" to="/discover">
           Find your first du’a <ArrowUpRight size={18} />
@@ -594,6 +598,7 @@ export default function App() {
         Skip to content
       </a>
       <Navbar />
+      <CloudOrganizerStatus />
       {!online && <div className="offline-notice" role="status">You’re offline. City prayer times and external links require a connection.</div>}
       {c.storageError && (
         <div role="alert" className="storage-warning">
@@ -619,6 +624,12 @@ export default function App() {
             <Route path="/my-duas" element={<MyDuasPage />} />
             <Route path="/calendar" element={<DuaCalendar />} />
             <Route path="/tahajjud" element={<Tahajjud />} />
+            <Route path="/login" element={<AuthForm key="login" mode="login" />} />
+            <Route path="/signup" element={<AuthForm key="signup" mode="signup" />} />
+            <Route path="/forgot-password" element={<AuthForm key="forgot" mode="forgot" />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/account/password" element={<AuthForm key="password" mode="password" />} />
+            <Route path="/account" element={<AccountPage />} />
             <Route path="/about" element={<About />} />
             <Route
               path="*"

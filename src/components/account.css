@@ -1,0 +1,32 @@
+﻿.account-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 75svh;
+  background: var(--desert-linen, #eee0c8);
+  color: var(--desert-ink, #33221c);
+}
+.account-landscape {
+  background: #87482f url("/assets/dua-moments-dawn.jpg") 68% center / cover no-repeat;
+}
+.account-content {
+  width: min(100%, 640px);
+  padding: clamp(24px, 5vw, 80px);
+  overflow-wrap: anywhere;
+}
+.account-content h1 { font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1; margin: 0 0 1rem; }
+.account-content p { margin: .8rem 0; }
+.account-form, .account-form fieldset { display: grid; gap: .8rem; min-width: 0; }
+.account-form fieldset { border: 0; padding: 0; margin: 0; }
+.account-form label { display: grid; gap: .3rem; font-weight: 600; }
+.account-form input { width: 100%; min-height: 46px; background: #fffaf0; color: #33221c; border: 1px solid #936a50; padding: .55rem .7rem; }
+.account-form button { justify-self: start; }
+.account-visibility, .account-links { display: flex; align-items: center; gap: .6rem; }
+.account-visibility { min-height: 44px; }
+.account-links { flex-wrap: wrap; gap: .6rem 1.1rem; margin-top: 1.1rem; }
+.account-content a, .cloud-organizer a { text-decoration: underline; text-underline-offset: .2em; }
+.cloud-organizer { max-width: 72rem; margin: .65rem auto; padding: .65rem 1.2rem; color: #33221c; background: #fff4df; }
+.cloud-organizer p { margin: .35rem 0; }
+@media (max-width: 720px) {
+  .account-page { grid-template-columns: minmax(0, 1fr); }
+  .account-landscape { min-height: 150px; }
+}

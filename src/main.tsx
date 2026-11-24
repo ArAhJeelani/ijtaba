@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { MotionConfig } from "motion/react";
+import { AuthProvider } from "./state/Auth";
 import { CollectionProvider } from "./state/Collection";
 import App from "./App";
 import "./styles.css";
@@ -14,13 +15,15 @@ import { HummingProvider } from "./state/Humming";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <CollectionProvider>
-        <HummingProvider>
-          <MotionConfig reducedMotion="user">
-            <App />
-          </MotionConfig>
-        </HummingProvider>
-      </CollectionProvider>
+      <AuthProvider>
+        <CollectionProvider>
+          <HummingProvider>
+            <MotionConfig reducedMotion="user">
+              <App />
+            </MotionConfig>
+          </HummingProvider>
+        </CollectionProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

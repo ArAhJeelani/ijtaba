@@ -40,7 +40,7 @@ export function DeletePersonalDuaDialog({dua,onClose,onDelete}:{
 }){
   const cancelButton=useRef<HTMLButtonElement>(null);
   return <OrganizerDialog title="Permanently delete this du’a?" onClose={onClose} initialFocus={cancelButton}>
-    <p>“{dua.title}” will be permanently deleted from this browser, along with its collection memberships, calendar entries, and individual schedules.</p>
+    <p>“{dua.title}” will be permanently deleted from your organizer, along with its collection memberships, calendar entries, and individual schedules.</p>
     <div className="organizer-actions">
       <button type="button" className="button outline" ref={cancelButton} onClick={onClose}>Cancel</button>
       <button type="button" className="button" onClick={onDelete}>Delete permanently</button>
