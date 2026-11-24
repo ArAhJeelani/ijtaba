@@ -41,11 +41,13 @@ export default function DuaMomentsPage() {
   return (
     <main className="dua-moments">
       <section className="moments-hero" aria-labelledby="moments-title">
-        <div className="moments-shell moments-hero-copy">
+        <div className="moments-hero-copy">
+          <span className="moments-arabic" lang="ar" dir="rtl">الدعاء</span>
           <h1 id="moments-title">When to Make <i>Du’a</i></h1>
           <p>Every moment is an opportunity to turn to Allah. Discover the moments especially encouraged in the Qur’an and Sunnah.</p>
           <a href="#through-the-day">Explore the moments <ArrowDown size={16} aria-hidden="true" /></a>
         </div>
+        <img className="moments-hero-art" src="/assets/dua-moments-dawn.jpg" alt="" width={1774} height={887} fetchPriority="high" />
       </section>
 
       <div className="moments-shell">
@@ -61,29 +63,30 @@ export default function DuaMomentsPage() {
             </li>}
           </ol>
         </section>
+      </div>
 
-        {specialMoments.length > 0 && (
-          <section className="moments-special" aria-labelledby="moments-special-title">
+      {specialMoments.length > 0 && (
+        <section className="moments-special" aria-labelledby="moments-special-title">
+          <div className="moments-shell">
             <header className="moments-heading">
               <h2 id="moments-special-title">Special Moments and Circumstances</h2>
             </header>
             <div className="moments-special-grid">
               {specialMoments.map((moment) => <MomentEntry key={moment.id} moment={moment} />)}
             </div>
-          </section>
-        )}
-      </div>
+          </div>
+        </section>
+      )}
 
       {nightMoment && (
         <section className="moments-night" id="last-third" aria-labelledby="moments-night-title">
-          <div className="moments-shell">
-            <div className="moments-night-copy">
-              <Moon size={27} aria-hidden="true" />
-              <h2 id="moments-night-title">{nightMoment.title}</h2>
-              <p>{nightMoment.summary}</p>
-              {nightMoment.action && <Link className="moments-cta" to={nightMoment.action.to}>{nightMoment.action.label} <ArrowUpRight size={17} aria-hidden="true" /></Link>}
-              <MomentDetails moment={nightMoment} />
-            </div>
+          <img className="moments-night-art" src="/assets/desert-dua-hero-textured.jpg" alt="" width={1672} height={941} loading="lazy" />
+          <div className="moments-night-copy">
+            <Moon size={27} aria-hidden="true" />
+            <h2 id="moments-night-title">{nightMoment.title}</h2>
+            <p>{nightMoment.summary}</p>
+            {nightMoment.action && <Link className="moments-cta" to={nightMoment.action.to}>{nightMoment.action.label} <ArrowUpRight size={17} aria-hidden="true" /></Link>}
+            <MomentDetails moment={nightMoment} />
           </div>
         </section>
       )}

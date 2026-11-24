@@ -1,11 +1,11 @@
 ﻿.dua-moments {
-  --moments-ink: #282e40;
-  --moments-muted: #514638;
-  --moments-gold: #f3d8a5;
-  --moments-paper: #f6ebd8;
-  --moments-line: #825a384d;
+  --moments-ink: var(--desert-ink);
+  --moments-muted: var(--desert-muted);
+  --moments-gold: #f3d8ad;
+  --moments-paper: var(--desert-linen);
+  --moments-line: #825a3866;
   color: var(--moments-ink);
-  background: var(--moments-paper) url("/assets/painted-canvas-v1.webp") center top / 980px;
+  background: linear-gradient(#f8eedc, var(--moments-paper) 34%, #d6b493 68%, #e9d6bb);
 }
 
 .moments-shell {
@@ -33,34 +33,53 @@
 .moments-hero,
 .moments-night {
   display: grid;
-  align-items: center;
-  isolation: isolate;
-  color: #fff4df;
-  background-color: #131e33;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
 }
 
 .moments-hero {
-  min-height: clamp(480px, 72svh, 740px);
-  background-image:
-    linear-gradient(90deg, #16192bf5, #16192bbf 35%, #16192b2b 85%),
-    url("/assets/desert-dua-hero-textured.jpg");
-  background-position: center, center 52%;
-  background-size: cover;
+  min-height: clamp(460px, 66svh, 680px);
+  background: #f5e6ce;
+}
+
+.moments-hero-copy,
+.moments-night-copy {
+  align-self: center;
+  padding: clamp(38px, 6vw, 96px);
+  min-width: 0;
 }
 
 .moments-hero-copy {
-  padding-block: clamp(62px, 11vw, 145px);
   animation: moments-enter .65s ease-out both;
+}
+
+.moments-arabic {
+  display: block;
+  width: fit-content;
+  margin-bottom: 1rem;
+  color: var(--desert-accent);
+  font: 1.75rem/1.2 Amiri, serif;
+}
+
+.moments-hero-art,
+.moments-night-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moments-hero-art {
+  object-position: 68% center;
 }
 
 .moments-hero h1 {
   max-width: 8ch;
-  font-size: clamp(3.6rem, 9vw, 8rem);
+  font-size: clamp(3.15rem, 6.4vw, 6.6rem);
   letter-spacing: -.035em;
 }
 
 .moments-hero i {
-  color: var(--moments-gold);
+  color: var(--desert-accent);
 }
 
 .moments-hero p {
@@ -81,7 +100,7 @@
 
 .moments-hero a {
   margin-top: 1.25rem;
-  color: var(--moments-gold);
+  color: #713d29;
 }
 
 .moments-day,
@@ -169,36 +188,47 @@
   background: #5b564f center / cover no-repeat;
 }
 
+.moments-art[data-scene="dawn"],
+.moments-art[data-scene="friday"] {
+  background-image: url("/assets/dua-moments-dawn.jpg");
+}
+
 .moments-art[data-scene="dawn"] {
-  background-image: linear-gradient(#765a3620, #3e294748), url("/assets/desert-dua-hero-textured.jpg");
-  background-position: center, 82% 24%;
+  background-position: left center;
+  background-size: auto 125%;
+}
+
+.moments-art[data-scene="friday"] {
+  background-position: right center;
+  background-size: auto 155%;
 }
 
 .moments-art[data-scene="prayer"] {
   background-image: url("/assets/sujood.webp");
   background-position: center 58%;
+  background-color: #7e553d;
+  filter: sepia(.85);
 }
 
 .moments-art[data-scene="sands"] {
   background-image: url("/assets/desert-dua-hero-prayer-mat-1000.jpg");
-  background-position: center 71%;
-}
-
-.moments-art[data-scene="friday"] {
-  background-image: url("/assets/dua-profiles/daily-essentials.png");
-  background-position: center 42%;
+  background-size: 150%;
+  background-position: right 85%;
 }
 
 .moments-art[data-scene="rain"] {
-  background-image: linear-gradient(#19293836, #19293877), url("/assets/dua-profiles/hardship-healing.png");
+  background-image: url("/assets/dua-moments-rain.jpg");
 }
 
 .moments-art[data-scene="road"] {
-  background-image: url("/assets/dua-profiles/career.png");
+  background-image: url("/assets/dua-moments-sunset.jpg");
 }
 
 .moments-special {
-  border-top: 1px solid var(--moments-line);
+  background: linear-gradient(160deg, #92573d, #633a2d);
+  color: #fff3df;
+  --moments-muted: #fae7d2;
+  --moments-line: #e8c5a283;
 }
 
 .moments-special-grid {
@@ -260,16 +290,15 @@
 }
 
 .moments-night {
-  --moments-line: #f3d8a56b;
-  min-height: clamp(500px, 72vw, 730px);
-  padding-block: clamp(66px, 10vw, 130px);
-  background-image: linear-gradient(90deg, #111c30f5, #111c30c7 42%, #111c3000), url("/assets/night.webp");
-  background-position: center, center 48%;
-  background-size: cover;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  --moments-line: #f3d8ad6b;
+  min-height: 540px;
+  background: #30201c;
+  color: #fff1dc;
 }
 
-.moments-night-copy {
-  max-width: 490px;
+.moments-night-art {
+  object-position: 69% center;
 }
 
 .moments-night-copy > svg {
@@ -282,7 +311,7 @@
   padding: .7rem 1.1rem;
   border-radius: 3px 15px 4px 11px;
   background: var(--moments-gold);
-  color: #222538;
+  color: #33221c;
 }
 
 .moments-night .moments-details {
@@ -310,23 +339,29 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 760px) {
+  .moments-hero,
+  .moments-night {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .moments-hero-copy,
+  .moments-night-copy {
+    padding: 42px clamp(20px, 6vw, 46px);
+  }
+
+  .moments-hero-art,
+  .moments-night-art {
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+}
+
 @media (max-width: 680px) {
   .moments-entry,
   .moments-special-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .moments-hero {
-    align-items: end;
-    background-image: linear-gradient(0deg, #16192bfa, #16192bb3 48%, #16192b15 90%), url("/assets/desert-dua-hero-textured.jpg");
-    background-position: center, 66% center;
-  }
-
-  .moments-night {
-    align-items: end;
-    padding-top: 200px;
-    background-image: linear-gradient(0deg, #111c30 4%, #111c30e0 55%, #111c3029), url("/assets/night.webp");
-    background-position: center, 59% top;
   }
 }
 
@@ -337,3 +372,5 @@
 @media (prefers-reduced-motion: no-preference) {
   html:has(.dua-moments) { scroll-behavior: smooth; }
 }
+
+.dua-moments :is(.moments-timeline-night, .moments-actions) a { color: var(--moments-ink); }
