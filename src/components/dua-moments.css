@@ -1,0 +1,339 @@
+﻿.dua-moments {
+  --moments-ink: #282e40;
+  --moments-muted: #514638;
+  --moments-gold: #f3d8a5;
+  --moments-paper: #f6ebd8;
+  --moments-line: #825a384d;
+  color: var(--moments-ink);
+  background: var(--moments-paper) url("/assets/painted-canvas-v1.webp") center top / 980px;
+}
+
+.moments-shell {
+  width: min(1080px, calc(100% - 2 * clamp(20px, 5vw, 64px)));
+  margin-inline: auto;
+}
+
+.dua-moments :is(h1, h2, h3) {
+  margin: 0;
+  text-wrap: balance;
+  line-height: 1;
+  color: inherit;
+}
+
+.dua-moments p {
+  margin: .85rem 0 0;
+  line-height: 1.65;
+}
+
+.dua-moments :is(a, summary):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.moments-hero,
+.moments-night {
+  display: grid;
+  align-items: center;
+  isolation: isolate;
+  color: #fff4df;
+  background-color: #131e33;
+}
+
+.moments-hero {
+  min-height: clamp(480px, 72svh, 740px);
+  background-image:
+    linear-gradient(90deg, #16192bf5, #16192bbf 35%, #16192b2b 85%),
+    url("/assets/desert-dua-hero-textured.jpg");
+  background-position: center, center 52%;
+  background-size: cover;
+}
+
+.moments-hero-copy {
+  padding-block: clamp(62px, 11vw, 145px);
+  animation: moments-enter .65s ease-out both;
+}
+
+.moments-hero h1 {
+  max-width: 8ch;
+  font-size: clamp(3.6rem, 9vw, 8rem);
+  letter-spacing: -.035em;
+}
+
+.moments-hero i {
+  color: var(--moments-gold);
+}
+
+.moments-hero p {
+  max-width: 36ch;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.moments-hero a,
+.moments-timeline-night a,
+.moments-actions a,
+.moments-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.moments-hero a {
+  margin-top: 1.25rem;
+  color: var(--moments-gold);
+}
+
+.moments-day,
+.moments-night {
+  scroll-margin-top: 85px;
+}
+
+.moments-day,
+.moments-special,
+.moments-close {
+  padding-block: clamp(56px, 9vw, 118px);
+}
+
+.moments-heading {
+  margin-bottom: clamp(28px, 5vw, 58px);
+}
+
+.moments-heading h2,
+.moments-close h2,
+.moments-night h2 {
+  font-size: clamp(2.65rem, 6vw, 5.2rem);
+}
+
+.moments-heading p {
+  max-width: 58ch;
+  color: var(--moments-muted);
+}
+
+.moments-heading a,
+.moments-sources a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.moments-timeline {
+  margin: 0;
+  padding: 0 0 0 clamp(16px, 4vw, 52px);
+  border-inline-start: 1px solid var(--moments-line);
+  list-style: none;
+}
+
+.moments-timeline > li {
+  position: relative;
+}
+
+.moments-timeline > li + li {
+  margin-top: clamp(28px, 5vw, 60px);
+}
+
+.moments-timeline > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(-1 * clamp(16px, 4vw, 52px) - 4px);
+  top: 20px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a16d3b;
+}
+
+.moments-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(18px, 4vw, 48px);
+}
+
+.moments-entry h3 {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+}
+
+.moments-entry-copy {
+  padding-block: .45rem;
+  min-width: 0;
+}
+
+.moments-entry-copy > p {
+  color: var(--moments-muted);
+}
+
+.moments-art {
+  aspect-ratio: 16 / 9;
+  border-radius: 50% 48% 2px 2px / 13% 15% 2px 2px;
+  background: #5b564f center / cover no-repeat;
+}
+
+.moments-art[data-scene="dawn"] {
+  background-image: linear-gradient(#765a3620, #3e294748), url("/assets/desert-dua-hero-textured.jpg");
+  background-position: center, 82% 24%;
+}
+
+.moments-art[data-scene="prayer"] {
+  background-image: url("/assets/sujood.webp");
+  background-position: center 58%;
+}
+
+.moments-art[data-scene="sands"] {
+  background-image: url("/assets/desert-dua-hero-prayer-mat-1000.jpg");
+  background-position: center 71%;
+}
+
+.moments-art[data-scene="friday"] {
+  background-image: url("/assets/dua-profiles/daily-essentials.png");
+  background-position: center 42%;
+}
+
+.moments-art[data-scene="rain"] {
+  background-image: linear-gradient(#19293836, #19293877), url("/assets/dua-profiles/hardship-healing.png");
+}
+
+.moments-art[data-scene="road"] {
+  background-image: url("/assets/dua-profiles/career.png");
+}
+
+.moments-special {
+  border-top: 1px solid var(--moments-line);
+}
+
+.moments-special-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px, 5vw, 64px);
+}
+
+.moments-special-grid .moments-entry {
+  display: block;
+}
+
+.moments-special-grid .moments-entry-copy {
+  padding-top: 1.2rem;
+}
+
+.moments-details {
+  margin-top: .75rem;
+  border-block: 1px solid var(--moments-line);
+}
+
+.moments-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding-block: .45rem;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.moments-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.moments-details summary svg {
+  flex: none;
+}
+
+.moments-details[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.moments-details > p {
+  margin-top: .25rem;
+}
+
+.moments-sources {
+  padding: 0;
+  margin: .65rem 0 .85rem;
+  list-style: none;
+  font-size: .9rem;
+}
+
+.moments-sources li + li {
+  margin-top: .35rem;
+}
+
+.moments-night {
+  --moments-line: #f3d8a56b;
+  min-height: clamp(500px, 72vw, 730px);
+  padding-block: clamp(66px, 10vw, 130px);
+  background-image: linear-gradient(90deg, #111c30f5, #111c30c7 42%, #111c3000), url("/assets/night.webp");
+  background-position: center, center 48%;
+  background-size: cover;
+}
+
+.moments-night-copy {
+  max-width: 490px;
+}
+
+.moments-night-copy > svg {
+  margin-bottom: 1rem;
+  color: var(--moments-gold);
+}
+
+.moments-cta {
+  margin-top: 1.25rem;
+  padding: .7rem 1.1rem;
+  border-radius: 3px 15px 4px 11px;
+  background: var(--moments-gold);
+  color: #222538;
+}
+
+.moments-night .moments-details {
+  margin-top: 1.35rem;
+}
+
+.moments-close {
+  text-align: center;
+}
+
+.moments-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+  gap: .65rem 1.5rem;
+}
+
+.moments-actions a {
+  border-bottom: 1px solid var(--moments-line);
+}
+
+@keyframes moments-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 680px) {
+  .moments-entry,
+  .moments-special-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .moments-hero {
+    align-items: end;
+    background-image: linear-gradient(0deg, #16192bfa, #16192bb3 48%, #16192b15 90%), url("/assets/desert-dua-hero-textured.jpg");
+    background-position: center, 66% center;
+  }
+
+  .moments-night {
+    align-items: end;
+    padding-top: 200px;
+    background-image: linear-gradient(0deg, #111c30 4%, #111c30e0 55%, #111c3029), url("/assets/night.webp");
+    background-position: center, 59% top;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moments-hero-copy { animation: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.dua-moments) { scroll-behavior: smooth; }
+}

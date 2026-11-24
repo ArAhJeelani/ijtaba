@@ -7,10 +7,11 @@ export function DiscoverSections() {
     ["/discover", "All du’as"],
     ["/discover/prophetic", "Prophetic Du’as"],
     ["/discover/profiles", "Du’a Profiles"],
+    ["/discover/when-to-make-dua", "When to Make Du?a"],
   ];
   return <nav className="filters" aria-label="Du’a library sections">
     {links.map(([path, label]) => (
-      <Link key={path} className="button" to={path + (path === "/discover/profiles" ? "" : search)}
+      <Link key={path} className="button" to={path + (path === "/discover" || path === "/discover/prophetic" ? search : "")}
         aria-current={pathname === path || (path === "/discover/profiles" && pathname.startsWith(path + "/")) ? "page" : undefined}>
         {label}
       </Link>

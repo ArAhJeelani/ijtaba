@@ -27,6 +27,7 @@ import { useOnline } from "./state/useOnline";
 const MyDuasPage = lazy(() => import("./components/MyDuasPage").then(({ MyDuasPage }) => ({ default: MyDuasPage })));
 const DuaCalendar = lazy(() => import("./components/DuaCalendar").then(({ DuaCalendar }) => ({ default: DuaCalendar })));
 const DuaProfilesPage = lazy(() => import("./components/DuaProfiles").then(({ DuaProfilesPage }) => ({ default: DuaProfilesPage })));
+const DuaMomentsPage = lazy(() => import("./components/DuaMomentsPage"));
 const Arrival = lazy(() => import("./components/Arrival").then(({ Arrival }) => ({ default: Arrival })));
 
 function Navbar() {
@@ -405,6 +406,15 @@ function Tahajjud() {
   useEffect(() => {
     if (!pageLocation.hash) setIntro(!reduced);
   }, [pageLocation.key, pageLocation.hash, reduced]);
+  useEffect(() => {
+    if (pageLocation.hash !== "#calculator") return;
+    const frame = requestAnimationFrame(() => {
+      const calculator = document.getElementById("calculator");
+      calculator?.focus({ preventScroll: true });
+      calculator?.scrollIntoView();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pageLocation.hash, pageLocation.key]);
   return (
     <main>
       <AnimatePresence
@@ -431,7 +441,7 @@ function Tahajjud() {
           Find the last third ↓
         </a>
       </section>
-      <div className="section" id="calculator">
+      <div className="section" id="calculator" tabIndex={-1}>
         <TahajjudCalculator />
         <TahajjudCollection />
         <div className="night-explanation">
@@ -554,10 +564,11 @@ export default function App() {
     }
   }, [opening]);
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     document.title =
       ({
         "/discover": "Discover Du’as",
+        "/discover/when-to-make-dua": "When to Make Du?a",
         "/discover/prophetic": "Prophetic Du’as",
         "/discover/profiles": "Du’a Profiles",
         "/my-duas": "My Du’as",
@@ -602,6 +613,7 @@ export default function App() {
               setIntroPending(true);
             }} />} />
             <Route path="/discover" element={<Discover key="all" />} />
+            <Route path="/discover/when-to-make-dua" element={<DuaMomentsPage />} />
             <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
             <Route path="/discover/profiles/:profileId?" element={<DuaProfilesPage />} />
             <Route path="/my-duas" element={<MyDuasPage />} />
