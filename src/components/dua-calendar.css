@@ -1,10 +1,15 @@
 .daily-browse-bar,
 .daily-calendar,
 .daily-selection-header {
-  border: 1px solid #80684755;
-  background: #fffaf0df;
-  border-radius: 18px;
+  border: 1px solid var(--desert-line);
+  background: var(--desert-paper);
+  border-radius: 12px;
   padding: clamp(14px, 3vw, 26px);
+}
+
+.daily-calendar {
+  background: linear-gradient(160deg, var(--desert-paper), var(--desert-linen));
+  box-shadow: 0 8px 24px #3823190d;
 }
 
 .daily-browse-bar,
@@ -26,8 +31,8 @@
 }
 
 .daily-browse-bar .count {
-  color: inherit;
-  background: #fff3;
+  color: var(--desert-cocoa);
+  background: var(--desert-linen);
 }
 
 .daily-layout {
@@ -39,7 +44,7 @@
 
 .daily-month {
   display: grid;
-  grid-template-columns: 40px 1fr 40px;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
   align-items: center;
   text-align: center;
 }
@@ -50,15 +55,24 @@
   margin: 0;
 }
 
+.daily-month h3,
+.daily-selection-header h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  line-height: 1.15;
+}
+
+.daily-month h3 { font-size: clamp(1.4rem, 3vw, 1.7rem); }
+.daily-selection-header h3 { font-size: clamp(1.5rem, 3vw, 1.9rem); }
+
 .daily-month button,
 .daily-date {
   display: grid;
   place-content: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 10px;
-  color: inherit;
+  border-radius: 7px;
+  color: var(--desert-cocoa);
 }
 
 .daily-grid {
@@ -72,12 +86,13 @@
   text-align: center;
   font-size: 0.75rem;
   margin-bottom: 5px;
+  color: var(--desert-muted);
 }
 
 .daily-date {
-  background: #e2d6be5c;
-  min-height: 44px;
+  background: #a26b3e16;
   font-variant-numeric: tabular-nums;
+  transition: background-color .15s, border-color .15s, color .15s;
 }
 
 .daily-date small {
@@ -88,13 +103,18 @@
 
 .daily-date[aria-current="date"],
 .daily-date:hover,
-.daily-month button:hover {
-  border-color: #806847;
+.daily-month button:not(:disabled):hover {
+  border-color: var(--desert-copper);
 }
 
 .daily-date[aria-pressed="true"] {
-  background: #263d36;
-  color: #fffaf0;
+  background: var(--desert-cocoa);
+  color: var(--desert-light);
+}
+
+.daily-date[aria-current="date"][aria-pressed="true"] {
+  border-color: var(--desert-cocoa);
+  box-shadow: inset 0 0 0 2px #e4b98e;
 }
 
 .daily-selection {
@@ -106,8 +126,21 @@
   transform: none;
 }
 
+.daily-page .daily-selection .empty {
+  margin: 0;
+  padding: 40px 20px;
+  border: 1px dashed var(--desert-line);
+  border-radius: 12px;
+  background: var(--desert-linen);
+}
+
 @media (max-width: 740px) {
   .daily-layout {
     grid-template-columns: minmax(0, 1fr);
   }
+  .daily-calendar { padding: 18px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .daily-date { transition: none; }
 }

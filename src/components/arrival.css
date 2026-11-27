@@ -887,8 +887,8 @@
 }
 
 .arrival.living-arrival {
-  background: #241815;
-  color: #fff0da;
+  background: var(--desert-night);
+  color: var(--desert-light);
   transition: opacity 0.65s ease;
 }
 
@@ -910,12 +910,12 @@
 }
 
 .arrival.living-arrival :is(.arrival-top, .film-footer) {
-  color: #fff0da;
+  color: var(--desert-light);
   mix-blend-mode: normal;
 }
 
 .arrival.living-arrival .film-words {
-  color: #fff0da;
+  color: var(--desert-light);
   text-shadow: 0 2px 14px #211613;
 }
 
@@ -924,7 +924,7 @@
 }
 
 .arrival.living-arrival .film-words :is(.eyebrow, h1 em) {
-  color: #f0c69b;
+  color: var(--desert-gold);
 }
 
 .arrival.living-arrival .earth-wash {
@@ -937,16 +937,20 @@
 }
 
 .arrival.living-arrival .film-footer details[open] {
-  background: #30201c;
+  background: var(--desert-night);
 }
 
 .arrival.living-arrival .film-signature .film-enter {
-  color: #2e1c17;
+  color: var(--desert-ink);
   text-shadow: none;
 }
 
 .arrival.living-arrival .film-signature .film-enter::before {
-  background: #edc79d;
+  background: var(--desert-gold);
+}
+
+.arrival.living-arrival :focus-visible {
+  outline-color: var(--desert-gold);
 }
 
 .arrival.living-arrival.is-paused .film-words {
