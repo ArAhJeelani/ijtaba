@@ -11,8 +11,8 @@ body {
 
 .offline-notice {
   padding: 0.75rem 1rem;
-  background: #192d49;
-  color: #fff2db;
+  background: var(--desert-cocoa);
+  color: var(--desert-light);
   font-size: 0.875rem;
   text-align: center;
 }
@@ -28,7 +28,7 @@ body {
 
 .navbar.desert-nav-home:has(+ .offline-notice) {
   margin-bottom: 0;
-  background: #30201c;
+  background: var(--desert-night);
 }
 
 .desert-footer {

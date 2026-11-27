@@ -7,7 +7,7 @@
 .profile-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem clamp(1rem, 4vw, 3.5rem);
+  gap: clamp(.85rem, 2vw, 1.5rem);
 }
 
 .profile-card {
@@ -15,18 +15,26 @@
   flex-direction: column;
   gap: .8rem;
   padding: clamp(1.1rem, 3vw, 2.4rem);
-  border-top: 1px solid var(--desert-line);
-  background: linear-gradient(145deg, #fff4dfaa, #fff4df30);
+  border: 1px solid var(--desert-line);
+  border-top-color: #bc8a66;
+  border-radius: .75rem;
+  background: linear-gradient(145deg, var(--desert-paper), var(--desert-linen));
+  box-shadow: 0 10px 24px -20px #603a2966;
 }
 
 .profile-identity {
   display: flex;
-  gap: 1rem;
+  gap: clamp(.65rem, 2vw, 1rem);
   align-items: center;
+}
+
+.profile-identity > div {
+  min-width: 0;
 }
 
 .profile-identity h2 {
   margin: .2rem 0 0;
+  color: var(--desert-ink);
   font-size: clamp(1.85rem, 3vw, 2.6rem);
   line-height: 1.02;
 }
@@ -36,7 +44,11 @@
   flex: 0 0 var(--portrait-size);
   width: var(--portrait-size);
   height: var(--portrait-size);
-  object-fit: cover;
+  padding: .22rem;
+  border: 1px solid var(--desert-line);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--desert-paper), #ead7c4);
+  object-fit: contain;
 }
 
 .profile-arabic {
@@ -61,7 +73,7 @@
 }
 
 .profile-card .profile-meta {
-  font-size: .76rem;
+  font-size: .8rem;
   margin-bottom: .5rem;
 }
 
@@ -94,8 +106,9 @@
 .profile-coming-soon {
   margin-top: 1.25rem;
   padding: clamp(1.5rem, 5vw, 3.25rem) 1rem;
-  border-block: 1px solid var(--desert-line);
-  background: linear-gradient(145deg, #fff4dfaa, #fff4df30);
+  border: 1px solid var(--desert-line);
+  border-radius: .75rem;
+  background: linear-gradient(145deg, var(--desert-paper), var(--desert-linen));
   text-align: center;
   color: var(--desert-muted);
 }
@@ -107,6 +120,7 @@
 
 .profile-coming-soon h2 {
   margin: .4rem 0;
+  color: var(--desert-ink);
 }
 
 .profile-coming-soon p {
@@ -125,13 +139,15 @@
   min-height: 44px;
   padding: .5rem .75rem;
   border: 1px solid var(--desert-line);
-  border-radius: 4px;
-  color: var(--desert-ink);
+  border-radius: .4rem;
+  background: var(--desert-paper);
+  color: var(--desert-cocoa);
   font-size: .8rem;
 }
 
 .profile-button:hover:not(:disabled) {
-  background: #be856a26;
+  border-color: var(--desert-copper);
+  background: #efddcc;
 }
 
 .profile-actions button:disabled {
@@ -142,5 +158,15 @@
 @media (max-width: 730px) {
   .profile-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .profile-page .section-heading .profile-identity h1 {
+    font-size: clamp(2.1rem, 10vw, 2.8rem);
+  }
+
+  .profile-avatar {
+    --portrait-size: 3.2rem;
   }
 }
