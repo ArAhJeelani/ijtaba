@@ -1,7 +1,7 @@
 /* The Vite build supplies CACHE_NAME and PRECACHE before this script. */
 const cachePrefix = "ijtaba-static-";
 const staticPaths = new Set(PRECACHE);
-const appRoute = /^\/(?:discover(?:\/prophetic|\/when-to-make-dua|\/ummah|\/profiles(?:\/[^/]+)?)?|login|signup|forgot-password|auth\/callback|account(?:\/password)?|my-duas|calendar|tahajjud|about)?\/?$/;
+const appRoute = /^\/(?:discover(?:\/prophetic|\/when-to-make-dua|\/ummah|\/uplifters|\/profiles(?:\/[^/]+)?)?|login|signup|forgot-password|auth\/callback|account(?:\/password)?|my-duas|calendar|tahajjud|about)?\/?$/;
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {

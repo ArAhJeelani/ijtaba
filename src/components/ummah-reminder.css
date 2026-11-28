@@ -1,5 +1,5 @@
 .ummah-page {
-  background: linear-gradient(160deg, #192c47, #2b4260 48%, #3e5066);
+  background: linear-gradient(160deg, #2d201a, #483124 48%, #5a3c2b);
   color: #fff2df;
   padding: clamp(2.5rem, 7vw, 6rem) max(1rem, 5vw);
 }
@@ -44,7 +44,7 @@
   padding: 0.6rem 1rem;
   border: 1px solid #dfc49f;
   border-radius: 999px;
-  background: #243851;
+  background: #493226;
   color: #fff2df;
   text-align: center;
 }
@@ -56,7 +56,7 @@
 .ummah-page .ummah-actions > :not(:disabled):hover,
 .ummah-page .filters .button[aria-current="page"] {
   background: #eed4b1;
-  color: #28374c;
+  color: #39261c;
 }
 
 .ummah-page :focus-visible, .ummah-prayer:focus {
@@ -87,7 +87,7 @@
 
 .ummah-card {
   background: #f3e5d0;
-  color: #27384f;
+  color: #39261c;
   border-radius: 1.2rem;
   padding: clamp(1.25rem, 4vw, 2.5rem);
 }

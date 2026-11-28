@@ -15,6 +15,7 @@ const artwork = [
   "assets/painted-canvas-v1.webp",
   "assets/sujood.webp",
   "assets/ummah-flags-painting.jpg",
+  "assets/uplifters-featured.jpg",
 ];
 
 export function offlineBuild() {

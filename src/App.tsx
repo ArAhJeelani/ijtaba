@@ -33,6 +33,7 @@ const DuaCalendar = lazy(() => import("./components/DuaCalendar").then(({ DuaCal
 const DuaProfilesPage = lazy(() => import("./components/DuaProfiles").then(({ DuaProfilesPage }) => ({ default: DuaProfilesPage })));
 const DuaMomentsPage = lazy(() => import("./components/DuaMomentsPage"));
 const UmmahReminderPage = lazy(() => import("./components/UmmahReminderPage"));
+const UpliftersPage = lazy(() => import("./components/UpliftersPage"));
 const Arrival = lazy(() => import("./components/Arrival").then(({ Arrival }) => ({ default: Arrival })));
 
 function Navbar() {
@@ -574,6 +575,7 @@ export default function App() {
       ({
         "/discover": "Discover Du’as",
         "/discover/ummah": "Don’t Forget the Ummah",
+        "/discover/uplifters": "Uplifters",
         "/discover/when-to-make-dua": "When to Make Du?a",
         "/discover/prophetic": "Prophetic Du’as",
         "/discover/profiles": "Du’a Profiles",
@@ -622,6 +624,7 @@ export default function App() {
             <Route path="/discover" element={<Discover key="all" />} />
             <Route path="/discover/when-to-make-dua" element={<DuaMomentsPage />} />
             <Route path="/discover/ummah" element={<UmmahReminderPage />} />
+            <Route path="/discover/uplifters" element={<UpliftersPage />} />
             <Route path="/discover/prophetic" element={<Discover key="prophetic" prophetic />} />
             <Route path="/discover/profiles/:profileId?" element={<DuaProfilesPage />} />
             <Route path="/my-duas" element={<MyDuasPage />} />
