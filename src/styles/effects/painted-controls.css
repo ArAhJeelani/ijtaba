@@ -1,0 +1,82 @@
+.button {
+  position: relative;
+  isolation: isolate;
+  background: none !important;
+  border: 0;
+  padding: 18px 29px;
+  font-size: 12px;
+  min-height: 52px;
+  color: #f5eddb;
+  transition: transform var(--transition-control);
+}
+.button:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #2e486c;
+  clip-path: polygon(
+    3% 7%,
+    17% 2%,
+    39% 6%,
+    58% 0,
+    82% 6%,
+    98% 2%,
+    100% 30%,
+    97% 60%,
+    100% 89%,
+    78% 95%,
+    56% 91%,
+    35% 100%,
+    15% 94%,
+    0 98%,
+    3% 65%,
+    0 35%
+  );
+  box-shadow: inset 0 0 25px #b1bbcf22;
+}
+.button:hover:before {
+  background: #465d81;
+}
+.button.light:before {
+  background: #d9c9a7;
+}
+.button.light {
+  color: #172c4c;
+}
+.button.outline:before {
+  background: #d3d4cd;
+}
+.button.outline {
+  color: #253d60;
+}
+.underlined,
+.text-link {
+  border: 0;
+  position: relative;
+  padding-bottom: 12px;
+}
+.underlined:after,
+.text-link:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  bottom: 0;
+  background: currentColor;
+  opacity: 0.35;
+  clip-path: polygon(
+    0 50%,
+    15% 10%,
+    40% 45%,
+    62% 0,
+    80% 30%,
+    100% 10%,
+    96% 85%,
+    70% 55%,
+    50% 100%,
+    25% 60%,
+    3% 100%
+  );
+}

@@ -1,0 +1,21 @@
+.intro-strip {
+  padding: 45px 8%;
+  text-align: center;
+  border-bottom: 1px solid #162b4918;
+  background: #eee7d9;
+}
+.intro-strip > span {
+  font-family: var(--font-arabic);
+  font-size: 29px;
+}
+.intro-strip p {
+  font-size: 11px;
+  margin: 12px 0 0;
+  color: #526079;
+}
+.intro-strip a {
+  display: block;
+  margin-top: 10px;
+  font-size: var(--text-caption);
+  letter-spacing: 0.08em;
+}

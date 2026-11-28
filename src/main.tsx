@@ -5,8 +5,9 @@ import { MotionConfig } from "motion/react";
 import { AuthProvider } from "./state/Auth";
 import { CollectionProvider } from "./state/Collection";
 import App from "./App";
-import "./styles.css";
-import "./painted.css";
+// Keep base, painted, page themes, then safe-area overrides in cascade order.
+import "./styles/base.css";
+import "./styles/painted.css";
 import "./desert-hero.css";
 import "./components/organizer.css";
 import "./desert-pages.css";

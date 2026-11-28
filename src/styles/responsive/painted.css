@@ -1,0 +1,289 @@
+@media (min-width: 1000px) {
+  .page > .section-heading {
+    padding-left: 15px;
+  }
+  .page .dua-grid {
+    column-gap: 50px;
+  }
+}
+@media (max-width: 850px) {
+  .navbar nav {
+    gap: 20px;
+  }
+  .navbar nav a {
+    font-size: 17px;
+  }
+  .dua-card {
+    padding: 35px 25px;
+  }
+  .dua-card h3 {
+    font-size: 35px;
+  }
+  .night-feature h2 {
+    font-size: 48px;
+  }
+  .category-grid h3 {
+    font-size: 32px;
+  }
+  .calculator form {
+    padding: 25px;
+  }
+  .film-words.phase-1 {
+    inset: 14% 6% auto;
+    width: auto;
+  }
+}
+@media (max-width: 650px) {
+  .navbar {
+    height: 90px;
+  }
+  .brand img {
+    width: 54px;
+    height: 54px;
+  }
+  .navbar nav {
+    top: 90px;
+    background: #2a4264 url("/assets/painted-canvas-v1.webp") center top/900px
+      auto;
+    padding: 25px 8% 40px;
+    clip-path: polygon(0 0, 100% 0, 100% 95%, 60% 100%, 30% 95%, 0 100%);
+    border: 0;
+  }
+  .navbar nav a {
+    font-size: 23px;
+  }
+  .intro-strip {
+    padding: 40px 8%;
+  }
+  .intro-strip > span {
+    font-size: 27px;
+  }
+  .intro-strip p {
+    font-size: 12px;
+  }
+  .section {
+    padding: 60px 7%;
+  }
+  .section-heading h2 {
+    font-size: 51px;
+  }
+  .section-heading p {
+    font-size: 13px;
+  }
+  .dua-grid {
+    gap: 35px;
+    grid-template-columns: 1fr;
+  }
+  .dua-card {
+    padding: 35px 23px;
+  }
+  .dua-card h3 {
+    font-size: 37px;
+  }
+  .dua-card:before {
+    inset: -8px -12px;
+  }
+  .arabic {
+    font-size: 31px !important;
+  }
+  .translation {
+    font-size: 25px;
+  }
+  .context {
+    font-size: 12px;
+  }
+  .card-bottom > a,
+  .card-bottom > span {
+    max-width: 100%;
+  }
+  .category-grid {
+    gap: 18px;
+  }
+  .category-grid > a,
+  .category-grid > a:first-child {
+    border: 0;
+    padding: 30px 25px;
+  }
+  .category-grid h3 {
+    font-size: 41px;
+  }
+  .category-grid > a > svg {
+    right: 22px;
+    bottom: 35px;
+  }
+  .night-feature {
+    clip-path: polygon(
+      0 2%,
+      20% 0,
+      50% 2%,
+      85% 0,
+      100% 2%,
+      100% 97%,
+      70% 100%,
+      40% 98%,
+      0 100%
+    );
+  }
+  .night-feature-image {
+    height: 280px;
+    mask-image: linear-gradient(black 50%, transparent);
+    background-image: url("/assets/night.webp");
+  }
+  .night-feature > div:last-child {
+    padding: 15px 8% 65px;
+  }
+  .night-feature h2 {
+    font-size: 51px;
+  }
+  .night-feature p {
+    font-size: 13px;
+  }
+  .collection-invite h2 {
+    font-size: 65px;
+  }
+  .collection-invite p {
+    font-size: 13px;
+  }
+  .purpose p {
+    font-size: 38px;
+  }
+  .purpose p br {
+    display: none;
+  }
+  .page {
+    padding-top: 65px;
+  }
+  .page:before {
+    inset: 12px -15px 0;
+  }
+  .page > .section-heading h2 {
+    font-size: 57px;
+    line-height: 1.15;
+  }
+  .filters {
+    gap: 10px;
+  }
+  .filters button {
+    font-size: 11px;
+    padding: 12px 14px;
+  }
+  .search {
+    width: 100%;
+  }
+  .library-controls {
+    margin-top: 20px;
+  }
+  .collection-toolbar {
+    gap: 22px;
+  }
+  .collection-toolbar > div {
+    gap: 18px;
+  }
+  .saved-row {
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
+  }
+  .saved-row .dua-card {
+    padding: 30px 17px;
+  }
+  .saved-row .dua-card h3 {
+    font-size: 33px;
+  }
+  .saved-row .arabic {
+    font-size: 28px !important;
+  }
+  .row-tools button {
+    width: 30px;
+    height: 36px;
+  }
+  .reading-overlay {
+    padding: 12px 4%;
+  }
+  .reading-content {
+    padding: 20px 4px;
+    margin: 20px auto;
+  }
+  .reading-content .dua-card {
+    padding: 20px 15px;
+  }
+  .reading-content .dua-card h3 {
+    font-size: 38px;
+  }
+  .reading-top {
+    padding: 12px 10px;
+  }
+  .reading-bottom {
+    padding: 15px 12px;
+  }
+  .reading-bottom .underlined {
+    font-size: 11px;
+  }
+  .reading-content .translation {
+    font-size: 26px;
+  }
+  .tahajjud-hero {
+    min-height: 630px;
+    background-size: 1200px auto;
+  }
+  .tahajjud-hero h1 {
+    font-size: 90px;
+  }
+  .tahajjud-hero p {
+    font-size: 13px;
+    max-width: 290px;
+  }
+  .calculator {
+    padding: 25px 0 45px;
+    gap: 20px;
+  }
+  .calculator h2 {
+    font-size: 55px;
+  }
+  .calculator form {
+    padding: 30px 20px;
+  }
+  .calculator input {
+    font-size: 13px;
+    min-width: 0;
+  }
+  .calculator p,
+  .night-explanation p {
+    font-size: 13px;
+  }
+  .night-explanation h2 {
+    font-size: 55px;
+  }
+  .about-painting {
+    mask-image: linear-gradient(black 65%, transparent);
+    height: 380px;
+  }
+  .about-page article {
+    padding: 50px 8%;
+    margin-top: -25px;
+  }
+  .about-page h1 {
+    font-size: 90px;
+  }
+  .about-page p:not(.lead) {
+    font-size: 13px;
+  }
+  footer {
+    padding: 55px 8% 40px;
+    font-size: 11px;
+  }
+  .film-enter:before {
+    background: #dcc59b;
+  }
+  .film-enter {
+    color: #1c3455;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-arrival * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .button:hover {
+    transform: none;
+  }
+}

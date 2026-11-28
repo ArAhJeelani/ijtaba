@@ -47,7 +47,7 @@ html:has(.tahajjud-arrival[open]) {
 }
 .arrow-heading .eyebrow {
   color: #e2cba5;
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.22em;
 }
 .arrow-heading h1 {
@@ -57,7 +57,7 @@ html:has(.tahajjud-arrival[open]) {
   letter-spacing: -0.02em;
 }
 .arrow-heading h1 em {
-  font-family: "Pinyon Script", "Cormorant Garamond", serif;
+  font-family: var(--font-script);
   font-size: 1.18em;
   font-weight: 400;
 }
@@ -93,7 +93,7 @@ html:has(.tahajjud-arrival[open]) {
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 8px;
+  font-size: var(--text-caption);
   letter-spacing: 0.2em;
   color: #ead8b5;
 }
@@ -197,7 +197,7 @@ html:has(.tahajjud-arrival[open]) {
   }
   .arrow-caption {
     bottom: 35px;
-    font-size: 7px;
+    font-size: var(--text-caption);
   }
   .arrow-skip {
     top: 18px;

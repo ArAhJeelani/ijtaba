@@ -1,0 +1,127 @@
+.page {
+  padding-top: 90px;
+  padding-bottom: 120px;
+  isolation: isolate;
+  min-height: 85vh;
+}
+.page:before {
+  content: "";
+  position: absolute;
+  inset: 25px 0 0;
+  z-index: -1;
+  background: url("/assets/brush-paper.svg") center/100% 100% no-repeat;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.page > .section-heading h2 {
+  font-family: var(--font-script);
+  font-size: 75px;
+  max-width: 800px;
+}
+.page .dua-card:before {
+  opacity: 0.65;
+}
+.library-controls {
+  padding: 15px 0;
+}
+.search {
+  border: 0;
+  position: relative;
+  background: #c4c7c335;
+  padding: 10px 15px;
+  clip-path: polygon(1% 5%, 45% 0, 99% 5%, 100% 92%, 50% 100%, 0 96%);
+}
+.search input {
+  font-size: 14px;
+}
+.filters {
+  gap: 15px;
+}
+.filters button {
+  font-size: 12px;
+  border: 0;
+  border-radius: 0;
+  padding: 12px 18px;
+  background: #a7afbc26;
+  clip-path: polygon(2% 8%, 35% 0, 70% 4%, 99% 0, 96% 95%, 55% 100%, 3% 94%);
+}
+.filters button.selected {
+  background: #344d72;
+}
+.small,
+.source-note {
+  font-size: 12px;
+  color: #526078;
+}
+.checkbox {
+  font-size: 12px;
+}
+.checkbox input {
+  accent-color: #586f91;
+}
+.source-note {
+  border: 0;
+  padding: 30px 10px;
+  background: #a4adbd16;
+}
+.empty {
+  border: 0;
+  background: url("/assets/brush-paper.svg") center/100% 100%;
+  padding: 80px 30px;
+}
+.empty h3 {
+  font-family: "Pinyon Script", serif;
+  font-size: 48px;
+}
+.empty p {
+  color: #4c5e73;
+}
+.collection-toolbar {
+  border: 0;
+  padding: 25px 0;
+  font-size: 12px;
+}
+.saved-list {
+  margin-top: 15px;
+}
+.saved-row {
+  margin-top: 40px;
+}
+.saved-row .dua-card {
+  width: 100%;
+}
+.row-tools {
+  padding-top: 35px;
+}
+.row-tools button {
+  background: #a2afbe26;
+  border: 0;
+  border-radius: 44% 56% 46% 54%;
+}
+.row-tools .checked {
+  background: #73866e;
+  color: white;
+}
+.personal-section {
+  padding: 25px 0;
+}
+.personal-form {
+  padding: 30px;
+  background: url("/assets/brush-paper.svg") center/100% 100%;
+}
+.personal-form label,
+.calculator label {
+  font-size: 12px;
+}
+.personal-form input,
+.personal-form textarea,
+.calculator input {
+  border: 0;
+  border-bottom: 2px solid #7c889455;
+  background: #c4c7c329;
+  padding: 16px;
+  color: #233c5c;
+}
+.personal-form p {
+  font-size: 13px;
+}

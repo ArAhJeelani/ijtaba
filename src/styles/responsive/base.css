@@ -1,0 +1,267 @@
+@media (max-width: 1000px) {
+  .nav-quiet {
+    display: none;
+  }
+  .navbar nav {
+    gap: 25px;
+  }
+  .section {
+    padding: 65px 6%;
+  }
+  .dua-card {
+    padding: 25px;
+  }
+  .calculator,
+  .night-explanation {
+    gap: 30px;
+  }
+  .time-inputs {
+    grid-template-columns: 1fr;
+  }
+  .about-page article {
+    padding: 60px 10%;
+  }
+  .about-page h1 {
+    font-size: 70px;
+  }
+}
+@media (max-width: 650px) {
+  .navbar {
+    height: 78px;
+    padding: 0 6%;
+    position: relative;
+    z-index: 10;
+  }
+  .brand img {
+    width: 44px;
+    height: 44px;
+  }
+  .brand > span {
+    font-size: 21px;
+  }
+  .menu-toggle {
+    display: block;
+    padding: 12px;
+  }
+  .navbar nav {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 78px;
+    background: #0b1630;
+    padding: 20px 7% 30px;
+    border-top: 1px solid #ffffff22;
+    align-items: stretch;
+  }
+  .navbar nav.open {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .navbar nav a {
+    font-size: 15px;
+    padding: 12px 0;
+  }
+  .intro-strip {
+    padding: 32px 7%;
+  }
+  .intro-strip > span {
+    font-size: 25px;
+  }
+  .intro-strip p {
+    font-size: 10px;
+  }
+  .section {
+    padding: 50px 6%;
+  }
+  .section-top {
+    display: block;
+  }
+  .section-top .underlined {
+    margin-top: 0;
+  }
+  .section-heading h2 {
+    font-size: 40px;
+  }
+  .dua-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .dua-card {
+    padding: 25px;
+  }
+  .arabic {
+    font-size: 29px !important;
+  }
+  .translation {
+    font-size: 23px;
+  }
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+  .category-grid > a,
+  .category-grid > a:first-child {
+    padding: 22px 8px;
+    border-right: 0;
+    border-bottom: 1px solid #162b4922;
+  }
+  .category-grid > a:last-child {
+    border-bottom: 0;
+  }
+  .category-grid h3 {
+    margin-top: 15px;
+  }
+  .category-grid > a > svg {
+    bottom: 32px;
+    right: 10px;
+  }
+  .category-grid p {
+    margin-bottom: 5px;
+  }
+  .night-feature {
+    display: flex;
+    flex-direction: column;
+  }
+  .night-feature-image {
+    height: 280px;
+    background:
+      linear-gradient(0deg, #0b1630, transparent 55%),
+      url("/assets/night.webp") center 67% / cover;
+  }
+  .night-feature > div:last-child {
+    padding: 25px 7% 50px;
+  }
+  .night-feature h2 {
+    font-size: 43px;
+  }
+  .collection-invite h2 {
+    font-size: 56px;
+  }
+  .collection-invite br {
+    display: none;
+  }
+  .purpose p {
+    font-size: 27px;
+  }
+  footer {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 30px 6%;
+  }
+  .page > .section-heading h2 {
+    font-size: 46px;
+  }
+  .library-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .search {
+    width: 100%;
+  }
+  .filters {
+    gap: 8px;
+  }
+  .filters button {
+    font-size: 10px;
+    padding: 9px 12px;
+  }
+  .collection-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .collection-toolbar > div {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .saved-row {
+    grid-template-columns: 30px 1fr;
+    gap: 8px;
+  }
+  .row-tools button {
+    min-width: 28px;
+    min-height: 32px;
+  }
+  .saved-row .dua-card {
+    padding: 20px 16px;
+  }
+  .card-bottom > a,
+  .card-bottom > span {
+    max-width: 100%;
+  }
+  .reading-overlay {
+    padding: 15px 4%;
+  }
+  .reading-content {
+    padding: 15px 0;
+  }
+  .reading-bottom {
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .reading-bottom > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .reading-content .translation {
+    font-size: 25px;
+  }
+  .tahajjud-hero {
+    min-height: 570px;
+  }
+  .tahajjud-hero h1 {
+    font-size: 73px;
+  }
+  .tahajjud-hero p {
+    font-size: 12px;
+  }
+  .calculator,
+  .night-explanation {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 15px 0 40px;
+  }
+  .night-explanation {
+    padding-top: 45px;
+  }
+  .time-inputs {
+    grid-template-columns: 1fr;
+  }
+  .about-page {
+    grid-template-columns: 1fr;
+  }
+  .about-painting {
+    height: 330px;
+    background-position: center 38%;
+  }
+  .about-page article {
+    padding: 45px 7%;
+  }
+  .about-page h1 {
+    font-size: 78px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+.reading-overlay {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: #162b49;
+}
+.reading-overlay::backdrop {
+  background: #0b1630aa;
+}

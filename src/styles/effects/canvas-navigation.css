@@ -1,0 +1,100 @@
+/* Every surface shares pigment, dry-brush edges and canvas; text stays sharp. */
+html,
+body {
+  overflow-x: clip;
+}
+.living-arrival .arrival-top > span:first-child {
+  color: #fff;
+}
+.living-arrival .arrival-top,
+.living-arrival .film-footer {
+  color: #fff;
+}
+.living-arrival .arrival-top {
+  padding: 0;
+}
+.living-arrival {
+  padding: 0;
+  background: #f3ecde;
+}
+body {
+  background: var(--desert-night);
+  position: relative;
+}
+body:after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75 .4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%237b6b55' filter='url(%23g)' d='M0 0h200v200H0z'/%3E%3C/svg%3E");
+}
+::selection {
+  background: #e4bc96;
+  color: var(--desert-ink);
+}
+.navbar {
+  background: transparent;
+  border: 0;
+  position: relative;
+  isolation: isolate;
+  height: 110px;
+  color: #eee5d1;
+  z-index: 12;
+}
+.navbar:before,
+footer:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #263d60;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 84%,
+    95% 92%,
+    87% 86%,
+    75% 98%,
+    62% 87%,
+    50% 96%,
+    35% 89%,
+    20% 100%,
+    10% 88%,
+    0 95%
+  );
+  opacity: 0.75;
+}
+.brand img {
+  border-radius: 0;
+  width: 66px;
+  height: 66px;
+  mask-image: radial-gradient(ellipse, black 30%, transparent 72%);
+}
+.brand small {
+  color: #e3cfa7;
+}
+.navbar nav a {
+  font-family: var(--font-editorial);
+  font-size: 19px;
+  color: #f0e7d8;
+}
+.navbar nav a.active {
+  border: 0;
+  color: #f0d49b;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1px;
+}
+.nav-quiet {
+  font-size: 11px;
+  color: #e5d2af;
+}
+.count {
+  border: 0;
+  background: #e5d3b225;
+  transform: rotate(-8deg);
+}

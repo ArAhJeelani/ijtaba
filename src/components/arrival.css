@@ -114,11 +114,11 @@
 }
 .film-words h1 em,
 .film-words:not(.phase-0) h1 {
-  font-family: "Pinyon Script", "Cormorant Garamond", serif;
+  font-family: var(--font-script);
   font-weight: 400;
 }
 .film-words .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.25em;
 }
 .film-words p {
@@ -920,7 +920,7 @@
 }
 
 .arrival.living-arrival .film-words h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-display);
 }
 
 .arrival.living-arrival .film-words :is(.eyebrow, h1 em) {

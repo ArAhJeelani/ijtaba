@@ -1,0 +1,45 @@
+.reading-overlay {
+  background: #e6e0d2 url("/assets/painted-canvas-v1.webp") center center/cover;
+}
+.reading-content {
+  max-width: 950px;
+  padding: 40px 30px;
+  background: url("/assets/brush-paper.svg") center/100% 100% no-repeat;
+  margin: 25px auto;
+}
+.reading-content .dua-card:before {
+  display: none;
+}
+.reading-content .dua-card h3 {
+  font-size: 45px;
+}
+.reading-top,
+.reading-bottom {
+  border: 0;
+  background: #f4ecdcbd;
+  padding: 15px 22px;
+  clip-path: polygon(
+    0 4%,
+    25% 0,
+    55% 4%,
+    100% 0,
+    99% 95%,
+    70% 100%,
+    40% 96%,
+    0 100%
+  );
+}
+.reading-overlay progress {
+  height: 4px;
+  opacity: 0.8;
+  accent-color: #6e7f95;
+}
+.reading-bottom .button {
+  font-size: 12px;
+}
+.reading-overlay .arabic {
+  color: #203a5b;
+}
+.reading-overlay::backdrop {
+  background: #253c60;
+}
