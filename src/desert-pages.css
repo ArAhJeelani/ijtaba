@@ -168,6 +168,13 @@
   color: var(--desert-light);
 }
 
+/* Shared painted buttons render their fill on the pseudo-element. */
+.desert-pages .filters[aria-label="Du’a library sections"] a.button[aria-current="page"]::before {
+  content: "";
+  background: var(--desert-cocoa);
+  border-radius: inherit;
+}
+
 .desert-pages :is(.calculator form, .empty, .source-note) {
   background: linear-gradient(155deg, var(--desert-paper), var(--desert-linen));
   border: 1px solid var(--desert-line);
