@@ -1,5 +1,6 @@
 import { approvedDuas } from "./approvedDuas.ts";
 import { propheticDuas } from "./propheticDuas.ts";
+import { ummahDua } from "./ummahDua.ts";
 
 export interface Dua {
   id: string;
@@ -59,4 +60,5 @@ export const duas: Dua[] = [
   },
   ...propheticDuas,
   ...approvedDuas,
+  ummahDua,
 ];
