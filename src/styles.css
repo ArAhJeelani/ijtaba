@@ -2,9 +2,22 @@
 @import "tailwindcss";
 :root {
   font-family: "DM Sans", sans-serif;
-  color: #162b49;
-  background: #f5efe4;
+  color: var(--desert-ink);
+  background: var(--desert-night);
   font-synthesis: none;
+  --desert-ink: #382319;
+  --desert-muted: #6b4e3e;
+  --desert-accent: #854426;
+  --desert-line: #ddc2a8;
+  --desert-night: #302016;
+  --desert-light: #fff4e4;
+  --desert-linen: #f7eee2;
+  --desert-paper: #fff9ef;
+  --desert-cocoa: #603a29;
+  --desert-copper: #98522f;
+  --desert-sand: #e8d2b9;
+  --desert-gold: #edc79d;
+  --desert-shadow: 0 10px 30px #42251a0c;
   --navy: #0b1630;
   --gold: #c6aa7b;
   --ivory: #f5efe4;
@@ -49,9 +62,10 @@ button {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #a67a3c;
-  outline-offset: 5px;
+  outline: 2px solid var(--desert-accent);
+  outline-offset: 3px;
 }
 h1,
 h2,

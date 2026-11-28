@@ -1,11 +1,10 @@
 ﻿.dua-moments {
   --moments-ink: var(--desert-ink);
   --moments-muted: var(--desert-muted);
-  --moments-gold: #f3d8ad;
-  --moments-paper: var(--desert-linen);
-  --moments-line: #825a3866;
+  --moments-gold: #ebc69f;
+  --moments-line: var(--desert-line);
   color: var(--moments-ink);
-  background: linear-gradient(#f8eedc, var(--moments-paper) 34%, #d6b493 68%, #e9d6bb);
+  background: linear-gradient(160deg, var(--desert-paper), var(--desert-linen) 42%, #efdfce);
 }
 
 .moments-shell {
@@ -38,7 +37,8 @@
 
 .moments-hero {
   min-height: clamp(460px, 66svh, 680px);
-  background: #f5e6ce;
+  border-bottom: 1px solid var(--moments-line);
+  background: radial-gradient(ellipse at 12% 18%, var(--desert-paper), #efddc9);
 }
 
 .moments-hero-copy,
@@ -70,6 +70,7 @@
 
 .moments-hero-art {
   object-position: 68% center;
+  filter: sepia(.16) saturate(.9);
 }
 
 .moments-hero h1 {
@@ -84,6 +85,7 @@
 
 .moments-hero p {
   max-width: 36ch;
+  color: var(--moments-muted);
   font-size: clamp(1rem, 2vw, 1.25rem);
 }
 
@@ -100,7 +102,14 @@
 
 .moments-hero a {
   margin-top: 1.25rem;
-  color: #713d29;
+  color: var(--desert-cocoa);
+}
+
+.moments-hero a:hover,
+.moments-timeline-night a:hover,
+.moments-actions a:hover {
+  text-decoration: underline;
+  text-underline-offset: .22em;
 }
 
 .moments-day,
@@ -154,12 +163,14 @@
 .moments-timeline > li::before {
   content: "";
   position: absolute;
-  inset-inline-start: calc(-1 * clamp(16px, 4vw, 52px) - 4px);
-  top: 20px;
-  width: 7px;
-  height: 7px;
+  inset-inline-start: calc(-1 * clamp(16px, 4vw, 52px) - 5px);
+  top: 18px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--desert-linen);
   border-radius: 50%;
-  background: #a16d3b;
+  background: var(--desert-copper);
+  box-shadow: 0 0 0 1px var(--desert-copper);
 }
 
 .moments-entry {
@@ -184,8 +195,11 @@
 
 .moments-art {
   aspect-ratio: 16 / 9;
+  border: 1px solid var(--moments-line);
   border-radius: 50% 48% 2px 2px / 13% 15% 2px 2px;
-  background: #5b564f center / cover no-repeat;
+  background: var(--desert-cocoa) center / cover no-repeat;
+  box-shadow: 0 14px 28px -20px #30201699;
+  filter: sepia(.12) saturate(.92);
 }
 
 .moments-art[data-scene="dawn"],
@@ -206,8 +220,7 @@
 .moments-art[data-scene="prayer"] {
   background-image: url("/assets/sujood.webp");
   background-position: center 58%;
-  background-color: #7e553d;
-  filter: sepia(.85);
+  filter: sepia(.5) saturate(.85);
 }
 
 .moments-art[data-scene="sands"] {
@@ -225,10 +238,10 @@
 }
 
 .moments-special {
-  background: linear-gradient(160deg, #92573d, #633a2d);
-  color: #fff3df;
-  --moments-muted: #fae7d2;
-  --moments-line: #e8c5a283;
+  --moments-muted: #f3dfca;
+  --moments-line: #d3a77c80;
+  background: linear-gradient(155deg, #794a35, var(--desert-cocoa));
+  color: var(--desert-light);
 }
 
 .moments-special-grid {
@@ -291,10 +304,10 @@
 
 .moments-night {
   grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  --moments-line: #f3d8ad6b;
+  --moments-line: #d3a77c80;
   min-height: 540px;
-  background: #30201c;
-  color: #fff1dc;
+  background: var(--desert-night);
+  color: var(--desert-light);
 }
 
 .moments-night-art {
@@ -309,9 +322,17 @@
 .moments-cta {
   margin-top: 1.25rem;
   padding: .7rem 1.1rem;
-  border-radius: 3px 15px 4px 11px;
+  border-radius: .4rem;
   background: var(--moments-gold);
-  color: #33221c;
+  color: var(--desert-night);
+}
+
+.moments-cta:hover {
+  background: var(--desert-light);
+}
+
+.moments-night .moments-cta:focus-visible {
+  outline-color: var(--desert-light);
 }
 
 .moments-night .moments-details {
@@ -320,6 +341,10 @@
 
 .moments-close {
   text-align: center;
+}
+
+.moments-close > p {
+  color: var(--moments-muted);
 }
 
 .moments-actions {
@@ -373,4 +398,4 @@
   html:has(.dua-moments) { scroll-behavior: smooth; }
 }
 
-.dua-moments :is(.moments-timeline-night, .moments-actions) a { color: var(--moments-ink); }
+.dua-moments :is(.moments-timeline-night, .moments-actions) a { color: var(--desert-cocoa); }

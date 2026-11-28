@@ -5,11 +5,11 @@ import {dateKey} from '../utils/calendar';
 import {addDays,repeatLabels,validDay} from '../utils/schedules';
 import {OrganizerDialog} from './OrganizerDialog';
 const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-export function ScheduleDialog({onClose,target,initial,date:initialDate}:{onClose:()=>void;target?:ScheduleTarget;initial?:ScheduledDua;date?:string}){
+export function ScheduleDialog({onClose,target,initial,date:initialDate,initialFrequency='once'}:{onClose:()=>void;target?:ScheduleTarget;initial?:ScheduledDua;date?:string;initialFrequency?:Repeat}){
   const c=useCollection(),today=dateKey(new Date());
   const [choice,setChoice]=useState<ScheduleTarget|undefined>(initial?.target||target);
   const [date,setDate]=useState(initial?.date||initialDate||addDays(today,1)),[time,setTime]=useState(initial?.time||'21:00');
-  const [frequency,setFrequency]=useState<Repeat>(initial?.recurrence.frequency||'once'),[days,setDays]=useState<number[]>(initial?.recurrence.weekdays||[5]);
+  const [frequency,setFrequency]=useState<Repeat>(initial?.recurrence.frequency||initialFrequency),[days,setDays]=useState<number[]>(initial?.recurrence.weekdays||[5]);
   const [note,setNote]=useState(initial?.note||''),[error,setError]=useState('');
   const zone=Intl.DateTimeFormat().resolvedOptions().timeZone;
   const isProfile = choice?.kind === 'profile';
@@ -39,7 +39,7 @@ export function ScheduleDialog({onClose,target,initial,date:initialDate}:{onClos
       paused: initial?.paused ?? false, createdAt: initial?.createdAt ?? new Date().toISOString(),
     });
     if (!saved) {
-      setError(unavailable);
+      setError(c.cloud && !c.cloud.ready ? 'Account editing is paused. Check your sync status.' : unavailable);
       return;
     }
     onClose();

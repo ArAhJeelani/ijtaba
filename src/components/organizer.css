@@ -1,29 +1,107 @@
-/* Quiet painted surfaces shared by collection, calendar, and scheduling. */
-.organizer-dialog{width:min(680px,calc(100vw - 28px));max-height:88svh;overflow:auto;border:1px solid #c4a77855;border-radius:26px 12px 28px 10px;padding:clamp(22px,4vw,40px);color:#1b3150;background:#f8f0df url('/assets/brush-paper.svg') center/100% 100%;box-shadow:0 25px 100px #07162d55;animation:organizer-arrive .2s ease-out}
-.organizer-dialog::backdrop{background:#07162dc9;backdrop-filter:blur(5px)}
+/* Organizer forms, collection controls, and scheduled entries. */
+.organizer-dialog {
+  width: min(680px, calc(100vw - 28px));
+  max-height: 88svh;
+  overflow: auto;
+  border: 1px solid var(--desert-line);
+  border-radius: 14px;
+  padding: clamp(22px, 4vw, 40px);
+  color: var(--desert-ink);
+  background: linear-gradient(150deg, var(--desert-paper), var(--desert-linen));
+  box-shadow: 0 24px 70px #38231940;
+  animation: organizer-arrive .2s ease-out;
+}
+.organizer-dialog::backdrop { background: #2d1913b8; backdrop-filter: blur(5px); }
 .organizer-dialog-top{display:flex;align-items:flex-start;gap:20px;justify-content:space-between;margin-bottom:20px}.organizer-dialog-top h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(28px,4vw,38px);line-height:1.15;margin:0;letter-spacing:-.02em}.organizer-dialog-top>button{min-width:44px;min-height:44px;display:grid;place-content:center}
-.organizer-form{display:grid;gap:18px}.organizer-form label,.collection-create label{display:grid;gap:8px;font-size:13px}.organizer-form input,.organizer-form textarea,.organizer-form select,.collection-create input{width:100%;min-width:0;border:1px solid #64758b55;background:#fffaf0c9;border-radius:6px;padding:12px;color:#1b3150;font:inherit;min-height:46px}.organizer-form textarea{resize:vertical}.organizer-form p{margin:0}.organizer-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.organizer-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:18px}.organizer-actions button,.dua-organizer-actions button{min-height:44px}.schedule-presets{display:flex;flex-wrap:wrap;gap:8px}.schedule-presets button{padding:10px 12px;border:1px solid #8e7c5d66;border-radius:44% 5% 36% 8% / 9% 32% 8% 35%;font-size:12px;min-height:44px}.schedule-subject{font-weight:600}.weekday-options{display:flex;flex-wrap:wrap;gap:12px;border:1px solid #64758b44;padding:15px}.weekday-options legend{font-size:13px}.weekday-options label{display:flex;align-items:center;gap:6px}.weekday-options input{width:18px;min-height:18px;accent-color:#2d4667}.membership-options{display:grid;gap:12px;margin:20px 0}.membership-options label{display:flex;align-items:center;gap:12px;min-height:40px}.membership-options input{width:20px;height:20px;accent-color:#2d4667}.organizer-reading h3{font-family:'Cormorant Garamond',serif;font-size:36px;margin-top:20px}.organizer-reading .arabic{line-height:2.1}.organizer-reading .translation{font-size:27px}.organizer-reading .transliteration{font-size:15px;line-height:1.8}
-.dua-organizer-actions{display:flex;flex-wrap:wrap;gap:8px 18px;border-top:1px solid #7d8b9d33;padding-top:15px;margin-top:20px}.dua-organizer-actions button{display:flex;align-items:center;gap:7px;font-size:12px;text-align:left}.dua-organizer-actions button:hover{color:#8a662b}.scheduled-indicator{display:inline-flex;align-items:center;gap:5px;margin-left:15px;letter-spacing:.03em}.card-saved-date{margin-top:20px}.card-bottom{flex-wrap:wrap;gap:14px}.collection-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);max-width:calc(100vw - 32px);width:max-content;padding:16px 24px;background:#172d49;color:#fff2d8;box-shadow:0 8px 40px #07162d33;border:1px solid #c4a77877;border-radius:8px 25px 7px 23px;z-index:200;font-size:13px;pointer-events:none;animation:organizer-arrive .18s ease-out}
-.collections-panel{padding:25px 0;border-bottom:1px solid #7d8b9d33}.collection-tabs{display:flex;flex-wrap:wrap;gap:10px}.collection-tabs button{min-height:44px;padding:12px 18px;background:#8798b124;border-radius:40% 5% 30% 4% / 7% 24% 9% 30%;font-size:13px}.collection-tabs .selected{background:#253e60;color:#fff3df}.collection-tabs span{margin-left:8px;font-size:11px;opacity:.8}.collection-create{display:flex;align-items:flex-end;gap:16px;margin:22px 0}.collection-create label{flex:1;max-width:420px}.tahajjud-collection{padding:40px 0;border-top:1px solid #7d8b9d33;border-bottom:1px solid #7d8b9d33;margin-bottom:40px}.tahajjud-collection h2{font-family:'Cormorant Garamond',serif;font-size:44px;margin-top:14px}.tahajjud-collection p{max-width:700px}
-.daily-calendar,.daily-selection-header{border:0;border-radius:0;background:#f5eddd url('/assets/brush-paper.svg') center/100% 100%;box-shadow:none}.daily-calendar{padding:24px}.daily-date{background:#8398b31f;border-radius:43% 48% 39% 50%;min-height:48px;transition:background .15s,color .15s}.daily-date[aria-pressed=true]{background:#263f61;color:#fff2d8}.daily-date[aria-current=date]{border:2px solid #b7985a}.daily-month h3{font-family:'Cormorant Garamond',serif;font-size:27px;line-height:1.2}.calendar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:25px 0;flex-wrap:wrap}.calendar-agendas{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:45px 0}.calendar-agendas>section>h3{font-family:'Cormorant Garamond',serif;font-size:35px}.schedule-entry{padding:22px;margin:14px 0;background:#f4eddfde;border-left:3px solid #bda16c;border-radius:4px 20px 7px 12px}.schedule-entry-heading{display:flex;gap:16px;align-items:flex-start}.schedule-clock{font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#526988;padding-top:5px}.schedule-entry h3{font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.2;letter-spacing:0;margin:0 0 8px}.schedule-entry .organizer-actions{gap:10px 18px}.schedule-note{white-space:pre-wrap;overflow-wrap:anywhere;color:#40536a;margin-top:12px}.all-schedules{border-top:1px solid #7d8b9d44;padding:25px 0}.all-schedules summary{cursor:pointer;font-size:14px;min-height:44px}.daily-selection .empty{padding:40px 20px}.daily-selection-header h3{font-family:'Cormorant Garamond',serif;font-size:30px}.daily-page .section-heading h2{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,6vw,68px)}.schedule-entry button,.collections-panel button,.organizer-dialog button{white-space:normal}.schedule-entry .small{margin:0}.daily-date:focus-visible{outline:3px solid #a67a3c;outline-offset:1px}
+.organizer-form{display:grid;gap:18px}.organizer-form label,.collection-create label{display:grid;gap:8px;font-size:13px}
+.organizer-form input, .organizer-form textarea, .organizer-form select, .collection-create input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  border: 1px solid #9f785d;
+  border-radius: 6px;
+  padding: 12px;
+  background: var(--desert-paper);
+  color: var(--desert-ink);
+  font: inherit;
+}
+.organizer-form textarea{resize:vertical}.organizer-form p{margin:0}.organizer-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.organizer-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:18px}.organizer-actions button,.dua-organizer-actions button{min-height:44px}
+.schedule-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.schedule-presets button {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--desert-line);
+  border-radius: 6px;
+  background: var(--desert-paper);
+  color: var(--desert-cocoa);
+  font-size: 12px;
+}
+.schedule-presets button:hover { border-color: var(--desert-copper); }
+.schedule-subject{font-weight:600}.weekday-options{display:flex;flex-wrap:wrap;gap:12px;border:1px solid var(--desert-line);padding:15px}.weekday-options legend{font-size:13px}.weekday-options label{display:flex;align-items:center;gap:6px}.weekday-options input{width:18px;min-height:18px;accent-color:var(--desert-copper)}.membership-options{display:grid;gap:12px;margin:20px 0}.membership-options label{display:flex;align-items:center;gap:12px;min-height:40px}.membership-options input{width:20px;height:20px;accent-color:var(--desert-copper)}.organizer-reading h3{font-family:'Cormorant Garamond',serif;font-size:36px;margin-top:20px}.organizer-reading .arabic{line-height:2.1}.organizer-reading .translation{font-size:27px}.organizer-reading .transliteration{font-size:15px;line-height:1.8}
+.dua-organizer-actions{display:flex;flex-wrap:wrap;gap:8px 18px;border-top:1px solid var(--desert-line);padding-top:15px;margin-top:20px}.dua-organizer-actions button{display:flex;align-items:center;gap:7px;font-size:12px;text-align:left}.dua-organizer-actions button:hover{color:var(--desert-copper)}.scheduled-indicator{display:inline-flex;align-items:center;gap:5px;margin-left:15px;letter-spacing:.03em}.card-saved-date{margin-top:20px}.card-bottom{flex-wrap:wrap;gap:14px}
+.collection-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  width: max-content;
+  padding: 16px 24px;
+  background: var(--desert-ink);
+  color: var(--desert-light);
+  box-shadow: 0 8px 32px #38231933;
+  border: 1px solid #b285655e;
+  border-radius: 10px;
+  z-index: 200;
+  font-size: 13px;
+  pointer-events: none;
+  animation: organizer-arrive .18s ease-out;
+}
+.collections-panel{padding:25px 0;border-bottom:1px solid var(--desert-line)}.collection-tabs{display:flex;flex-wrap:wrap;gap:10px}
+.collection-tabs button {
+  min-height: 44px;
+  padding: 12px 18px;
+  border: 1px solid var(--desert-line);
+  border-radius: 7px;
+  background: var(--desert-paper);
+  color: var(--desert-cocoa);
+  font-size: 13px;
+}
+.collection-tabs button:hover { border-color: var(--desert-copper); }
+.collection-tabs .selected {
+  border-color: var(--desert-cocoa);
+  background: var(--desert-cocoa);
+  color: var(--desert-light);
+}
+.collection-tabs span{margin-left:8px;font-size:11px;opacity:.8}.collection-create{display:flex;align-items:flex-end;gap:16px;margin:22px 0}.collection-create label{flex:1;max-width:420px}.tahajjud-collection{padding:40px 0;border-block:1px solid var(--desert-line);margin-bottom:40px}.tahajjud-collection h2{font-family:'Cormorant Garamond',serif;font-size:44px;margin-top:14px}.tahajjud-collection p{max-width:700px}
+.calendar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:25px 0;flex-wrap:wrap}.calendar-agendas{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:45px 0}.calendar-agendas>section>h3{font-family:'Cormorant Garamond',serif;font-size:35px}
+.schedule-entry {
+  padding: 22px;
+  margin: 14px 0;
+  border: 1px solid var(--desert-line);
+  border-inline-start: 3px solid var(--desert-copper);
+  border-radius: 8px;
+  background: var(--desert-paper);
+}
+.schedule-entry-heading{display:flex;gap:16px;align-items:flex-start}.schedule-clock{font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--desert-copper);padding-top:5px}.schedule-entry h3{font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.2;letter-spacing:0;margin:0 0 8px}.schedule-entry .organizer-actions{gap:10px 18px}.schedule-note{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--desert-muted);margin-top:12px}.all-schedules{border-top:1px solid var(--desert-line);padding:25px 0}.all-schedules summary{cursor:pointer;font-size:14px;min-height:44px}.schedule-entry button,.collections-panel button,.organizer-dialog button{white-space:normal}.schedule-entry .small{margin:0}
 @keyframes organizer-arrive{from{opacity:0;translate:0 7px}to{opacity:1;translate:0 0}}
-@media(max-width:740px){.calendar-agendas{grid-template-columns:1fr}.collection-create{align-items:stretch;flex-direction:column}.collection-create label{max-width:none}.organizer-two{gap:10px}.schedule-entry{padding:18px}.daily-calendar{padding:18px 10px}.daily-month h3{font-size:23px}.daily-date{min-height:44px}.scheduled-indicator{display:flex;margin:8px 0 0}.organizer-dialog .organizer-actions{gap:8px}.collection-toolbar{align-items:flex-start;flex-direction:column}.collection-toolbar>div{flex-wrap:wrap}.saved-list .saved-row{min-width:0}.dua-card h3,.schedule-entry h3,.collection-tabs button{overflow-wrap:anywhere}}
-@media(prefers-reduced-motion:reduce){.organizer-dialog,.collection-toast{animation:none}.daily-date{transition:none}}
+@media(max-width:740px){.calendar-agendas{grid-template-columns:1fr}.collection-create{align-items:stretch;flex-direction:column}.collection-create label{max-width:none}.organizer-two{gap:10px}.schedule-entry{padding:18px}.scheduled-indicator{display:flex;margin:8px 0 0}.organizer-dialog .organizer-actions{gap:8px}.collection-toolbar{align-items:flex-start;flex-direction:column}.collection-toolbar>div{flex-wrap:wrap}.saved-list .saved-row{min-width:0}.dua-card h3,.schedule-entry h3,.collection-tabs button{overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){.organizer-dialog,.collection-toast{animation:none}}
 
 #saved-dua-count, .membership-count { position: relative; }
 .membership-count {
   margin-inline-start: auto;
   padding: 2px 8px;
   border-radius: 12px;
-  background: #e7d9be;
+  background: #ecd9c4;
   font-variant-numeric: tabular-nums;
 }
 .membership-count .collection-count-gain { animation-delay: 0s; }
 .collection-count-gain {
   position: absolute;
   inset: auto auto -6px 50%;
-  color: #fff2d8;
-  background: #684a24;
+  color: var(--desert-light);
+  background: var(--desert-cocoa);
   border-radius: 12px;
   padding: 2px 5px;
   pointer-events: none;
@@ -42,10 +120,10 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid #c4a778;
-  color: #172d49;
-  background: #fff2d8;
-  box-shadow: 0 5px 16px #07162d44;
+  border: 1px solid #b28565;
+  color: var(--desert-cocoa);
+  background: var(--desert-paper);
+  box-shadow: 0 5px 16px #38231933;
   pointer-events: none;
 }
 .collection-added {
@@ -56,7 +134,7 @@
   animation-delay: .48s;
   animation-fill-mode: both;
 }
-.collection-added strong { color: #ffdb91; }
+.collection-added strong { color: #efc589; }
 .backup-counts {
   display: grid;
   gap: 8px;

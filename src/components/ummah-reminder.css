@@ -1,0 +1,122 @@
+.ummah-page {
+  background: linear-gradient(160deg, #192c47, #2b4260 48%, #3e5066);
+  color: #fff2df;
+  padding: clamp(2.5rem, 7vw, 6rem) max(1rem, 5vw);
+}
+
+.ummah-hero, .ummah-body {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+}
+
+.ummah-hero, .ummah-reflection {
+  text-align: center;
+}
+
+.ummah-page :is(h1, h2, h3) {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: inherit;
+  line-height: 1.08;
+}
+
+.ummah-page h1 { font-size: clamp(3rem, 8vw, 6.25rem); }
+.ummah-page h2 { font-size: clamp(2rem, 5vw, 3.25rem); }
+.ummah-page h3 { font-size: 1.55rem; }
+.ummah-page p { line-height: 1.75; }
+
+.ummah-hero > p, .ummah-reflection > p {
+  max-width: 38rem;
+  margin: 1rem auto;
+  color: #f1dec5;
+  overflow-wrap: anywhere;
+}
+
+.ummah-page .filters, .ummah-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 1.5rem 0;
+}
+
+.ummah-page :is(.ummah-actions, .filters) .button {
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #dfc49f;
+  border-radius: 999px;
+  background: #243851;
+  color: #fff2df;
+  text-align: center;
+}
+
+.ummah-page :is(.ummah-actions, .filters) .button::before {
+  content: none;
+}
+
+.ummah-page .ummah-actions > :not(:disabled):hover,
+.ummah-page .filters .button[aria-current="page"] {
+  background: #eed4b1;
+  color: #28374c;
+}
+
+.ummah-page :focus-visible, .ummah-prayer:focus {
+  outline: 2px solid #ffe4b9;
+  outline-offset: 4px;
+}
+
+.ummah-body {
+  display: grid;
+  gap: clamp(2.5rem, 7vw, 5rem);
+  margin-top: clamp(3rem, 8vw, 6rem);
+}
+
+.ummah-regions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ummah-flag-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #dfc49655;
+  border-radius: 1.2rem;
+  margin-bottom: calc(-0.65 * clamp(2.5rem, 7vw, 5rem));
+}
+
+.ummah-card {
+  background: #f3e5d0;
+  color: #27384f;
+  border-radius: 1.2rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.ummah-prayer {
+  scroll-margin-top: 1.5rem;
+}
+
+.ummah-prayer p {
+  white-space: pre-line;
+}
+
+.ummah-source { color: #534638; }
+
+.ummah-prayer .ummah-arabic {
+  font-family: Amiri, "Traditional Arabic", serif;
+  font-size: clamp(1.65rem, 4vw, 2.5rem);
+  line-height: 1.95;
+  margin-block: 1.5rem 2rem;
+}
+
+@media (max-width: 680px) {
+  .ummah-regions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ummah-hero { animation: ummah-appear 350ms ease-out; }
+}
+
+@keyframes ummah-appear {
+  from { opacity: 0.75; transform: translateY(4px); }
+}

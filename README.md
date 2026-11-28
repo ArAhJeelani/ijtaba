@@ -28,7 +28,7 @@ React renders reusable components; TypeScript checks data contracts; Vite develo
 
 ## MVP behavior
 
-Search and category filtering; duplicate-free saves; persistent ordering; remove/reorder; session read flags and reset; one-at-a-time reading; optional transliteration; clearly labeled personal entries; manual dated Maghrib/Fajr calculator. Saved collection is browser-local; read progress resets on refresh. No authentication, live prayer-time API, or cloud sync.
+Search and category filtering; duplicate-free saves; persistent ordering; remove/reorder; session read flags and reset; one-at-a-time reading; optional transliteration; clearly labeled personal entries; manual dated Maghrib/Fajr calculator. Guest collections are browser-local, and read progress resets on refresh. Configured Supabase accounts can sync private organizers across devices.
 
 Calculator entries use the browser’s timezone, explicitly displayed in the UI. The location field is only a label. Dated inputs account for midnight and elapsed-time changes across DST. For a timezone’s ambiguous fall-back hour, use an unambiguous local timetable time; future provider integration should store explicit UTC offsets. No example prayer times are prefilled as live data.
 
@@ -55,3 +55,7 @@ The closing logo includes a sequential calligraphic ink reveal: “Just know… 
 `src/painted.css` applies the canvas texture and brush shapes to every page, navigation, inputs, buttons, prayer excerpts, reading dialog and footer. Arabic stays native text. The original generated canvas and exact prompt are saved in `artwork-originals/painted-canvas-v1.png` and `painted-canvas-v1.prompt.txt`. It was created with the built-in image-generation tool and compressed as `public/assets/painted-canvas-v1.webp`. The supplied logo remains unchanged in spelling and composition.
 
 # ijtaba
+
+## Accounts and cloud sync
+
+See [Accounts and organizer sync](docs/accounts.md) for Supabase setup, migration, privacy, and testing.

@@ -4,6 +4,7 @@ import "./dua-profiles.css";
 export function DiscoverSections() {
   const { pathname, search } = useLocation();
   const links = [
+    ["/discover/ummah", "Don’t Forget the Ummah"],
     ["/discover", "All du’as"],
     ["/discover/prophetic", "Prophetic Du’as"],
     ["/discover/profiles", "Du’a Profiles"],

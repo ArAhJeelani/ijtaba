@@ -18,7 +18,7 @@ body {
   background: #f3ecde;
 }
 body {
-  background: #30201c;
+  background: var(--desert-night);
   position: relative;
 }
 body:after {
@@ -27,13 +27,13 @@ body:after {
   inset: 0;
   z-index: 90;
   pointer-events: none;
-  opacity: 0.09;
+  opacity: 0.045;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75 .4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%237b6b55' filter='url(%23g)' d='M0 0h200v200H0z'/%3E%3C/svg%3E");
 }
 ::selection {
-  background: #a4a3bd66;
-  color: #172d4e;
+  background: #e4bc96;
+  color: var(--desert-ink);
 }
 .navbar {
   background: transparent;

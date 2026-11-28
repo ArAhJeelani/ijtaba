@@ -1,5 +1,5 @@
-import {useRef,useState} from 'react';
-import {Link,useSearchParams} from 'react-router-dom';
+import {useEffect,useRef,useState} from 'react';
+import {Link,useLocation,useSearchParams} from 'react-router-dom';
 import {ArrowDown,ArrowUp,Check,Plus} from 'lucide-react';
 import {useCollection} from '../state/Collection';
 import {DuaCard} from './DuaCard';
@@ -13,6 +13,12 @@ export function MyDuasPage(){
   const c=useCollection(),[params,setParams]=useSearchParams(),selected=params.get('collection')||'';
   const [reading,setReading]=useState(false),[personal,setPersonal]=useState(false),[title,setTitle]=useState(''),[prayer,setPrayer]=useState('');
   const [management,setManagement]=useState<{action:'edit'|'delete';id:string}|null>(null);
+  const {hash}=useLocation();
+  useEffect(()=>{
+    if(hash!=='#organizer-backup-heading')return;
+    const frame=requestAnimationFrame(()=>document.getElementById('organizer-backup-heading')?.scrollIntoView());
+    return ()=>cancelAnimationFrame(frame);
+  },[hash]);
   const personalButton=useRef<HTMLButtonElement>(null);
   const items=selected?c.collectionItems(selected):c.items;
   const savedIds=new Set(c.data.ids);
@@ -31,13 +37,13 @@ export function MyDuasPage(){
       <h2 id="unsaved-personal-heading">Unsaved personal du’as</h2>
       <div className="saved-list">{unsavedPersonal.map(dua=><div key={dua.id}>{card(dua)}</div>)}</div>
     </section>}
-    <section className="personal-section"><button ref={personalButton} className="underlined" aria-expanded={personal} onClick={()=>setPersonal(!personal)}><Plus size={17}/> A prayer in your own words</button>{personal&&<form className="personal-form" onSubmit={e=>{e.preventDefault();if(!title.trim()||!prayer.trim())return;c.addPersonal(title.trim(),prayer.trim());setTitle('');setPrayer('');setPersonal(false)}}><p>Personal prayers are labeled separately from sourced supplications. They stay in this browser and are not uploaded.</p><label>Title<input required maxLength={personalDuaLimits.title} value={title} onChange={e=>setTitle(e.target.value)}/></label><label>Your prayer<textarea required rows={4} maxLength={personalDuaLimits.prayer} value={prayer} onChange={e=>setPrayer(e.target.value)}/></label><button className="button">Add personal prayer</button></form>}</section>
+    <section className="personal-section"><button ref={personalButton} className="underlined" aria-expanded={personal} onClick={()=>setPersonal(!personal)}><Plus size={17}/> A prayer in your own words</button>{personal&&<form className="personal-form" onSubmit={e=>{e.preventDefault();if(!title.trim()||!prayer.trim())return;if(!c.addPersonal(title.trim(),prayer.trim()))return;setTitle('');setPrayer('');setPersonal(false)}}><p>Personal prayers are labeled separately from sourced supplications. {c.cloud ? 'They sync privately to your account.' : 'They stay in this browser.'}</p><label>Title<input required maxLength={personalDuaLimits.title} value={title} onChange={e=>setTitle(e.target.value)}/></label><label>Your prayer<textarea required rows={4} maxLength={personalDuaLimits.prayer} value={prayer} onChange={e=>setPrayer(e.target.value)}/></label><button className="button">Add personal prayer</button></form>}</section>
     {managedDua&&management?.action==='edit'&&<EditPersonalDuaDialog dua={managedDua} onClose={closeManagement} onSave={(nextTitle,nextPrayer)=>{
-      c.editPersonal(managedDua.id,nextTitle,nextPrayer);
+      if(!c.editPersonal(managedDua.id,nextTitle,nextPrayer))return;
       closeManagement();
     }}/>}
     {managedDua&&management?.action==='delete'&&<DeletePersonalDuaDialog dua={managedDua} onClose={closeManagement} onDelete={()=>{
-      c.deletePersonal(managedDua.id);
+      if(!c.deletePersonal(managedDua.id))return;
       closeManagement();
       requestAnimationFrame(()=>personalButton.current?.focus());
     }}/>}

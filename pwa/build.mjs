@@ -14,6 +14,7 @@ const artwork = [
   "assets/night.webp",
   "assets/painted-canvas-v1.webp",
   "assets/sujood.webp",
+  "assets/ummah-flags-painting.jpg",
 ];
 
 export function offlineBuild() {

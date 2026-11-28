@@ -1,20 +1,18 @@
 .desert-home,
 .desert-pages {
-  --desert-ink: #33221c;
-  --desert-muted: #654a3c;
-  --desert-linen: #eee0c8;
   color: var(--desert-ink);
   background:
-    radial-gradient(ellipse at 12% 28%, #fff4dc96, transparent 58%),
-    linear-gradient(155deg, var(--desert-linen) 23%, #cfaa86 100%);
+    radial-gradient(ellipse at 10% 12%, var(--desert-paper), transparent 55%),
+    linear-gradient(145deg, var(--desert-linen) 38%, var(--desert-sand) 100%);
 }
 
 .desert-home .intro-strip {
   display: grid;
   justify-items: center;
   gap: 0.65rem;
-  background: linear-gradient(#2d1c18, #543226);
-  color: #fff0d9;
+  background: linear-gradient(155deg, var(--desert-night), var(--desert-cocoa));
+  border-bottom: 1px solid #bd8c664d;
+  color: var(--desert-light);
 }
 
 .desert-home .intro-strip::before,
@@ -60,62 +58,103 @@
   color: var(--desert-ink);
 }
 
-.desert-home .collection-invite h2 i {
-  color: #8a4931;
+.desert-home :is(.section-heading .eyebrow, .collection-invite .eyebrow, .collection-invite h2 i, .purpose .eyebrow) {
+  color: var(--desert-accent);
 }
 
 .desert-home .category-grid > a {
-  background: #b26d4440;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--desert-line);
+  border-radius: 5px;
+  background: linear-gradient(150deg, var(--desert-paper), var(--desert-linen));
+  box-shadow: var(--desert-shadow);
+  clip-path: none;
+  transform: none;
   color: var(--desert-ink);
 }
 
+.desert-home .category-grid > a > svg {
+  color: var(--desert-accent);
+}
+
 .desert-home .category-grid > a:hover {
-  background: #b26d4460;
+  background: linear-gradient(150deg, var(--desert-paper), #f0decc);
+  border-color: var(--desert-copper);
 }
 
 .desert-home .night-feature {
-  color: #fff1dc;
-  background: #30201c;
+  color: var(--desert-light);
+  background: linear-gradient(125deg, var(--desert-night), var(--desert-cocoa));
 }
 
 .desert-home .night-feature-image {
-  background: url("/assets/desert-dua-hero-textured.jpg") right center / cover no-repeat;
+  background:
+    linear-gradient(125deg, #39201445, transparent 70%),
+    url("/assets/desert-dua-hero-textured.jpg") right center / cover no-repeat;
 }
 
-.desert-home .night-feature :is(p, h2 i) {
-  color: #f1cfad;
+.desert-home .night-feature :is(p, h2 i, .eyebrow, small) {
+  color: var(--desert-gold);
 }
 
 .desert-home .purpose {
   color: var(--desert-ink);
-  background: #b9754c36;
+  background: linear-gradient(155deg, #eddcc9, #dfbb9d);
+  border-block: 1px solid var(--desert-line);
 }
 
 .desert-footer {
-  color: #f4debd;
-  background: #30201c;
+  color: var(--desert-light);
+  background: linear-gradient(145deg, var(--desert-cocoa), var(--desert-night) 64%);
+  border-top: 1px solid #a67555;
 }
 
 .desert-footer::before {
   content: none;
 }
 
+.desert-footer :is(a, p) {
+  color: var(--desert-gold);
+}
+
+.desert-footer a:hover {
+  color: var(--desert-light);
+}
+
 .navbar.desert-nav {
   --home-nav-height: 84px;
   height: var(--home-nav-height);
-  background: #30201c;
-  color: #f8eedc;
+  background: linear-gradient(115deg, var(--desert-night) 30%, #482c20);
+  border-bottom: 1px solid #d2a17d45;
+  color: var(--desert-light);
 }
 
 .navbar.desert-nav-home {
   margin-bottom: calc(-1 * var(--home-nav-height));
   background: transparent;
+  border-color: #e2be9c30;
 }
 
 .navbar.desert-nav::before {
-  background: linear-gradient(#1b1415a6, transparent);
+  background: linear-gradient(#25140ce6, #25140c2e);
   clip-path: none;
   opacity: 1;
+}
+
+.desert-nav nav a.active {
+  color: var(--desert-gold);
+  text-decoration-style: solid;
+  text-underline-offset: 0.45em;
+}
+
+.desert-nav :is(nav a:hover, .brand small, .nav-quiet) {
+  color: var(--desert-gold);
+}
+
+.desert-nav .count {
+  background: #edc79d25;
+  color: var(--desert-light);
+  transform: none;
 }
 
 .desert-nav .brand > span {
@@ -137,8 +176,8 @@
   min-height: max(650px, 100svh);
   padding: 100px clamp(28px, 8vw, 140px) 60px;
   overflow: hidden;
-  background: #241a19;
-  color: #fff1dc;
+  background: var(--desert-night);
+  color: var(--desert-light);
 }
 
 .desert-scene,
@@ -230,7 +269,7 @@
 .desert-hero::after {
   content: "";
   z-index: -1;
-  background: linear-gradient(90deg, #1c1517ba, #1c151753 38%, transparent 65%);
+  background: linear-gradient(90deg, #29170fee, #391f166b 40%, #7a432421 74%);
 }
 
 .desert-hero-copy {
@@ -249,7 +288,7 @@
 .desert-hero h1 em {
   display: block;
   margin-top: 0.12em;
-  color: #edc79d;
+  color: var(--desert-gold);
   font-weight: inherit;
 }
 
@@ -258,20 +297,24 @@
   align-items: center;
   gap: 0.65em;
   margin-top: 2.5rem;
-  padding: 0.7em 0;
-  border-bottom: 1px solid #edc79d9c;
-  color: #fff1dc;
-  transition: color 160ms ease, border-color 160ms ease;
+  min-height: 48px;
+  padding: 0.65em 1.15em;
+  border: 1px solid var(--desert-gold);
+  border-radius: 4px;
+  background: var(--desert-paper);
+  color: var(--desert-ink);
+  font-weight: 600;
+  transition: background-color 160ms ease;
 }
 
 .desert-hero-cta:hover {
-  color: #edc79d;
-  border-color: currentColor;
+  background: var(--desert-gold);
 }
 
 .desert-hero-cta:focus-visible,
 .desert-nav a:focus-visible,
-.desert-nav .menu-toggle:focus-visible {
+.desert-nav .menu-toggle:focus-visible,
+.desert-footer a:focus-visible {
   outline: 2px solid #ffe1b8;
   outline-offset: 5px;
 }
@@ -283,7 +326,8 @@
 
   .desert-nav nav.open {
     top: var(--home-nav-height);
-    background: #2a201e;
+    background: var(--desert-night);
+    border-bottom: 1px solid #d2a17d45;
   }
 
   .desert-hero {
@@ -302,7 +346,7 @@
   }
 
   .desert-hero::after {
-    background: linear-gradient(0deg, #241a19 8%, #241a19 21%, #241a19ad 33%, transparent 56%);
+    background: linear-gradient(0deg, var(--desert-night) 20%, #302016c4 36%, #603a2933 62%);
   }
 
   .desert-hero-copy {
