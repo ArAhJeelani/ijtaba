@@ -1,0 +1,86 @@
+.page {
+  min-height: 70vh;
+  padding-top: 70px;
+}
+.page > .section-heading h2 {
+  font-size: 64px;
+}
+.library-controls {
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 35px;
+}
+.search {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #162b4944;
+  gap: 12px;
+  width: 60%;
+  padding: 10px 0;
+}
+.search input {
+  border: 0;
+  background: none;
+  padding: 8px 0;
+  width: 100%;
+  font-size: 13px;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+}
+.checkbox input {
+  accent-color: #162b49;
+  width: 16px;
+  height: 16px;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  margin: 25px 0;
+  flex-wrap: wrap;
+}
+.filters button {
+  padding: 10px 17px;
+  border: 1px solid #162b4929;
+  border-radius: 30px;
+  font-size: 11px;
+}
+.filters button.selected {
+  background: #162b49;
+  color: #f5efe4;
+}
+.small {
+  font-size: 11px;
+  color: #647083;
+}
+.source-note {
+  font-size: 11px;
+  color: #647083;
+  border-top: 1px solid #162b4922;
+  padding-top: 25px;
+  margin-top: 50px;
+}
+.empty {
+  text-align: center;
+  padding: 70px 25px;
+  border: 1px dashed #162b4933;
+  margin: 35px 0;
+}
+.empty h3 {
+  font-size: 36px;
+}
+.empty p {
+  font-size: 13px;
+  color: #647083;
+}
+.empty > span {
+  font-size: 40px;
+  color: #aa895c;
+  display: block;
+  margin-bottom: 20px;
+}

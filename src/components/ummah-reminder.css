@@ -14,7 +14,7 @@
 }
 
 .ummah-page :is(h1, h2, h3) {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-display);
   color: inherit;
   line-height: 1.08;
 }
@@ -39,24 +39,33 @@
   margin: 1.5rem 0;
 }
 
-.ummah-page :is(.ummah-actions, .filters) .button {
+.ummah-page .ummah-actions .button,
+.ummah-page .filters[aria-label] a.button {
   min-height: 44px;
   padding: 0.6rem 1rem;
   border: 1px solid #dfc49f;
   border-radius: 999px;
-  background: #493226;
   color: #fff2df;
   text-align: center;
 }
 
-.ummah-page :is(.ummah-actions, .filters) .button::before {
-  content: none;
+.ummah-page .ummah-actions > .button::before,
+.ummah-page .filters[aria-label] a.button::before {
+  content: "";
+  background: #493226;
+  border-radius: inherit;
+  clip-path: none;
+  box-shadow: none;
 }
 
-.ummah-page .ummah-actions > :not(:disabled):hover,
-.ummah-page .filters .button[aria-current="page"] {
-  background: #eed4b1;
+.ummah-page .ummah-actions > .button:not(:disabled):hover,
+.ummah-page .filters[aria-label] a.button[aria-current="page"] {
   color: #39261c;
+}
+
+.ummah-page .ummah-actions > .button:not(:disabled):hover::before,
+.ummah-page .filters[aria-label] a.button[aria-current="page"]::before {
+  background: #eed4b1;
 }
 
 .ummah-page :focus-visible, .ummah-prayer:focus {

@@ -1,0 +1,28 @@
+.section {
+  padding: 85px 8%;
+  max-width: 1600px;
+  margin: auto;
+}
+.section-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+.section-heading > .eyebrow {
+  color: #897048;
+  margin-bottom: 18px;
+}
+.section-heading p {
+  color: #647083;
+  max-width: 500px;
+}
+.underlined {
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #162b4944;
+  padding: 8px 0;
+  white-space: nowrap;
+}

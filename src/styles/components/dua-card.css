@@ -1,0 +1,78 @@
+.dua-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+.dua-card {
+  padding: 32px;
+  background: #fffcf55e;
+  border: 1px solid #162b491a;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.dua-card .eyebrow {
+  color: #8a7351;
+  font-size: var(--text-caption);
+  letter-spacing: 0.12em;
+}
+.dua-card h3 {
+  margin: 14px 0 22px;
+  font-size: 30px;
+}
+.arabic {
+  font-family: var(--font-arabic) !important;
+  font-size: 31px !important;
+  line-height: 2 !important;
+  text-align: right;
+  color: #162b49;
+  margin-bottom: 25px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.translation {
+  font-family: var(--font-display);
+  font-size: 23px;
+  line-height: 1.45;
+}
+.context {
+  font-size: 11px;
+  color: #677181;
+  margin-top: 5px;
+}
+.transliteration {
+  font-size: 13px;
+  font-style: italic;
+  color: #677181;
+}
+.card-bottom {
+  border-top: 1px solid #162b491a;
+  padding-top: 18px;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.card-bottom > a,
+.card-bottom > span {
+  font-size: var(--text-caption);
+  line-height: 1.7;
+  color: #647083;
+  max-width: 60%;
+}
+.card-bottom a:hover {
+  text-decoration: underline;
+}
+.save {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  padding: 8px 0;
+}
+.save.saved {
+  color: #52734e;
+}

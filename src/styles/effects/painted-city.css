@@ -1,0 +1,76 @@
+.masjid-calculator select {
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px;
+  color: #233c5c;
+  background: #e8e5d9;
+  border: 0;
+  border-bottom: 2px solid #7c889455;
+  border-radius: 0;
+}
+.masjid-calculator select:focus-visible {
+  outline: 2px solid #a67a3c;
+  outline-offset: 3px;
+}
+.masjid-calculator form {
+  min-width: 0;
+}
+.masjid-calculator .timetable-source {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.masjid-calculator .result {
+  clip-path: none;
+  border-radius: 35% 3% 20% 4% / 3% 20% 4% 15%;
+}
+.masjid-calculator .result h3 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.3;
+}
+.masjid-calculator button {
+  margin-top: 12px;
+}
+.masjid-search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.masjid-search-results li + li {
+  border-top: 1px solid #7c889444;
+}
+.masjid-search-results button {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  text-align: left;
+  padding: 16px 12px;
+  background: #a4b2b31a;
+}
+.masjid-search-results button:hover,
+.masjid-search-results button:focus-visible {
+  background: #a4b2b34d;
+}
+.masjid-search-results small,
+.chosen-masjid > span:not(.eyebrow) {
+  font-size: 12px;
+  color: #41556e;
+}
+.chosen-masjid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.chosen-masjid strong,
+.masjid-search-results strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.masjid-search-results span {
+  font-size: 13px;
+}
