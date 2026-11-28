@@ -63,7 +63,9 @@ export default function UmmahReminderPage() {
         <img
           className="ummah-flag-scene"
           src="/assets/ummah-flags-painting.jpg"
-          alt="Painted flags of Palestine, the Democratic Republic of the Congo, and Sudan planted in desert sand at twilight."
+          alt="Flags of Palestine, the Democratic Republic of the Congo, and Sudan planted in moonlit dunes beside a prayer rug."
+          width={1672}
+          height={941}
           loading="lazy"
           decoding="async"
         />
